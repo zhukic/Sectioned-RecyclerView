@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="names">
+        <item>The Shawshank Redemption</item>
+        <item>The Green Mile</item>
+        <item>Interstellar</item>
+        <item>Intouchables</item>
+        <item>Knockin\' on Heaven\'s Door</item>
+        <item>Lock, Stock and Two Smoking Barrels</item>
+        <item>A Beautiful Mind</item>
+        <item>Back to the Future</item>
+        <item>Catch Me If You Can</item>
+        <item>Fight Club</item>
+        <item>Forrest Gump</item>
+        <item>Gladiator</item>
+        <item>Inception</item>
+        <item>Schindler\'s List</item>
+        <item>The Loin King</item>
+        <item>The Lord of the Rings: The Return of the King</item>
+        <item>The Pianist</item>
+        <item>Léon</item>
+        <item>Pulp Fiction</item>
+        <item>The Prestige</item>
+    </string-array>
+    <string-array name="genres">
+        <item>Drama</item>
+        <item>Fantasy</item>
+        <item>Adventure</item>
+        <item>Biography</item>
+        <item>Action</item>
+        <item>Crime</item>
+        <item>Biography</item>
+        <item>Adventure</item>
+        <item>Biography</item>
+        <item>Drama</item>
+        <item>Drama</item>
+        <item>Action</item>
+        <item>Action</item>
+        <item>Biography</item>
+        <item>Adventure</item>
+        <item>Action</item>
+        <item>Biography</item>
+        <item>Crime</item>
+        <item>Crime</item>
+        <item>Drama</item>
+    </string-array>
+    <integer-array name="years">
+        <item>1994</item>
+        <item>1999</item>
+        <item>2014</item>
+        <item>2011</item>
+        <item>1997</item>
+        <item>1998</item>
+        <item>2001</item>
+        <item>1985</item>
+        <item>2002</item>
+        <item>1999</item>
+        <item>1994</item>
+        <item>2000</item>
+        <item>2010</item>
+        <item>1993</item>
+        <item>1994</item>
+        <item>2003</item>
+        <item>2002</item>
+        <item>1994</item>
+        <item>1994</item>
+        <item>2006</item>
+    </integer-array>
+</resources>
