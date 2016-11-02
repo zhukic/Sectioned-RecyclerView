@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">RecyclerViewHeaders</string>
+    <string name="app_name">SectionedRV Movies</string>
     <string name="action_settings">Settings</string>
     <string name="action_sort_by_name"> Sort by name</string>
     <string name="action_sort_by_genre"> Sort by genre</string>

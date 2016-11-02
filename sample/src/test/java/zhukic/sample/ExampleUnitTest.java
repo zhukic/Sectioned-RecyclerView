@@ -1,4 +1,4 @@
-package zhukic.library;
+package zhukic.sample;
 
 import org.junit.Test;
 

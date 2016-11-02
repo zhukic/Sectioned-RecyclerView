@@ -1,4 +1,4 @@
-package zhukic.sectionedrecyclerview;
+package zhukic.sample;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;

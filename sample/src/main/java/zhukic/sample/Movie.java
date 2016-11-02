@@ -1,4 +1,4 @@
-package zhukic.sectionedrecyclerview;
+package zhukic.sample;
 
 /**
  * Created by RUS on 31.08.2016.
@@ -7,7 +7,9 @@ package zhukic.sectionedrecyclerview;
 public class Movie {
 
     private String name;
+
     private int year;
+
     private String genre;
 
     public Movie(String name, int year, String genre) {

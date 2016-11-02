@@ -1,4 +1,4 @@
-package zhukic.sectionedrecyclerview;
+package zhukic.sample;
 
 import android.content.res.Resources;
 import android.os.Bundle;
@@ -10,21 +10,26 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
+
+import com.zhukic.sectionedrecyclerview.SectionedRecyclerAdapter;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.List;
 
-import zhukic.library.SectionedRecyclerAdapter;
+import zhukic.sample.adapters.BaseMovieAdapter;
+import zhukic.sample.adapters.MovieAdapterByDecade;
+import zhukic.sample.adapters.MovieAdapterByGenre;
+import zhukic.sample.adapters.MovieAdapterByName;
+import zhukic.sectionedrecyclerview.R;
 
 /**
  * Created by RUS on 04.09.2016.
  */
-public class MovieFragment extends Fragment {
+public class MovieFragment extends Fragment implements BaseMovieAdapter.OnItemClickListener {
 
-    private SectionedRecyclerAdapter mSectionedRecyclerAdapter;
+    private BaseMovieAdapter mSectionedRecyclerAdapter;
     private ArrayList<Movie> mMovieList;
 
     @Nullable
@@ -47,8 +52,6 @@ public class MovieFragment extends Fragment {
 
         int position = getArguments().getInt("POSITION");
 
-        Log.d("TAG", String.valueOf(position));
-
         switch (position) {
             case 0:
                 setAdapterByName();
@@ -60,6 +63,8 @@ public class MovieFragment extends Fragment {
                 setAdapterByDecade();
                 break;
         }
+
+        mSectionedRecyclerAdapter.setOnItemClickListener(this);
 
         recyclerView.setAdapter(mSectionedRecyclerAdapter);
 
@@ -94,5 +99,13 @@ public class MovieFragment extends Fragment {
             }
         });
         mSectionedRecyclerAdapter = new MovieAdapterByDecade(mMovieList);
+    }
+
+    @Override
+    public void onItemClicked(int adapterPosition, int positionInCollection) {
+        final String text = "Item clicked: adapter position = " + adapterPosition +
+                ", position in collection = " + positionInCollection;
+
+        Toast.makeText(getContext(), text, Toast.LENGTH_SHORT).show();
     }
 }
