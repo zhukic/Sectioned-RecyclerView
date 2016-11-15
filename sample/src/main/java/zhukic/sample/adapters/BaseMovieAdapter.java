@@ -18,7 +18,7 @@ import zhukic.sectionedrecyclerview.R;
  * Created by RUS on 02.11.2016.
  */
 
-public abstract class BaseMovieAdapter extends SectionedRecyclerAdapter<Movie, BaseMovieAdapter.SubheaderHolder, BaseMovieAdapter.MovieViewHolder> {
+public abstract class BaseMovieAdapter extends SectionedRecyclerAdapter<BaseMovieAdapter.SubheaderHolder, BaseMovieAdapter.MovieViewHolder> {
 
     public interface OnItemClickListener {
         void onItemClicked(int adapterPosition, int positionInCollection);
@@ -61,18 +61,23 @@ public abstract class BaseMovieAdapter extends SectionedRecyclerAdapter<Movie, B
     }
 
     public BaseMovieAdapter(List<Movie> itemList) {
-        super(itemList);
+        super();
         this.movieList = itemList;
     }
 
     @Override
     public MovieViewHolder onCreateItemViewHolder(ViewGroup parent, int viewType) {
-        return new MovieViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.movie_item, parent, false));
+        return new MovieViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_movie, parent, false));
     }
 
     @Override
     public SubheaderHolder onCreateSubheaderViewHolder(ViewGroup parent, int viewType) {
-        return new SubheaderHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.header_item, parent, false));
+        return new SubheaderHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_header, parent, false));
+    }
+
+    @Override
+    public int getItemSize() {
+        return movieList.size();
     }
 
     public void setOnItemClickListener(OnItemClickListener onItemClickListener) {

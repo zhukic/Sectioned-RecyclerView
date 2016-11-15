@@ -4,15 +4,13 @@ import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
-
-import com.zhukic.sectionedrecyclerview.SectionedRecyclerAdapter;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -20,6 +18,7 @@ import java.util.Comparator;
 
 import zhukic.sample.adapters.BaseMovieAdapter;
 import zhukic.sample.adapters.MovieAdapterByDecade;
+import zhukic.sample.adapters.MovieAdapterByDifferentViewTypes;
 import zhukic.sample.adapters.MovieAdapterByGenre;
 import zhukic.sample.adapters.MovieAdapterByName;
 import zhukic.sectionedrecyclerview.R;
@@ -29,13 +28,15 @@ import zhukic.sectionedrecyclerview.R;
  */
 public class MovieFragment extends Fragment implements BaseMovieAdapter.OnItemClickListener {
 
-    private BaseMovieAdapter mSectionedRecyclerAdapter;
     private ArrayList<Movie> mMovieList;
+
+    private RecyclerView recyclerView;
+    private BaseMovieAdapter mSectionedRecyclerAdapter;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        RecyclerView recyclerView = (RecyclerView) inflater.inflate(R.layout.recycler_view, container, false);
+        recyclerView = (RecyclerView) inflater.inflate(R.layout.recycler_view, container, false);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         Resources resources = getResources();
@@ -61,6 +62,9 @@ public class MovieFragment extends Fragment implements BaseMovieAdapter.OnItemCl
                 break;
             case 2:
                 setAdapterByDecade();
+                break;
+            case 3:
+                setAdapterWithGridLayout();
                 break;
         }
 
@@ -99,6 +103,23 @@ public class MovieFragment extends Fragment implements BaseMovieAdapter.OnItemCl
             }
         });
         mSectionedRecyclerAdapter = new MovieAdapterByDecade(mMovieList);
+    }
+
+    private void setAdapterByDifferentViewTypes() {
+        Collections.sort(mMovieList, new Comparator<Movie>() {
+            @Override
+            public int compare(Movie o1, Movie o2) {
+                return o1.getGenre().compareTo(o2.getGenre());
+            }
+        });
+        mSectionedRecyclerAdapter = new MovieAdapterByDifferentViewTypes(mMovieList);
+    }
+
+    private void setAdapterWithGridLayout() {
+        setAdapterByGenre();
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 2);
+        recyclerView.setLayoutManager(gridLayoutManager);
+        mSectionedRecyclerAdapter.setGridLayoutManager(gridLayoutManager);
     }
 
     @Override

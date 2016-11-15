@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="72dp"
+    android:layout_marginTop="@dimen/activity_vertical_margin"
+    android:layout_marginBottom="@dimen/activity_vertical_margin"
+    android:layout_marginLeft="@dimen/activity_horizontal_margin"
+    android:layout_marginRight="@dimen/activity_horizontal_margin"
+    android:focusable="true"
+    android:clickable="true">
+
+    <RelativeLayout
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:background="?attr/selectableItemBackground">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/movieGenre"
+            android:textColor="@color/secondaryTextColor"
+            android:textSize="@dimen/secondary_text_size"
+            tools:text="Biography"
+            android:layout_below="@+id/movieName"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+        <TextView
+            android:text=", "
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/movieGenre"
+            android:layout_toEndOf="@+id/movieGenre"
+            android:id="@+id/textView2"
+            android:layout_below="@+id/movieName"
+            android:layout_alignBottom="@+id/movieGenre"
+            tools:text=", "
+            android:textAppearance="@style/TextAppearance.AppCompat.Small" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/textView2"
+            android:layout_toEndOf="@+id/textView2"
+            android:id="@+id/movieYear"
+            android:layout_alignBottom="@+id/textView2"
+            tools:text="2002"
+            android:layout_alignTop="@+id/textView2" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/movieName"
+            tools:text="Catch Me If You Can"
+            android:textAppearance="@style/TextAppearance.AppCompat"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+    </RelativeLayout>
+
+</android.support.v7.widget.CardView>

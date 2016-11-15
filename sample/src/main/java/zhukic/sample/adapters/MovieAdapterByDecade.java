@@ -1,18 +1,10 @@
 package zhukic.sample.adapters;
 
-import android.graphics.Typeface;
-import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
-
-import com.zhukic.sectionedrecyclerview.SectionedRecyclerAdapter;
 
 import java.util.List;
 
 import zhukic.sample.Movie;
-import zhukic.sectionedrecyclerview.R;
 
 /**
  * Created by Vladislav Zhukov on 04.09.2016.
@@ -24,8 +16,11 @@ public class MovieAdapterByDecade extends BaseMovieAdapter {
     }
 
     @Override
-    public boolean onItems(Movie o1, Movie o2) {
-        return o1.getYear() / 10 != o2.getYear() / 10;
+    public boolean onItems(int position1, int position2) {
+        final Movie movie1 = movieList.get(position1);
+        final Movie movie2 = movieList.get(position2);
+
+        return movie1.getYear() / 10 != movie2.getYear() / 10;
     }
 
     @Override

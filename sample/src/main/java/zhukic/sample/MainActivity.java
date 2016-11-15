@@ -36,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
         adapter.addFragment(new MovieFragment(), "By name");
         adapter.addFragment(new MovieFragment(), "By genre");
         adapter.addFragment(new MovieFragment(), "By decade");
+        adapter.addFragment(new MovieFragment(), "Grid");
         viewPager.setAdapter(adapter);
     }
 

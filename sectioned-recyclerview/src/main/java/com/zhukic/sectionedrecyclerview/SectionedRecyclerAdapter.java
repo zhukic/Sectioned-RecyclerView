@@ -1,47 +1,48 @@
 package com.zhukic.sectionedrecyclerview;
 
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.ViewGroup;
 
-import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 /**
  * @author Vladislav Zhukov (zhukic)
  */
-public abstract class SectionedRecyclerAdapter<T, SH extends RecyclerView.ViewHolder, VH extends RecyclerView.ViewHolder> extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public abstract class SectionedRecyclerAdapter<SH extends RecyclerView.ViewHolder, VH extends RecyclerView.ViewHolder>
+        extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+
+    public static final String TAG = SectionedRecyclerAdapter.class.getSimpleName();
 
     public static final int TYPE_HEADER = -1;
-    public static final int TYPE_ITEM = 0;
 
-    private List<T> mItemList;
-    private Set<Integer> mSubheaderPositions = new HashSet<>();
+    private List<Integer> mSubheaderPositions = new ArrayList<>();
 
-    public SectionedRecyclerAdapter(List<T> itemList) {
-        this.mItemList = itemList;
-        initSubheaderPositions();
-    }
+    public SectionedRecyclerAdapter() { }
 
     private void initSubheaderPositions() {
         mSubheaderPositions.clear();
 
-        if(!mItemList.isEmpty()) {
+        if(getItemSize() != 0) {
             mSubheaderPositions.add(0);
         } else {
             return;
         }
 
-        for(int i = 1; i < mItemList.size(); i++) {
-            T t1 = mItemList.get(i - 1);
-            T t2 = mItemList.get(i);
-            if(onItems(t1, t2)) {
+        for(int i = 1; i < getItemSize(); i++) {
+            if(onItems(i - 1, i)) {
                 mSubheaderPositions.add(i + mSubheaderPositions.size());
             }
         }
     }
 
-    public abstract boolean onItems(T o1, T o2);
+    @Override
+    public void onAttachedToRecyclerView(RecyclerView recyclerView) {
+        initSubheaderPositions();
+    }
+
+    public abstract boolean onItems(int position1, int position2);
 
     public abstract VH onCreateItemViewHolder(ViewGroup parent, int viewType);
 
@@ -51,26 +52,31 @@ public abstract class SectionedRecyclerAdapter<T, SH extends RecyclerView.ViewHo
 
     public abstract void onBindSubheaderViewHolder(SH subheaderHolder, int nextItemPosition);
 
+    public abstract int getItemSize();
+
+    public int getViewType(int position) {
+        return 0;
+    }
+
     @Override
     public final int getItemViewType(int position) {
         if(isHeaderOnPosition(position)) {
             return TYPE_HEADER;
         } else {
-            return TYPE_ITEM;
+            return getViewType(position);
         }
     }
 
     @Override
     public final RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        if(viewType == TYPE_ITEM) {
-            return onCreateItemViewHolder(parent, viewType);
-        } else if(viewType == TYPE_HEADER) {
+        if(viewType == TYPE_HEADER) {
             return onCreateSubheaderViewHolder(parent, viewType);
         } else {
-            throw new IllegalArgumentException("");
+            return onCreateItemViewHolder(parent, viewType);
         }
     }
 
+    @SuppressWarnings("unchecked_cast")
     @Override
     public final void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if(isHeaderOnPosition(position)) {
@@ -82,15 +88,20 @@ public abstract class SectionedRecyclerAdapter<T, SH extends RecyclerView.ViewHo
 
     @Override
     public final int getItemCount() {
-        return mItemList.size() + mSubheaderPositions.size();
+        return getItemSize() + mSubheaderPositions.size();
     }
 
-    public int getHeaderCount() {
-        return mSubheaderPositions.size();
-    }
-
-    public Set<Integer> getSubheaderPositions() {
-        return mSubheaderPositions;
+    public void setGridLayoutManager(final GridLayoutManager gridLayoutManager) {
+        gridLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+            @Override
+            public int getSpanSize(int position) {
+                if(mSubheaderPositions.contains(position)) {
+                    return gridLayoutManager.getSpanCount();
+                } else {
+                    return 1;
+                }
+            }
+        });
     }
 
     private boolean isHeaderOnPosition(int position) {
@@ -110,5 +121,10 @@ public abstract class SectionedRecyclerAdapter<T, SH extends RecyclerView.ViewHo
     private int getItemPositionForViewHolder(int viewHolderPosition) {
         return viewHolderPosition - getCountOfSubheadersBeforePosition(viewHolderPosition);
     }
+
+    public int getHeaderCount() {
+        return mSubheaderPositions.size();
+    }
+
 
 }
