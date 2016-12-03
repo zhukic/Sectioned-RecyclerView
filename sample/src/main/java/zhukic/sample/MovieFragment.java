@@ -18,7 +18,6 @@ import java.util.Comparator;
 
 import zhukic.sample.adapters.BaseMovieAdapter;
 import zhukic.sample.adapters.MovieAdapterByDecade;
-import zhukic.sample.adapters.MovieAdapterByDifferentViewTypes;
 import zhukic.sample.adapters.MovieAdapterByGenre;
 import zhukic.sample.adapters.MovieAdapterByName;
 import zhukic.sectionedrecyclerview.R;
@@ -28,14 +27,15 @@ import zhukic.sectionedrecyclerview.R;
  */
 public class MovieFragment extends Fragment implements BaseMovieAdapter.OnItemClickListener {
 
-    private ArrayList<Movie> mMovieList;
+    private ArrayList<Movie> movieList;
 
     private RecyclerView recyclerView;
-    private BaseMovieAdapter mSectionedRecyclerAdapter;
+    private BaseMovieAdapter sectionedRecyclerAdapter;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
         recyclerView = (RecyclerView) inflater.inflate(R.layout.recycler_view, container, false);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
@@ -44,11 +44,11 @@ public class MovieFragment extends Fragment implements BaseMovieAdapter.OnItemCl
         String[] genres = resources.getStringArray(R.array.genres);
         int[] years = resources.getIntArray(R.array.years);
 
-        mMovieList = new ArrayList<>(20);
+        movieList = new ArrayList<>(20);
 
         for(int i = 0; i < 20; i++) {
             Movie movie = new Movie(names[i], years[i], genres[i]);
-            mMovieList.add(movie);
+            movieList.add(movie);
         }
 
         int position = getArguments().getInt("POSITION");
@@ -68,58 +68,48 @@ public class MovieFragment extends Fragment implements BaseMovieAdapter.OnItemCl
                 break;
         }
 
-        mSectionedRecyclerAdapter.setOnItemClickListener(this);
+        sectionedRecyclerAdapter.setOnItemClickListener(this);
 
-        recyclerView.setAdapter(mSectionedRecyclerAdapter);
+        recyclerView.setAdapter(sectionedRecyclerAdapter);
 
         return recyclerView;
     }
 
     private void setAdapterByName() {
-        Collections.sort(mMovieList, new Comparator<Movie>() {
+        Collections.sort(movieList, new Comparator<Movie>() {
             @Override
             public int compare(Movie o1, Movie o2) {
                 return o1.getName().compareTo(o2.getName());
             }
         });
-        mSectionedRecyclerAdapter = new MovieAdapterByName(mMovieList);
+        sectionedRecyclerAdapter = new MovieAdapterByName(movieList);
     }
 
     private void setAdapterByGenre() {
-        Collections.sort(mMovieList, new Comparator<Movie>() {
+        Collections.sort(movieList, new Comparator<Movie>() {
             @Override
             public int compare(Movie o1, Movie o2) {
                 return o1.getGenre().compareTo(o2.getGenre());
             }
         });
-        mSectionedRecyclerAdapter = new MovieAdapterByGenre(mMovieList);
+        sectionedRecyclerAdapter = new MovieAdapterByGenre(movieList);
     }
 
     private void setAdapterByDecade() {
-        Collections.sort(mMovieList, new Comparator<Movie>() {
+        Collections.sort(movieList, new Comparator<Movie>() {
             @Override
             public int compare(Movie o1, Movie o2) {
                 return o1.getYear() - o2.getYear();
             }
         });
-        mSectionedRecyclerAdapter = new MovieAdapterByDecade(mMovieList);
-    }
-
-    private void setAdapterByDifferentViewTypes() {
-        Collections.sort(mMovieList, new Comparator<Movie>() {
-            @Override
-            public int compare(Movie o1, Movie o2) {
-                return o1.getGenre().compareTo(o2.getGenre());
-            }
-        });
-        mSectionedRecyclerAdapter = new MovieAdapterByDifferentViewTypes(mMovieList);
+        sectionedRecyclerAdapter = new MovieAdapterByDecade(movieList);
     }
 
     private void setAdapterWithGridLayout() {
         setAdapterByGenre();
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 2);
         recyclerView.setLayoutManager(gridLayoutManager);
-        mSectionedRecyclerAdapter.setGridLayoutManager(gridLayoutManager);
+        sectionedRecyclerAdapter.setGridLayoutManager(gridLayoutManager);
     }
 
     @Override
