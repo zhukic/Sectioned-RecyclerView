@@ -16,9 +16,9 @@ public class MovieAdapterByDecade extends BaseMovieAdapter {
     }
 
     @Override
-    public boolean onItems(int position1, int position2) {
-        final Movie movie1 = movieList.get(position1);
-        final Movie movie2 = movieList.get(position2);
+    public boolean onPlaceSubheaderBetweenItems(int itemPosition, int nextItemPosition) {
+        final Movie movie1 = movieList.get(itemPosition);
+        final Movie movie2 = movieList.get(nextItemPosition);
 
         return movie1.getYear() / 10 != movie2.getYear() / 10;
     }
@@ -40,9 +40,9 @@ public class MovieAdapterByDecade extends BaseMovieAdapter {
     }
 
     @Override
-    public void onBindSubheaderViewHolder(SubheaderHolder subheaderHolder, int nextItemPosition) {
+    public void onBindSubheaderViewHolder(SubheaderViewHolder subheaderViewHolder, int nextItemPosition) {
         final Movie nextMovie = movieList.get(nextItemPosition);
         String decade = String.valueOf(nextMovie.getYear() - nextMovie.getYear() % 10) + "s";
-        subheaderHolder.mSubheaderText.setText(decade);
+        subheaderViewHolder.subheaderText.setText(decade);
     }
 }
