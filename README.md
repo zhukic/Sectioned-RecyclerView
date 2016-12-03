@@ -1,5 +1,5 @@
 # SectionedRecyclerView
-[ ![Download](https://api.bintray.com/packages/zhukic/maven/SectionedRecyclerView/images/download.svg?version=0.2.1) ](https://bintray.com/zhukic/maven/SectionedRecyclerView/0.2.1/link)
+[ ![Download](https://api.bintray.com/packages/zhukic/maven/SectionedRecyclerView/images/download.svg) ](https://bintray.com/zhukic/maven/SectionedRecyclerView/_latestVersion)
 
 A simple library that allows you to easily delineate sections of a list or grid list.
 
