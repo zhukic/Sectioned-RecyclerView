@@ -18,7 +18,7 @@ import zhukic.sectionedrecyclerview.R;
  * Created by RUS on 02.11.2016.
  */
 
-public abstract class BaseMovieAdapter extends SectionedRecyclerAdapter<BaseMovieAdapter.SubheaderHolder, BaseMovieAdapter.MovieViewHolder> {
+public abstract class BaseMovieAdapter extends SectionedRecyclerAdapter<BaseMovieAdapter.SubheaderViewHolder, BaseMovieAdapter.MovieViewHolder> {
 
     public interface OnItemClickListener {
         void onItemClicked(int adapterPosition, int positionInCollection);
@@ -28,20 +28,20 @@ public abstract class BaseMovieAdapter extends SectionedRecyclerAdapter<BaseMovi
 
     protected OnItemClickListener onItemClickListener;
 
-    public static class SubheaderHolder extends RecyclerView.ViewHolder {
+    public static class SubheaderViewHolder extends RecyclerView.ViewHolder {
 
         private static Typeface meduiumTypeface = null;
 
-        public TextView mSubheaderText;
+        public TextView subheaderText;
 
-        public SubheaderHolder(View itemView) {
+        public SubheaderViewHolder(View itemView) {
             super(itemView);
-            this.mSubheaderText = (TextView) itemView.findViewById(R.id.subheaderText);
+            this.subheaderText = (TextView) itemView.findViewById(R.id.subheaderText);
 
             if(meduiumTypeface == null) {
                 meduiumTypeface = Typeface.createFromAsset(itemView.getContext().getAssets(), "Roboto-Medium.ttf");
             }
-            this.mSubheaderText.setTypeface(meduiumTypeface);
+            this.subheaderText.setTypeface(meduiumTypeface);
         }
 
     }
@@ -71,12 +71,12 @@ public abstract class BaseMovieAdapter extends SectionedRecyclerAdapter<BaseMovi
     }
 
     @Override
-    public SubheaderHolder onCreateSubheaderViewHolder(ViewGroup parent, int viewType) {
-        return new SubheaderHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_header, parent, false));
+    public SubheaderViewHolder onCreateSubheaderViewHolder(ViewGroup parent, int viewType) {
+        return new SubheaderViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_header, parent, false));
     }
 
     @Override
-    public int getItemSize() {
+    public int getCount() {
         return movieList.size();
     }
 

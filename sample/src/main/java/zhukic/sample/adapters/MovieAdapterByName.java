@@ -17,9 +17,9 @@ public class MovieAdapterByName extends BaseMovieAdapter {
     }
 
     @Override
-    public boolean onItems(int position1, int position2) {
-        final Movie movie1 = movieList.get(position1);
-        final Movie movie2 = movieList.get(position2);
+    public boolean onPlaceSubheaderBetweenItems(int itemPosition, int nextItemPosition) {
+        final Movie movie1 = movieList.get(itemPosition);
+        final Movie movie2 = movieList.get(nextItemPosition);
 
         return !movie1.getName().substring(0, 1).equals(movie2.getName().substring(0, 1));
     }
@@ -41,8 +41,8 @@ public class MovieAdapterByName extends BaseMovieAdapter {
     }
 
     @Override
-    public void onBindSubheaderViewHolder(SubheaderHolder subheaderHolder, int nextItemPosition) {
+    public void onBindSubheaderViewHolder(SubheaderViewHolder subheaderViewHolder, int nextItemPosition) {
         final Movie nextMovie = movieList.get(nextItemPosition);
-        subheaderHolder.mSubheaderText.setText(nextMovie.getName().substring(0, 1));
+        subheaderViewHolder.subheaderText.setText(nextMovie.getName().substring(0, 1));
     }
 }
