@@ -81,7 +81,7 @@ public class Adapter extends SectionedRecyclerAdapter<SubheaderViewHolder, ItemV
     }
     
     @Override
-    public void onBindItemViewHolder(final MovieViewHolder holder, int position) {
+    public void onBindItemViewHolder(MovieViewHolder holder, int position) {
         //Setup item view
     }
 
