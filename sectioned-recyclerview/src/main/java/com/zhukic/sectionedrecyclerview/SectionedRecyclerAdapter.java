@@ -121,6 +121,10 @@ public abstract class SectionedRecyclerAdapter<SH extends RecyclerView.ViewHolde
         return subheaderPositions.contains(position);
     }
 
+    private boolean isHeaderOnItemPosition(int position) {
+        return subheaderPositions.contains(position + getCountOfSubheadersBeforeItemPosition(position));
+    }
+
     private int getCountOfSubheadersBeforePosition(int position) {
         int count = 0;
         for(int subheaderPosition : subheaderPositions) {
@@ -131,8 +135,22 @@ public abstract class SectionedRecyclerAdapter<SH extends RecyclerView.ViewHolde
         return count;
     }
 
+    private int getCountOfSubheadersBeforeItemPosition(int position) {
+        int count = 0;
+        for (int subheaderPosition : subheaderPositions) {
+            if (subheaderPosition < position + count) {
+                count++;
+            }
+        }
+        return count;
+    }
+
     private int getItemPositionForViewHolder(int viewHolderPosition) {
         return viewHolderPosition - getCountOfSubheadersBeforePosition(viewHolderPosition);
+    }
+
+    public int getViewHolderPositionForItem(int itemPosition) {
+        return itemPosition + getCountOfSubheadersBeforeItemPosition(itemPosition) + (isHeaderOnItemPosition(itemPosition) ? 1 : 0);
     }
 
     public int getHeaderCount() {
