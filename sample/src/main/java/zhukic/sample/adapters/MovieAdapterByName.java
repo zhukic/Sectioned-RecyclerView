@@ -17,11 +17,11 @@ public class MovieAdapterByName extends BaseMovieAdapter {
     }
 
     @Override
-    public boolean onItems(int position1, int position2) {
-        final Movie movie1 = movieList.get(position1);
-        final Movie movie2 = movieList.get(position2);
+    public boolean onPlaceSubheaderBetweenItems(int position) {
+        final Movie movie = movieList.get(position);
+        final Movie nextMovie = movieList.get(position + 1);
 
-        return !movie1.getName().substring(0, 1).equals(movie2.getName().substring(0, 1));
+        return !movie.getName().substring(0, 1).equals(nextMovie.getName().substring(0, 1));
     }
 
     @Override
@@ -35,7 +35,7 @@ public class MovieAdapterByName extends BaseMovieAdapter {
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onItemClickListener.onItemClicked(holder.getAdapterPosition(), position);
+                onItemClickListener.onItemClicked(movie);
             }
         });
     }

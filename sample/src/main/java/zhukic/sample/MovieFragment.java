@@ -3,6 +3,7 @@ package zhukic.sample;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -10,15 +11,14 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
 
 import zhukic.sample.adapters.BaseMovieAdapter;
 import zhukic.sample.adapters.MovieAdapterByDecade;
-import zhukic.sample.adapters.MovieAdapterByDifferentViewTypes;
 import zhukic.sample.adapters.MovieAdapterByGenre;
 import zhukic.sample.adapters.MovieAdapterByName;
 import zhukic.sectionedrecyclerview.R;
@@ -26,17 +26,30 @@ import zhukic.sectionedrecyclerview.R;
 /**
  * Created by RUS on 04.09.2016.
  */
-public class MovieFragment extends Fragment implements BaseMovieAdapter.OnItemClickListener {
+public class MovieFragment extends Fragment implements BaseMovieAdapter.OnItemClickListener, NewMovieDialog.DialogListener {
 
-    private ArrayList<Movie> mMovieList;
+    private List<Movie> mMovieList;
+
+    private Comparator<Movie> movieComparator;
 
     private RecyclerView recyclerView;
+    private FloatingActionButton fab;
+
     private BaseMovieAdapter mSectionedRecyclerAdapter;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        recyclerView = (RecyclerView) inflater.inflate(R.layout.recycler_view, container, false);
+        return inflater.inflate(R.layout.fragment_movies, container, false);
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
+        fab = (FloatingActionButton) view.findViewById(R.id.fab);
+
+        fab.setOnClickListener(v -> onFabClick());
+
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         Resources resources = getResources();
@@ -71,48 +84,24 @@ public class MovieFragment extends Fragment implements BaseMovieAdapter.OnItemCl
         mSectionedRecyclerAdapter.setOnItemClickListener(this);
 
         recyclerView.setAdapter(mSectionedRecyclerAdapter);
-
-        return recyclerView;
     }
 
     private void setAdapterByName() {
-        Collections.sort(mMovieList, new Comparator<Movie>() {
-            @Override
-            public int compare(Movie o1, Movie o2) {
-                return o1.getName().compareTo(o2.getName());
-            }
-        });
+        this.movieComparator = (o1, o2) -> o1.getName().compareTo(o2.getName());
+        Collections.sort(mMovieList, movieComparator);
         mSectionedRecyclerAdapter = new MovieAdapterByName(mMovieList);
     }
 
     private void setAdapterByGenre() {
-        Collections.sort(mMovieList, new Comparator<Movie>() {
-            @Override
-            public int compare(Movie o1, Movie o2) {
-                return o1.getGenre().compareTo(o2.getGenre());
-            }
-        });
+        this.movieComparator = (o1, o2) -> o1.getGenre().compareTo(o2.getGenre());
+        Collections.sort(mMovieList, movieComparator);
         mSectionedRecyclerAdapter = new MovieAdapterByGenre(mMovieList);
     }
 
     private void setAdapterByDecade() {
-        Collections.sort(mMovieList, new Comparator<Movie>() {
-            @Override
-            public int compare(Movie o1, Movie o2) {
-                return o1.getYear() - o2.getYear();
-            }
-        });
+        this.movieComparator = (o1, o2) -> o1.getYear() - o2.getYear();
+        Collections.sort(mMovieList, movieComparator);
         mSectionedRecyclerAdapter = new MovieAdapterByDecade(mMovieList);
-    }
-
-    private void setAdapterByDifferentViewTypes() {
-        Collections.sort(mMovieList, new Comparator<Movie>() {
-            @Override
-            public int compare(Movie o1, Movie o2) {
-                return o1.getGenre().compareTo(o2.getGenre());
-            }
-        });
-        mSectionedRecyclerAdapter = new MovieAdapterByDifferentViewTypes(mMovieList);
     }
 
     private void setAdapterWithGridLayout() {
@@ -123,10 +112,28 @@ public class MovieFragment extends Fragment implements BaseMovieAdapter.OnItemCl
     }
 
     @Override
-    public void onItemClicked(int adapterPosition, int positionInCollection) {
-        final String text = "Item clicked: adapter position = " + adapterPosition +
-                ", position in collection = " + positionInCollection;
+    public void onItemClicked(Movie movie) {
+        final int index = mMovieList.indexOf(movie);
+        movie.setName("AAAAA");
+        mSectionedRecyclerAdapter.changeItem(index);
+    }
 
-        Toast.makeText(getContext(), text, Toast.LENGTH_SHORT).show();
+    private void onFabClick() {
+        NewMovieDialog newMovieDialog = new NewMovieDialog();
+        newMovieDialog.setTargetFragment(this, 1);
+        newMovieDialog.show(getFragmentManager(), "newMovie");
+    }
+
+    @Override
+    public void onMovieCreated(Movie movie) {
+        for (int i = 0; i < mMovieList.size(); i++) {
+            if (movieComparator.compare(mMovieList.get(i), movie) >= 0) {
+                mMovieList.add(i, movie);
+                mSectionedRecyclerAdapter.addItem(i);
+                return;
+            }
+        }
+        mMovieList.add(mMovieList.size(), movie);
+        mSectionedRecyclerAdapter.addItem(mMovieList.size() - 1);
     }
 }

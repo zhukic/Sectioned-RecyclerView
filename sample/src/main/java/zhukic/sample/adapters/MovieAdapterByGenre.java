@@ -16,11 +16,11 @@ public class MovieAdapterByGenre extends BaseMovieAdapter {
     public MovieAdapterByGenre(List<Movie> itemList) { super(itemList); }
 
     @Override
-    public boolean onItems(int position1, int position2) {
-        final Movie movie1 = movieList.get(position1);
-        final Movie movie2 = movieList.get(position2);
+    public boolean onPlaceSubheaderBetweenItems(int position) {
+        final Movie movie = movieList.get(position);
+        final Movie nextMovie = movieList.get(position + 1);
 
-        return !movie1.getGenre().equals(movie2.getGenre());
+        return !movie.getGenre().equals(nextMovie.getGenre());
     }
 
     @Override
@@ -34,7 +34,7 @@ public class MovieAdapterByGenre extends BaseMovieAdapter {
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onItemClickListener.onItemClicked(holder.getAdapterPosition(), position);
+                onItemClickListener.onItemClicked(movie);
             }
         });
     }

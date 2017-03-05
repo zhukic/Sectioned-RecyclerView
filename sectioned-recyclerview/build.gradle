@@ -1,32 +1,14 @@
 apply plugin: 'com.android.library'
 
 ext {
-    bintrayRepo = 'maven'
-    bintrayName = 'SectionedRecyclerView'
-
-    publishedGroupId = 'com.github.zhukic'
-    libraryName = 'SectionedRecyclerView'
-    artifact = 'sectioned-recyclerview'
-
-    libraryDescription = 'A simple library that allows you to split a RecyclerView into sections with subheaders.'
-
-    siteUrl = 'https://github.com/zhukic/SectionedRecyclerView'
-    gitUrl = 'https://github.com/zhukic/SectionedRecyclerView.git'
-
-    libraryVersion = '0.1.1'
-
-    developerId = 'zhukic'
-    developerName = 'Vladislav Zhukov'
-    developerEmail = 'zhukic@mail.ru'
-
-    licenseName = 'The Apache Software License, Version 2.0'
-    licenseUrl = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-    allLicenses = ["Apache-2.0"]
+    PUBLISH_GROUP_ID = 'com.github.zhukic'
+    PUBLISH_ARTIFACT_ID = 'sectioned-recyclerview'
+    PUBLISH_VERSION = '0.2.3'
 }
 
 android {
     compileSdkVersion 24
-    buildToolsVersion "24.0.1"
+    buildToolsVersion '25.0.0'
 
     defaultConfig {
         minSdkVersion 9
@@ -51,5 +33,4 @@ dependencies {
     compile 'com.android.support:appcompat-v7:24.2.0'
 }
 
-apply from: 'https://raw.githubusercontent.com/nuuneoi/JCenter/master/installv1.gradle'
-apply from: 'https://raw.githubusercontent.com/nuuneoi/JCenter/master/bintrayv1.gradle'
+apply from: 'https://raw.githubusercontent.com/blundell/release-android-library/master/android-release-aar.gradle'

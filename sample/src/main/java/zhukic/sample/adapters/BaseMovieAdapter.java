@@ -21,20 +21,20 @@ import zhukic.sectionedrecyclerview.R;
 public abstract class BaseMovieAdapter extends SectionedRecyclerAdapter<BaseMovieAdapter.SubheaderHolder, BaseMovieAdapter.MovieViewHolder> {
 
     public interface OnItemClickListener {
-        void onItemClicked(int adapterPosition, int positionInCollection);
+        void onItemClicked(Movie movie);
     }
 
-    protected List<Movie> movieList;
+    List<Movie> movieList;
 
-    protected OnItemClickListener onItemClickListener;
+    OnItemClickListener onItemClickListener;
 
-    public static class SubheaderHolder extends RecyclerView.ViewHolder {
+    static class SubheaderHolder extends RecyclerView.ViewHolder {
 
         private static Typeface meduiumTypeface = null;
 
-        public TextView mSubheaderText;
+        TextView mSubheaderText;
 
-        public SubheaderHolder(View itemView) {
+        SubheaderHolder(View itemView) {
             super(itemView);
             this.mSubheaderText = (TextView) itemView.findViewById(R.id.subheaderText);
 
@@ -46,13 +46,13 @@ public abstract class BaseMovieAdapter extends SectionedRecyclerAdapter<BaseMovi
 
     }
 
-    public static class MovieViewHolder extends RecyclerView.ViewHolder {
+    static class MovieViewHolder extends RecyclerView.ViewHolder {
 
-        protected TextView textMovieName;
-        protected TextView textMovieGenre;
-        protected TextView textMovieYear;
+        TextView textMovieName;
+        TextView textMovieGenre;
+        TextView textMovieYear;
 
-        public MovieViewHolder(View itemView) {
+        MovieViewHolder(View itemView) {
             super(itemView);
             this.textMovieName = (TextView) itemView.findViewById(R.id.movieName);
             this.textMovieGenre = (TextView) itemView.findViewById(R.id.movieGenre);
@@ -60,7 +60,7 @@ public abstract class BaseMovieAdapter extends SectionedRecyclerAdapter<BaseMovi
         }
     }
 
-    public BaseMovieAdapter(List<Movie> itemList) {
+    BaseMovieAdapter(List<Movie> itemList) {
         super();
         this.movieList = itemList;
     }
