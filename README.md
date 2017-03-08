@@ -3,8 +3,8 @@
 
 A simple library that allows you to easily delineate sections of a list or grid list.
 
-![Screenshots](https://github.com/zhukic/Sectioned-RecyclerView/blob/master/art/name.png?raw=true)
-![Screenshots](https://github.com/zhukic/Sectioned-RecyclerView/blob/master/art/genre.png?raw=true)
+![](https://github.com/zhukic/Sectioned-RecyclerView/blob/1.0.0/art/main1.gif)
+![](https://github.com/zhukic/Sectioned-RecyclerView/blob/1.0.0/art/main2.gif)
 
 #Setup
 The Gradle dependency is available via [jCenter](https://bintray.com/zhukic/maven/SectionedRecyclerView). 
