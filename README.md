@@ -22,6 +22,7 @@ public boolean onPlaceSubheaderBetweenItems(int position) {
     final Movie movie = movieList.get(position);
     final Movie nextMovie = movieList.get(position + 1);
 
+    //The subheader will be placed between two neighboring items if movie genres are different.
     return !movie.getGenre().equals(nextMovie.getGenre());
 } 
 ```
