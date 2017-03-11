@@ -18,13 +18,12 @@ compile 'com.github.zhukic:sectioned-recyclerview:0.2.2'
 The main idea is to tell the adapter whether you want to place subheader between two neighboring items.
 ```java
 @Override
-public boolean onPlaceSubheaderBetweenItems(int itemPosition, int nextItemPosition) {
-    final Movie movie1 = movieList.get(itemPosition);
-    final Movie movie2 = movieList.get(nextItemPosition);
+public boolean onPlaceSubheaderBetweenItems(int position) {
+    final Movie movie = movieList.get(position);
+    final Movie nextMovie = movieList.get(position + 1);
 
-    //The subheader will be placed between two neighboring items if movie genres are different.
-    return !movie1.getGenre().equals(movie2.getGenre());
-}    
+    return !movie.getGenre().equals(nextMovie.getGenre());
+} 
 ```
 Also your items should be sorted. 
 ```java
@@ -39,9 +38,9 @@ sectionedRecyclerAdapter = new Adapter(movieList);
 Otherwise you will get something like this:
 
 ![Screenshots](https://github.com/zhukic/Sectioned-RecyclerView/blob/master/art/notSortedItems.png?raw=true)
-###Sample adapter
+#Sample adapter
 ```java
-public class Adapter extends SectionedRecyclerAdapter<SubheaderViewHolder, ItemViewHolder> {
+public class Adapter extends SectionedRecyclerViewAdapter<SubheaderViewHolder, ItemViewHolder> {
 
     public static class SubheaderViewHolder extends RecyclerView.ViewHolder {
 
@@ -60,7 +59,7 @@ public class Adapter extends SectionedRecyclerAdapter<SubheaderViewHolder, ItemV
     }
 
     @Override
-    public boolean onPlaceSubheaderBetweenItems(int itemPosition, int nextItemPosition) {
+    public boolean onPlaceSubheaderBetweenItems(int itemPosition) {
         //return true if you want to place subheader between two neighboring items
     }
 
@@ -91,13 +90,21 @@ public class Adapter extends SectionedRecyclerAdapter<SubheaderViewHolder, ItemV
     }
 }
 ```
+#Modify data
+```java
+notifyDataChanged();
+notifyItemInsertedAtPosition(int);
+notifyItemChangedAtPosition(int);
+notifyItemRemovedAtPosition(int);
+```
+![](https://github.com/zhukic/Sectioned-RecyclerView/blob/1.0.0/art/removing.gif)
 #Grid
 If you are using a ```GridLayoutManager``` set it to adapter.
 ```java
 GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 2);
 sectionedRecyclerAdapter.setGridLayoutManager(gridLayoutManager);
 ```
-![Screenshots](https://github.com/zhukic/Sectioned-RecyclerView/blob/master/art/grid.png?raw=true)
+![Screenshots](https://github.com/zhukic/Sectioned-RecyclerView/blob/1.0.0/art/grid.png?raw=true)
 
 #License
 
