@@ -10,16 +10,16 @@ import java.util.List;
 /**
  * @author Vladislav Zhukov (https://github.com/zhukic)
  */
-public abstract class SectionedRecyclerAdapter<SH extends RecyclerView.ViewHolder, VH extends RecyclerView.ViewHolder>
+public abstract class SectionedRecyclerViewAdapter<SH extends RecyclerView.ViewHolder, VH extends RecyclerView.ViewHolder>
         extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    public static final String TAG = SectionedRecyclerAdapter.class.getSimpleName();
+    public static final String TAG = SectionedRecyclerViewAdapter.class.getSimpleName();
 
     private static final int TYPE_HEADER = -1;
 
     private List<Integer> subheaderPositions = new ArrayList<>();
 
-    public SectionedRecyclerAdapter() { }
+    public SectionedRecyclerViewAdapter() { }
 
     private void initSubheaderPositions() {
         subheaderPositions.clear();
@@ -103,9 +103,14 @@ public abstract class SectionedRecyclerAdapter<SH extends RecyclerView.ViewHolde
         return getItemSize() + subheaderPositions.size();
     }
 
-    public void addItem(int itemPosition) {
+    public void notifyDataChanged() {
+        initSubheaderPositions();
+        notifyDataSetChanged();
+    }
+
+    public void notifyItemInsertedAtPosition(int itemPosition) {
         if (itemPosition == 0) {
-           if (onPlaceSubheaderBetweenItems(itemPosition)) {
+           if (getItemCount() == 1 || onPlaceSubheaderBetweenItems(itemPosition)) {
                subheaderPositions.add(0, 0);
                increaseSubheaderPositions(1, 2);
                notifyItemRangeInserted(0, 2);
@@ -143,12 +148,12 @@ public abstract class SectionedRecyclerAdapter<SH extends RecyclerView.ViewHolde
         }
     }
 
-    public void changeItem(int itemPosition) {
+    public void notifyItemChangedAtPosition(int itemPosition) {
         final int itemPositionInRv = getItemPositionInRecyclerView(itemPosition);
         notifyItemChanged(itemPositionInRv);
     }
 
-    public void removeItem(int itemPosition) {
+    public void notifyItemRemovedAtPosition(int itemPosition) {
 
         final int itemPositionInRv = getItemPositionInRecyclerView(itemPosition);
 

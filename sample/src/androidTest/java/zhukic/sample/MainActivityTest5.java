@@ -66,7 +66,7 @@ public class MainActivityTest5 {
                         childAtPosition(
                                 childAtPosition(
                                         withId(R.id.recyclerView),
-                                        5),
+                                        6),
                                 0),
                         isDisplayed()));
         textView.check(matches(withText("D")));
@@ -76,7 +76,7 @@ public class MainActivityTest5 {
                         childAtPosition(
                                 childAtPosition(
                                         withId(R.id.recyclerView),
-                                        6),
+                                        7),
                                 0),
                         isDisplayed()));
         textView2.check(matches(withText("District 9")));
@@ -86,7 +86,7 @@ public class MainActivityTest5 {
                         childAtPosition(
                                 childAtPosition(
                                         withId(R.id.recyclerView),
-                                        4),
+                                        5),
                                 0),
                         isDisplayed()));
         textView3.check(matches(withText("Catch Me If You Can")));
@@ -96,7 +96,7 @@ public class MainActivityTest5 {
                         childAtPosition(
                                 childAtPosition(
                                         withId(R.id.recyclerView),
-                                        3),
+                                        4),
                                 0),
                         isDisplayed()));
         textView4.check(matches(withText("C")));
@@ -106,7 +106,7 @@ public class MainActivityTest5 {
                         childAtPosition(
                                 childAtPosition(
                                         withId(R.id.recyclerView),
-                                        7),
+                                        8),
                                 0),
                         isDisplayed()));
         textView5.check(matches(withText("F")));

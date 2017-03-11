@@ -7,7 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.zhukic.sectionedrecyclerview.SectionedRecyclerAdapter;
+import com.zhukic.sectionedrecyclerview.SectionedRecyclerViewAdapter;
 
 import java.util.List;
 
@@ -18,7 +18,7 @@ import zhukic.sectionedrecyclerview.R;
  * Created by RUS on 02.11.2016.
  */
 
-public abstract class BaseMovieAdapter extends SectionedRecyclerAdapter<BaseMovieAdapter.SubheaderHolder, BaseMovieAdapter.MovieViewHolder> {
+public abstract class BaseMovieAdapter extends SectionedRecyclerViewAdapter<BaseMovieAdapter.SubheaderHolder, BaseMovieAdapter.MovieViewHolder> {
 
     public interface OnItemClickListener {
         void onItemClicked(Movie movie);

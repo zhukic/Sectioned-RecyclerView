@@ -3,7 +3,6 @@ package zhukic.sample;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -26,14 +25,13 @@ import zhukic.sectionedrecyclerview.R;
 /**
  * Created by RUS on 04.09.2016.
  */
-public class MovieFragment extends Fragment implements BaseMovieAdapter.OnItemClickListener, NewMovieDialog.DialogListener {
+public class MovieFragment extends Fragment implements BaseMovieAdapter.OnItemClickListener, NewMovieDialogFragment.DialogListener {
 
     private List<Movie> mMovieList;
 
     private Comparator<Movie> movieComparator;
 
     private RecyclerView recyclerView;
-    private FloatingActionButton fab;
 
     private BaseMovieAdapter mSectionedRecyclerAdapter;
 
@@ -46,9 +44,6 @@ public class MovieFragment extends Fragment implements BaseMovieAdapter.OnItemCl
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
-        fab = (FloatingActionButton) view.findViewById(R.id.fab);
-
-        fab.setOnClickListener(v -> onFabClick());
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
@@ -114,14 +109,14 @@ public class MovieFragment extends Fragment implements BaseMovieAdapter.OnItemCl
     @Override
     public void onItemClicked(Movie movie) {
         final int index = mMovieList.indexOf(movie);
-        movie.setName("AAAAA");
-        mSectionedRecyclerAdapter.changeItem(index);
+        mMovieList.remove(movie);
+        mSectionedRecyclerAdapter.notifyItemRemovedAtPosition(index);
     }
 
-    private void onFabClick() {
-        NewMovieDialog newMovieDialog = new NewMovieDialog();
-        newMovieDialog.setTargetFragment(this, 1);
-        newMovieDialog.show(getFragmentManager(), "newMovie");
+    public void onFabClick() {
+        NewMovieDialogFragment newMovieDialogFragment = new NewMovieDialogFragment();
+        newMovieDialogFragment.setTargetFragment(this, 1);
+        newMovieDialogFragment.show(getFragmentManager(), "newMovie");
     }
 
     @Override
@@ -129,11 +124,11 @@ public class MovieFragment extends Fragment implements BaseMovieAdapter.OnItemCl
         for (int i = 0; i < mMovieList.size(); i++) {
             if (movieComparator.compare(mMovieList.get(i), movie) >= 0) {
                 mMovieList.add(i, movie);
-                mSectionedRecyclerAdapter.addItem(i);
+                mSectionedRecyclerAdapter.notifyItemInsertedAtPosition(i);
                 return;
             }
         }
         mMovieList.add(mMovieList.size(), movie);
-        mSectionedRecyclerAdapter.addItem(mMovieList.size() - 1);
+        mSectionedRecyclerAdapter.notifyItemInsertedAtPosition(mMovieList.size() - 1);
     }
 }
