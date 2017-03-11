@@ -7,7 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.zhukic.sectionedrecyclerview.SectionedRecyclerAdapter;
+import com.zhukic.sectionedrecyclerview.SectionedRecyclerViewAdapter;
 
 import java.util.List;
 
@@ -18,41 +18,41 @@ import zhukic.sectionedrecyclerview.R;
  * Created by RUS on 02.11.2016.
  */
 
-public abstract class BaseMovieAdapter extends SectionedRecyclerAdapter<BaseMovieAdapter.SubheaderViewHolder, BaseMovieAdapter.MovieViewHolder> {
+public abstract class BaseMovieAdapter extends SectionedRecyclerViewAdapter<BaseMovieAdapter.SubheaderHolder, BaseMovieAdapter.MovieViewHolder> {
 
     public interface OnItemClickListener {
-        void onItemClicked(int adapterPosition, int positionInCollection);
+        void onItemClicked(Movie movie);
     }
 
-    protected List<Movie> movieList;
+    List<Movie> movieList;
 
-    protected OnItemClickListener onItemClickListener;
+    OnItemClickListener onItemClickListener;
 
-    public static class SubheaderViewHolder extends RecyclerView.ViewHolder {
+    static class SubheaderHolder extends RecyclerView.ViewHolder {
 
         private static Typeface meduiumTypeface = null;
 
-        public TextView subheaderText;
+        TextView mSubheaderText;
 
-        public SubheaderViewHolder(View itemView) {
+        SubheaderHolder(View itemView) {
             super(itemView);
-            this.subheaderText = (TextView) itemView.findViewById(R.id.subheaderText);
+            this.mSubheaderText = (TextView) itemView.findViewById(R.id.subheaderText);
 
             if(meduiumTypeface == null) {
                 meduiumTypeface = Typeface.createFromAsset(itemView.getContext().getAssets(), "Roboto-Medium.ttf");
             }
-            this.subheaderText.setTypeface(meduiumTypeface);
+            this.mSubheaderText.setTypeface(meduiumTypeface);
         }
 
     }
 
-    public static class MovieViewHolder extends RecyclerView.ViewHolder {
+    static class MovieViewHolder extends RecyclerView.ViewHolder {
 
-        protected TextView textMovieName;
-        protected TextView textMovieGenre;
-        protected TextView textMovieYear;
+        TextView textMovieName;
+        TextView textMovieGenre;
+        TextView textMovieYear;
 
-        public MovieViewHolder(View itemView) {
+        MovieViewHolder(View itemView) {
             super(itemView);
             this.textMovieName = (TextView) itemView.findViewById(R.id.movieName);
             this.textMovieGenre = (TextView) itemView.findViewById(R.id.movieGenre);
@@ -60,7 +60,7 @@ public abstract class BaseMovieAdapter extends SectionedRecyclerAdapter<BaseMovi
         }
     }
 
-    public BaseMovieAdapter(List<Movie> itemList) {
+    BaseMovieAdapter(List<Movie> itemList) {
         super();
         this.movieList = itemList;
     }
@@ -71,12 +71,12 @@ public abstract class BaseMovieAdapter extends SectionedRecyclerAdapter<BaseMovi
     }
 
     @Override
-    public SubheaderViewHolder onCreateSubheaderViewHolder(ViewGroup parent, int viewType) {
-        return new SubheaderViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_header, parent, false));
+    public SubheaderHolder onCreateSubheaderViewHolder(ViewGroup parent, int viewType) {
+        return new SubheaderHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_header, parent, false));
     }
 
     @Override
-    public int getCount() {
+    public int getItemSize() {
         return movieList.size();
     }
 

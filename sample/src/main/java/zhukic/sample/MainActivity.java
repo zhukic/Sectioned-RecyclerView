@@ -1,6 +1,7 @@
 package zhukic.sample;
 
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -8,13 +9,17 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import zhukic.sectionedrecyclerview.R;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+
+    private ViewPager viewPager;
+    private Adapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,21 +28,27 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        ViewPager viewPager = (ViewPager) findViewById(R.id.viewPager);
-        setupViewPager(viewPager);
+        this.viewPager = (ViewPager) findViewById(R.id.viewPager);
+        setupViewPager(this.viewPager);
 
         TabLayout tabs = (TabLayout) findViewById(R.id.tabLayout);
-        tabs.setupWithViewPager(viewPager);
+        tabs.setupWithViewPager(this.viewPager);
 
+        ((FloatingActionButton) findViewById(R.id.fab)).setOnClickListener(this);
     }
 
     private void setupViewPager(ViewPager viewPager) {
-        Adapter adapter = new Adapter(getSupportFragmentManager());
-        adapter.addFragment(new MovieFragment(), "By name");
-        adapter.addFragment(new MovieFragment(), "By genre");
-        adapter.addFragment(new MovieFragment(), "By decade");
-        adapter.addFragment(new MovieFragment(), "Grid");
-        viewPager.setAdapter(adapter);
+        this.adapter = new Adapter(getSupportFragmentManager());
+        this.adapter.addFragment(new MovieFragment(), "By name");
+        this.adapter.addFragment(new MovieFragment(), "By genre");
+        this.adapter.addFragment(new MovieFragment(), "By decade");
+        this.adapter.addFragment(new MovieFragment(), "Grid");
+        viewPager.setAdapter(this.adapter);
+    }
+
+    @Override
+    public void onClick(View v) {
+        ((MovieFragment) this.adapter.getItem(viewPager.getCurrentItem())).onFabClick();
     }
 
     private static class Adapter extends FragmentPagerAdapter {
