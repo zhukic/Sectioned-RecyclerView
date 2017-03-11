@@ -3,8 +3,8 @@
 
 A simple library that allows you to easily delineate sections of a list or grid list.
 
-![](https://github.com/zhukic/Sectioned-RecyclerView/blob/1.0.0/art/main1.gif)
-![](https://github.com/zhukic/Sectioned-RecyclerView/blob/1.0.0/art/main2.gif)
+![](https://github.com/zhukic/Sectioned-RecyclerView/blob/master/art/1.gif)
+![](https://github.com/zhukic/Sectioned-RecyclerView/blob/master/art/2.gif)
 
 #Setup
 The Gradle dependency is available via [jCenter](https://bintray.com/zhukic/maven/SectionedRecyclerView). 
@@ -98,14 +98,14 @@ notifyItemInsertedAtPosition(int);
 notifyItemChangedAtPosition(int);
 notifyItemRemovedAtPosition(int);
 ```
-![](https://github.com/zhukic/Sectioned-RecyclerView/blob/1.0.0/art/removing.gif)
+![](https://github.com/zhukic/Sectioned-RecyclerView/blob/master/art/removing.gif)
 #Grid
 If you are using a ```GridLayoutManager``` set it to adapter.
 ```java
 GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 2);
 sectionedRecyclerAdapter.setGridLayoutManager(gridLayoutManager);
 ```
-![Screenshots](https://github.com/zhukic/Sectioned-RecyclerView/blob/1.0.0/art/grid.png?raw=true)
+![Screenshots](https://github.com/zhukic/Sectioned-RecyclerView/blob/master/art/grid.png?raw=true)
 
 #License
 
