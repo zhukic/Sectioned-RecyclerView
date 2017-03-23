@@ -3,10 +3,10 @@
 
 A simple library that allows you to easily delineate sections of a list or grid list.
 
-![](https://github.com/zhukic/Sectioned-RecyclerView/blob/master/art/1.gif)
-![](https://github.com/zhukic/Sectioned-RecyclerView/blob/master/art/2.gif)
+![Screenshots](https://github.com/zhukic/Sectioned-RecyclerView/blob/master/art/name.png?raw=true)
+![Screenshots](https://github.com/zhukic/Sectioned-RecyclerView/blob/master/art/decade.png?raw=true)
 
-#Setup
+# Setup
 The Gradle dependency is available via [jCenter](https://bintray.com/zhukic/maven/SectionedRecyclerView). 
 
 Add this to your `build.gradle` file.
@@ -14,7 +14,7 @@ Add this to your `build.gradle` file.
 compile 'com.github.zhukic:sectioned-recyclerview:1.0.0'
 ```
 
-#Usage
+# Usage
 The main idea is to tell the adapter whether you want to place subheader between two neighboring items.
 ```java
 @Override
@@ -39,7 +39,7 @@ sectionedRecyclerAdapter = new Adapter(movieList);
 Otherwise you will get something like this:
 
 ![Screenshots](https://github.com/zhukic/Sectioned-RecyclerView/blob/master/art/notSortedItems.png?raw=true)
-#Sample adapter
+# Sample adapter
 ```java
 public class Adapter extends SectionedRecyclerViewAdapter<SubheaderViewHolder, ItemViewHolder> {
 
@@ -91,7 +91,7 @@ public class Adapter extends SectionedRecyclerViewAdapter<SubheaderViewHolder, I
     }
 }
 ```
-#Modify data
+# Modify data
 ```java
 notifyDataChanged();
 notifyItemInsertedAtPosition(int);
@@ -99,7 +99,8 @@ notifyItemChangedAtPosition(int);
 notifyItemRemovedAtPosition(int);
 ```
 ![](https://github.com/zhukic/Sectioned-RecyclerView/blob/master/art/removing.gif)
-#Grid
+![](https://github.com/zhukic/Sectioned-RecyclerView/blob/master/art/main2.gif)
+# Grid
 If you are using a ```GridLayoutManager``` set it to adapter.
 ```java
 GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 2);
@@ -107,7 +108,7 @@ sectionedRecyclerAdapter.setGridLayoutManager(gridLayoutManager);
 ```
 ![Screenshots](https://github.com/zhukic/Sectioned-RecyclerView/blob/master/art/grid.png?raw=true)
 
-#License
+# License
 
     Copyright 2016 Vladislav Zhukov
 
