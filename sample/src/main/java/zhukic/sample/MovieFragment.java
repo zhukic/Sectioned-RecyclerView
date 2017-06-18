@@ -23,8 +23,9 @@ import zhukic.sample.adapters.MovieAdapterByName;
 import zhukic.sectionedrecyclerview.R;
 
 /**
- * Created by RUS on 04.09.2016.
+ * @author Vladislav Zhukov (https://github.com/zhukic)
  */
+
 public class MovieFragment extends Fragment implements BaseMovieAdapter.OnItemClickListener, NewMovieDialogFragment.DialogListener {
 
     private List<Movie> mMovieList;
@@ -113,6 +114,15 @@ public class MovieFragment extends Fragment implements BaseMovieAdapter.OnItemCl
         mSectionedRecyclerAdapter.notifyItemRemovedAtPosition(index);
     }
 
+    @Override
+    public void onSubheaderClicked(int position) {
+        if (mSectionedRecyclerAdapter.isSectionExpanded(mSectionedRecyclerAdapter.getSectionIndex(position))) {
+            mSectionedRecyclerAdapter.collapseSection(mSectionedRecyclerAdapter.getSectionIndex(position));
+        } else {
+            mSectionedRecyclerAdapter.expandSection(mSectionedRecyclerAdapter.getSectionIndex(position));
+        }
+    }
+
     public void onFabClick() {
         NewMovieDialogFragment newMovieDialogFragment = new NewMovieDialogFragment();
         newMovieDialogFragment.setTargetFragment(this, 1);
@@ -131,4 +141,5 @@ public class MovieFragment extends Fragment implements BaseMovieAdapter.OnItemCl
         mMovieList.add(mMovieList.size(), movie);
         mSectionedRecyclerAdapter.notifyItemInsertedAtPosition(mMovieList.size() - 1);
     }
+
 }

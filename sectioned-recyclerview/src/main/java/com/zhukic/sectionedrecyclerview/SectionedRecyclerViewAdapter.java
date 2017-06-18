@@ -4,37 +4,45 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.ViewGroup;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * @author Vladislav Zhukov (https://github.com/zhukic)
  */
+
 public abstract class SectionedRecyclerViewAdapter<SH extends RecyclerView.ViewHolder, VH extends RecyclerView.ViewHolder>
         extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    public static final String TAG = SectionedRecyclerViewAdapter.class.getSimpleName();
+    static final int TYPE_HEADER = -1;
 
-    private static final int TYPE_HEADER = -1;
+    private SectionManager sectionManager = new SectionManager();
 
-    private List<Integer> subheaderPositions = new ArrayList<>();
+    public SectionedRecyclerViewAdapter() {}
 
-    public SectionedRecyclerViewAdapter() { }
+    void initSubheaderPositions() {
 
-    private void initSubheaderPositions() {
-        subheaderPositions.clear();
+        sectionManager.getSections().clear();
 
-        if(getItemSize() != 0) {
-            subheaderPositions.add(0);
+        if (getItemSize() != 0) {
+            sectionManager.addSection(new Section(0));
         } else {
             return;
         }
 
-        for(int i = 1; i < getItemSize(); i++) {
-            if(onPlaceSubheaderBetweenItems(i - 1)) {
-                subheaderPositions.add(i + subheaderPositions.size());
+        int lastSectionItemCount = getItemSize();
+
+        for (int i = 1; i < getItemSize(); i++) {
+            if (onPlaceSubheaderBetweenItems(i - 1)) {
+                final Section section = new Section(i + sectionManager.getSections().size());
+                final Section previousSection = sectionManager.getLastSection();
+                final int sectionItemCount = section.getSubheaderPosition() - previousSection.getSubheaderPosition() - 1;
+                previousSection.setItemsCount(sectionItemCount);
+                sectionManager.addSection(section);
+                lastSectionItemCount -= sectionItemCount;
             }
         }
+
+        final Section lastSection = sectionManager.getLastSection();
+        lastSection.setItemsCount(lastSectionItemCount);
+
     }
 
     @Override
@@ -72,16 +80,17 @@ public abstract class SectionedRecyclerViewAdapter<SH extends RecyclerView.ViewH
 
     @Override
     public final int getItemViewType(int position) {
-        if(isSubheaderOnPosition(position)) {
+        if (sectionManager.isSectionSubheaderOnPosition(position)) {
             return TYPE_HEADER;
         } else {
+            //TODO check header view type
             return getViewType(position);
         }
     }
 
     @Override
     public final RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        if(viewType == TYPE_HEADER) {
+        if (viewType == TYPE_HEADER) {
             return onCreateSubheaderViewHolder(parent, viewType);
         } else {
             return onCreateItemViewHolder(parent, viewType);
@@ -91,39 +100,62 @@ public abstract class SectionedRecyclerViewAdapter<SH extends RecyclerView.ViewH
     @SuppressWarnings("unchecked")
     @Override
     public final void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        if(isSubheaderOnPosition(position)) {
-            onBindSubheaderViewHolder((SH)holder, getItemPositionForViewHolder(position));
+        if (sectionManager.isSectionSubheaderOnPosition(position)) {
+            onBindSubheaderViewHolder((SH)holder, sectionManager.getItemPositionForSubheaderViewHolder(position));
         } else {
-            onBindItemViewHolder((VH)holder, getItemPositionForViewHolder(position));
+            onBindItemViewHolder((VH)holder, sectionManager.getItemPositionForItemViewHolder(position));
         }
     }
 
     @Override
     public final int getItemCount() {
-        return getItemSize() + subheaderPositions.size();
+        return sectionManager.getItemCount();
     }
 
-    public void notifyDataChanged() {
+    public final void notifyDataChanged() {
         initSubheaderPositions();
         notifyDataSetChanged();
     }
 
     public void notifyItemInsertedAtPosition(int itemPosition) {
+
         if (itemPosition == 0) {
-           if (getItemCount() == 1 || onPlaceSubheaderBetweenItems(itemPosition)) {
-               subheaderPositions.add(0, 0);
-               increaseSubheaderPositions(1, 2);
+            if (getItemCount() == 0 || onPlaceSubheaderBetweenItems(itemPosition)) {
+                sectionManager.insertItem(0, true);
+            } else {
+                sectionManager.insertItem(1, false);
+            }
+        } else if (itemPosition == getItemSize() - 1) {
+            if (onPlaceSubheaderBetweenItems(itemPosition - 1)) {
+                sectionManager.insertItem(sectionManager.getItemCount(), true);
+            } else {
+                sectionManager.insertItem(sectionManager.getItemCount(), false);
+            }
+        } else {
+            if (onPlaceSubheaderBetweenItems(itemPosition - 1) && onPlaceSubheaderBetweenItems(itemPosition)) {
+                int itemAdapterPosition = sectionManager.getAdapterPositionForItem(itemPosition);
+                sectionManager.insertItem(itemAdapterPosition, true);
+            } else {
+                sectionManager.insertItem(itemPosition, false);
+            }
+        }
+
+        notifyDataChanged();
+
+ /*       if (itemPosition == 0) {
+           if (getItemCount() == 0 || onPlaceSubheaderBetweenItems(itemPosition)) {
+               sectionManager.insertItem(0, true);
                notifyItemRangeInserted(0, 2);
            } else {
-               increaseSubheaderPositions(1, 1);
+               sectionManager.insertItem(0, false);
                notifyItemInserted(1);
            }
         } else if (itemPosition == getItemSize() - 1) {
             if (onPlaceSubheaderBetweenItems(itemPosition - 1)) {
-                subheaderPositions.add(getItemCount() - 1);
+                sectionManager.insertItem(getItemCount() - 1, true);
                 notifyItemRangeInserted(getItemCount() - 1, 2);
             } else {
-                notifyItemInserted(getItemPositionInRecyclerView(itemPosition));
+                notifyItemInserted(sectionManager.getAdapterPositionForItem(itemPosition));
             }
         } else {
             if (onPlaceSubheaderBetweenItems(itemPosition - 1) && onPlaceSubheaderBetweenItems(itemPosition)) {
@@ -145,48 +177,32 @@ public abstract class SectionedRecyclerViewAdapter<SH extends RecyclerView.ViewH
                 increaseSubheaderPositions(getCountOfSubheadersBeforePosition(itemPositionInRv), 1);
                 notifyItemInserted(itemPositionInRv);
             }
-        }
+        }*/
     }
 
-    public void notifyItemChangedAtPosition(int itemPosition) {
-        final int itemPositionInRv = getItemPositionInRecyclerView(itemPosition);
-        notifyItemChanged(itemPositionInRv);
+    public final void notifyItemChangedAtPosition(int itemPosition) {
+        final int itemAdapterPosition = sectionManager.getAdapterPositionForItem(itemPosition);
+        notifyItemChanged(itemAdapterPosition);
     }
 
     public void notifyItemRemovedAtPosition(int itemPosition) {
 
-        final int itemPositionInRv = getItemPositionInRecyclerView(itemPosition);
+        final int itemAdapterPosition = sectionManager.getAdapterPositionForItem(itemPosition);
+        final boolean isSectionRemoved = sectionManager.removeItem(itemAdapterPosition);
 
-        for (int i = 1; i < subheaderPositions.size(); i++) {
-            final int subheaderPosition = subheaderPositions.get(i);
-            if (subheaderPosition > itemPositionInRv) {
-                final int previousSubheaderPosition = subheaderPositions.get(i - 1);
-                if (subheaderPosition - previousSubheaderPosition == 2) {
-                    subheaderPositions.remove(subheaderPositions.indexOf(previousSubheaderPosition));
-                    decreaseSubheaderPositions(subheaderPositions.indexOf(subheaderPosition), 2);
-                    notifyItemRangeRemoved(itemPositionInRv - 1, 2);
-                } else {
-                    decreaseSubheaderPositions(subheaderPositions.indexOf(subheaderPosition), 1);
-                    notifyItemRemoved(itemPositionInRv);
-                }
-                return;
-            }
-        }
-
-        final int lastSubheaderPosition = subheaderPositions.get(subheaderPositions.size() - 1);
-        if (itemPositionInRv - lastSubheaderPosition == 1 && getItemCount() == itemPosition + subheaderPositions.size()) {
-            subheaderPositions.remove(subheaderPositions.size() - 1);
-            notifyItemRangeRemoved(itemPositionInRv - 1, 2);
+        if (isSectionRemoved) {
+            notifyItemRangeRemoved(itemAdapterPosition - 1, 2);
         } else {
-            notifyItemRemoved(itemPositionInRv);
+            notifyItemRemoved(itemAdapterPosition);
         }
+
     }
 
-    public void setGridLayoutManager(final GridLayoutManager gridLayoutManager) {
+    public final void setGridLayoutManager(final GridLayoutManager gridLayoutManager) {
         gridLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
             @Override
             public int getSpanSize(int position) {
-                if(subheaderPositions.contains(position)) {
+                if(sectionManager.isSectionSubheaderOnPosition(position)) {
                     return gridLayoutManager.getSpanCount();
                 } else {
                     return 1;
@@ -195,57 +211,66 @@ public abstract class SectionedRecyclerViewAdapter<SH extends RecyclerView.ViewH
         });
     }
 
-    public boolean isSubheaderOnPosition(int position) {
-        return subheaderPositions.contains(position);
+    public final boolean isSubheaderOnPosition(int adapterPosition) {
+        return sectionManager.isSectionSubheaderOnPosition(adapterPosition);
     }
 
-    public int getCountOfSubheadersBeforePosition(int position) {
-        int count = 0;
-        for(int subheaderPosition : subheaderPositions) {
-            if(subheaderPosition < position) {
-                count++;
-            }
+    public final void expandSection(int sectionPosition) {
+
+        if (isSectionExpanded(sectionPosition)) {
+            return;
         }
-        return count;
+
+        int sectionSubheaderPosition = sectionManager.getSection(sectionPosition).getSubheaderPosition();
+
+        notifyItemChanged(sectionSubheaderPosition);
+
+        int insertedItemCount = sectionManager.expandSection(sectionPosition);
+
+        notifyItemRangeInserted(sectionSubheaderPosition + 1, insertedItemCount);
+
     }
 
-    public int getItemPositionInRecyclerView(int position) {
-        int countOfItems = 0;
-        for (int i = 1; i < subheaderPositions.size(); i++) {
-            final int previousSubheaderPosition = subheaderPositions.get(i - 1);
-            final int nextSubheaderPosition = subheaderPositions.get(i);
-            countOfItems += nextSubheaderPosition - previousSubheaderPosition - 1;
-            if (countOfItems > position) {
-                return position + i;
-            }
+    public final void expandAllSections() {
+        sectionManager.expandAllSections();
+        notifyDataChanged();
+    }
+
+    public final void collapseSection(int sectionPosition) {
+
+        if (!isSectionExpanded(sectionPosition)) {
+            return;
         }
-        return position + subheaderPositions.size();
+
+        int sectionSubheaderPosition = sectionManager.getSection(sectionPosition).getSubheaderPosition();
+
+        notifyItemChanged(sectionSubheaderPosition);
+
+        int removedItemCount = sectionManager.collapseSection(sectionPosition);
+
+        notifyItemRangeRemoved(sectionSubheaderPosition + 1, removedItemCount);
+
     }
 
-    public int getItemPositionForViewHolder(int viewHolderPosition) {
-        return viewHolderPosition - getCountOfSubheadersBeforePosition(viewHolderPosition);
+    public final void collapseAllSections() {
+        sectionManager.collapseAllSections();
+        notifyDataChanged();
     }
 
-    private void decreaseSubheaderPositions(int startSubheaderPosition, int decreaseNum) {
-        for (int i = startSubheaderPosition; i < subheaderPositions.size(); i++) {
-            final int subheaderPosition = subheaderPositions.get(i);
-            subheaderPositions.set(i, subheaderPosition - decreaseNum);
-        }
+    public final boolean isSectionExpanded(int position) {
+        return sectionManager.isSectionExpanded(position);
     }
 
-    private void increaseSubheaderPositions(int startSubheaderPosition, int increaseNum) {
-        for (int i = startSubheaderPosition; i < subheaderPositions.size(); i++) {
-            final int subheaderPosition = subheaderPositions.get(i);
-            subheaderPositions.set(i, subheaderPosition + increaseNum);
-        }
+    public final int getSectionIndex(int adapterPosition) {
+        return sectionManager.sectionIndex(adapterPosition);
     }
 
-    private List<Integer> getSubheaderPositions() {
-        return subheaderPositions;
+    SectionManager getSectionManager() {
+        return sectionManager;
     }
 
-    public int getSubheaderCount() {
-        return subheaderPositions.size();
+    void setSectionManager(SectionManager sectionManager) {
+        this.sectionManager = sectionManager;
     }
 
 }

@@ -7,7 +7,7 @@ import java.util.List;
 import zhukic.sample.Movie;
 
 /**
- * Created by RUS on 04.09.2016.
+ * @author Vladislav Zhukov (https://github.com/zhukic)
  */
 
 public class MovieAdapterByGenre extends BaseMovieAdapter {
@@ -31,16 +31,12 @@ public class MovieAdapterByGenre extends BaseMovieAdapter {
         holder.textMovieGenre.setText(movie.getGenre());
         holder.textMovieYear.setText(String.valueOf(movie.getYear()));
 
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onItemClickListener.onItemClicked(movie);
-            }
-        });
+        holder.itemView.setOnClickListener(v -> onItemClickListener.onItemClicked(movie));
     }
 
     @Override
     public void onBindSubheaderViewHolder(SubheaderHolder subheaderHolder, int nextItemPosition) {
+        super.onBindSubheaderViewHolder(subheaderHolder, nextItemPosition);
         final Movie nextMovie = movieList.get(nextItemPosition);
         subheaderHolder.mSubheaderText.setText(nextMovie.getGenre());
     }

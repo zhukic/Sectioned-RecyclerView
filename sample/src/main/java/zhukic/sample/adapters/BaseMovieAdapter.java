@@ -1,10 +1,13 @@
 package zhukic.sample.adapters;
 
 import android.graphics.Typeface;
+import android.support.annotation.CallSuper;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.zhukic.sectionedrecyclerview.SectionedRecyclerViewAdapter;
@@ -15,13 +18,14 @@ import zhukic.sample.Movie;
 import zhukic.sectionedrecyclerview.R;
 
 /**
- * Created by RUS on 02.11.2016.
+ * @author Vladislav Zhukov (https://github.com/zhukic)
  */
 
 public abstract class BaseMovieAdapter extends SectionedRecyclerViewAdapter<BaseMovieAdapter.SubheaderHolder, BaseMovieAdapter.MovieViewHolder> {
 
     public interface OnItemClickListener {
         void onItemClicked(Movie movie);
+        void onSubheaderClicked(int position);
     }
 
     List<Movie> movieList;
@@ -33,10 +37,12 @@ public abstract class BaseMovieAdapter extends SectionedRecyclerViewAdapter<Base
         private static Typeface meduiumTypeface = null;
 
         TextView mSubheaderText;
+        ImageView mArrow;
 
         SubheaderHolder(View itemView) {
             super(itemView);
             this.mSubheaderText = (TextView) itemView.findViewById(R.id.subheaderText);
+            this.mArrow = (ImageView) itemView.findViewById(R.id.arrow);
 
             if(meduiumTypeface == null) {
                 meduiumTypeface = Typeface.createFromAsset(itemView.getContext().getAssets(), "Roboto-Medium.ttf");
@@ -76,6 +82,22 @@ public abstract class BaseMovieAdapter extends SectionedRecyclerViewAdapter<Base
     }
 
     @Override
+    @CallSuper
+    public void onBindSubheaderViewHolder(SubheaderHolder subheaderHolder, int nextItemPosition) {
+
+        boolean isSectionExpanded = isSectionExpanded(getSectionIndex(subheaderHolder.getAdapterPosition()));
+
+        if (isSectionExpanded) {
+            subheaderHolder.mArrow.setImageDrawable(ContextCompat.getDrawable(subheaderHolder.itemView.getContext(), R.drawable.ic_keyboard_arrow_up_black_24dp));
+        } else {
+            subheaderHolder.mArrow.setImageDrawable(ContextCompat.getDrawable(subheaderHolder.itemView.getContext(), R.drawable.ic_keyboard_arrow_down_black_24dp));
+        }
+
+        subheaderHolder.itemView.setOnClickListener(v -> onItemClickListener.onSubheaderClicked(subheaderHolder.getAdapterPosition()));
+
+    }
+
+    @Override
     public int getItemSize() {
         return movieList.size();
     }
@@ -83,4 +105,5 @@ public abstract class BaseMovieAdapter extends SectionedRecyclerViewAdapter<Base
     public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
         this.onItemClickListener = onItemClickListener;
     }
+
 }
