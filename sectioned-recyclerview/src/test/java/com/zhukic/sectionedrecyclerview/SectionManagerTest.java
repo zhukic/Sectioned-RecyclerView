@@ -1245,7 +1245,6 @@ public class SectionManagerTest {
         //Item 2
         //Item 3
         //Subheader 4
-        //Item 5
 
         assertThat(sectionManager.getItemPositionForItemViewHolder(2)).isEqualTo(3);
         assertThat(sectionManager.getItemPositionForItemViewHolder(3)).isEqualTo(4);
@@ -1257,6 +1256,7 @@ public class SectionManagerTest {
         //Item 2
         //Item 3
         //Subheader 4
+        //Item 5
 
         assertThat(sectionManager.getItemPositionForItemViewHolder(2)).isEqualTo(3);
         assertThat(sectionManager.getItemPositionForItemViewHolder(3)).isEqualTo(4);
