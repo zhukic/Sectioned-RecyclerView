@@ -8,6 +8,9 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -35,6 +38,12 @@ public class MovieFragment extends Fragment implements BaseMovieAdapter.OnItemCl
     private RecyclerView recyclerView;
 
     private BaseMovieAdapter mSectionedRecyclerAdapter;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
 
     @Nullable
     @Override
@@ -142,4 +151,23 @@ public class MovieFragment extends Fragment implements BaseMovieAdapter.OnItemCl
         mSectionedRecyclerAdapter.notifyItemInsertedAtPosition(mMovieList.size() - 1);
     }
 
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+            case R.id.action_expand_all_sections:
+                mSectionedRecyclerAdapter.expandAllSections();
+                break;
+            case R.id.action_collapse_all_sections:
+                mSectionedRecyclerAdapter.collapseAllSections();
+                break;
+        }
+
+        return true;
+    }
 }

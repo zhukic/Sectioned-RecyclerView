@@ -11,7 +11,7 @@ import static org.junit.Assert.*;
 public class SectionTest {
 
     @Test
-    public void test_constructor() {
+    public void checkConstructor() {
 
         Section section = new Section(10);
 

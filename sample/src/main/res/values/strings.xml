@@ -9,4 +9,6 @@
     <string name="name">Name</string>
     <string name="year">Year</string>
     <string name="genre">Genre</string>
+    <string name="expand_all_sections">Expand all sections</string>
+    <string name="collapse_all_sections">Collapse all sections</string>
 </resources>

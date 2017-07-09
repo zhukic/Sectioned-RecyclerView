@@ -1,6 +1,5 @@
 package com.zhukic.sectionedrecyclerview;
 
-import org.assertj.core.api.Assertions;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -9,7 +8,7 @@ import java.util.Collections;
 
 import static org.junit.Assert.*;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Java6Assertions.*;
 
 /**
  * @author Vladislav Zhukov (https://github.com/zhukic)
@@ -25,14 +24,12 @@ public class SectionManagerTest {
     }
 
     @Test
-    public void test_constructor() {
-
+    public void constructor() {
         assertTrue(sectionManager.getSections().isEmpty());
-
     }
 
     @Test
-    public void test_addSection() {
+    public void addSection() {
 
         Section section1 = new Section(0);
         Section section2 = new Section(5);
@@ -47,7 +44,7 @@ public class SectionManagerTest {
     }
 
     @Test
-    public void test_isSectionSubheaderOnPosition() {
+    public void isSectionSubheaderOnPosition() {
 
         Section section1 = new Section(0);
         Section section2 = new Section(4);
@@ -68,7 +65,7 @@ public class SectionManagerTest {
     }
 
     @Test
-    public void test1_expandSection() {
+    public void expandSection1() {
 
         //Subheader 0
         //Subheader 1
@@ -184,7 +181,7 @@ public class SectionManagerTest {
     }
 
     @Test
-    public void test2_expandSection() {
+    public void expandSection2() {
 
         //Subheader 0
         //Subheader 1
@@ -305,7 +302,7 @@ public class SectionManagerTest {
     }
 
     @Test
-    public void test3_expandSection() {
+    public void expandSection3() {
 
         //Subheader 0
         //Subheader 1
@@ -414,7 +411,7 @@ public class SectionManagerTest {
     }
 
     @Test
-    public void test1_expandAllSections() {
+    public void expandAllSections1() {
 
         //Subheader 0
         //Item 1
@@ -499,7 +496,7 @@ public class SectionManagerTest {
     }
 
     @Test
-    public void test2_expandAllSections() {
+    public void expandAllSections2() {
 
         //Subheader 0
         //Item 1
@@ -597,7 +594,7 @@ public class SectionManagerTest {
     }
 
     @Test
-    public void test1_collapseSection() {
+    public void collapseSection1() {
 
         //Subheader 0
         //Item
@@ -701,7 +698,7 @@ public class SectionManagerTest {
     }
 
     @Test
-    public void test2_collapseSection() {
+    public void collapseSection2() {
 
         //Subheader 0
         //Item
@@ -816,7 +813,7 @@ public class SectionManagerTest {
     }
 
     @Test
-    public void test3_collapseSection() {
+    public void collapseSection3() {
 
         //Subheader 0
         //Item
@@ -925,8 +922,23 @@ public class SectionManagerTest {
 
     }
 
+    @Test(expected = IllegalArgumentException.class)
+    public void collapseSection_shouldThrowException() {
+
+        Section section1 = new Section(0);
+        Section section2 = new Section(3);
+        Section section3 = new Section(5);
+
+        sectionManager.addSection(section1);
+        sectionManager.addSection(section2);
+        sectionManager.addSection(section3);
+
+        sectionManager.collapseSection(3);
+
+    }
+
     @Test
-    public void test1_collapseAllSections() {
+    public void collapseAllSections1() {
 
         //Subheader 0
         //Item 1
@@ -977,7 +989,7 @@ public class SectionManagerTest {
     }
 
     @Test
-    public void test2_collapseAllSections() {
+    public void collapseAllSections2() {
 
         //Subheader 0
         //Item 1
@@ -1046,7 +1058,7 @@ public class SectionManagerTest {
     }
 
     @Test
-    public void test_isSectionExpanded() {
+    public void isSectionExpanded() {
 
         Section section1 = new Section(0);
         Section section2 = new Section(4);
@@ -1064,8 +1076,23 @@ public class SectionManagerTest {
 
     }
 
+    @Test(expected = IllegalArgumentException.class)
+    public void isSectionExpanded_shouldThrowException() {
+
+        Section section1 = new Section(0);
+        Section section2 = new Section(4);
+        Section section3 = new Section(7);
+
+        sectionManager.addSection(section1);
+        sectionManager.addSection(section2);
+        sectionManager.addSection(section3);
+
+        sectionManager.isSectionExpanded(4);
+
+    }
+
     @Test
-    public void test_getItemPositionForSubheaderViewHolder() {
+    public void getItemPositionForSubheaderViewHolder() {
 
         //Subheader 0
         //Item
@@ -1140,7 +1167,7 @@ public class SectionManagerTest {
         assertThat(sectionManager.getItemPositionForSubheaderViewHolder(1)).isEqualTo(3);
         assertThat(sectionManager.getItemPositionForSubheaderViewHolder(4)).isEqualTo(5);
 
-        sectionManager.expandSection(1);
+        sectionManager.expandSection(0);
 
         //Subheader 0
         //Item
@@ -1152,7 +1179,7 @@ public class SectionManagerTest {
         //Subheader 7
 
         assertThat(sectionManager.getItemPositionForSubheaderViewHolder(0)).isEqualTo(0);
-        assertThat(sectionManager.getItemPositionForSubheaderViewHolder(1)).isEqualTo(3);
+        assertThat(sectionManager.getItemPositionForSubheaderViewHolder(4)).isEqualTo(3);
         assertThat(sectionManager.getItemPositionForSubheaderViewHolder(7)).isEqualTo(5);
 
         sectionManager.expandSection(2);
@@ -1168,13 +1195,33 @@ public class SectionManagerTest {
         //Item
 
         assertThat(sectionManager.getItemPositionForSubheaderViewHolder(0)).isEqualTo(0);
-        assertThat(sectionManager.getItemPositionForSubheaderViewHolder(1)).isEqualTo(3);
+        assertThat(sectionManager.getItemPositionForSubheaderViewHolder(4)).isEqualTo(3);
         assertThat(sectionManager.getItemPositionForSubheaderViewHolder(7)).isEqualTo(5);
 
     }
 
+    @Test(expected = IllegalArgumentException.class)
+    public void getItemPositionForSubheaderViewHolder_shouldThrowException() {
+
+        Section section1 = new Section(0);
+        section1.setItemsCount(3);
+
+        Section section2 = new Section(4);
+        section2.setItemsCount(2);
+
+        Section section3 = new Section(7);
+        section3.setItemsCount(1);
+
+        sectionManager.addSection(section1);
+        sectionManager.addSection(section2);
+        sectionManager.addSection(section3);
+
+        sectionManager.getItemPositionForSubheaderViewHolder(9);
+
+    }
+
     @Test
-    public void test_getItemPositionForItemViewHolder() {
+    public void getItemPositionForItemViewHolder() {
 
         //Subheader 0
         //Item 1
@@ -1283,7 +1330,35 @@ public class SectionManagerTest {
     }
 
     @Test
-    public void test_getAdapterPositionForItem() {
+    public void getItemPositionForItemViewHolder_shouldThrowException() {
+
+        Section section1 = new Section(0);
+        section1.setItemsCount(3);
+
+        Section section2 = new Section(4);
+        section2.setItemsCount(2);
+
+        Section section3 = new Section(7);
+        section3.setItemsCount(1);
+
+        sectionManager.addSection(section1);
+        sectionManager.addSection(section2);
+        sectionManager.addSection(section3);
+
+        try {
+            sectionManager.getItemPositionForItemViewHolder(0);
+            failBecauseExceptionWasNotThrown(IllegalArgumentException.class);
+        } catch (Exception e) {}
+
+        try {
+            sectionManager.getItemPositionForItemViewHolder(9);
+            failBecauseExceptionWasNotThrown(IllegalArgumentException.class);
+        } catch (Exception e) {}
+
+    }
+
+    @Test
+    public void getAdapterPositionForItem() {
 
         //Subheader 0
         //Item 1 ( index = 0 )
@@ -1465,8 +1540,32 @@ public class SectionManagerTest {
 
     }
 
+    @Test(expected = IllegalArgumentException.class)
+    public void getAdapterPositionForItem_shouldThrowException() {
+
+        Section section1 = new Section(0);
+        section1.setItemsCount(3);
+
+        Section section2 = new Section(4);
+        section2.setItemsCount(2);
+
+        Section section3 = new Section(7);
+        section3.setItemsCount(4);
+
+        Section section4 = new Section(12);
+        section4.setItemsCount(1);
+
+        sectionManager.addSection(section1);
+        sectionManager.addSection(section2);
+        sectionManager.addSection(section3);
+        sectionManager.addSection(section4);
+
+        sectionManager.getAdapterPositionForItem(10);
+
+    }
+
     @Test
-    public void test_removeItem() {
+    public void removeItem() {
 
         //Subheader 0
         //Item 1 ( index = 0 )
@@ -1774,7 +1873,43 @@ public class SectionManagerTest {
     }
 
     @Test
-    public void test_insertItem() {
+    public void removeItem_shouldThrowException() {
+
+        Section section1 = new Section(0);
+        section1.setItemsCount(3);
+
+        Section section2 = new Section(4);
+        section2.setItemsCount(1);
+
+        Section section3 = new Section(6);
+        section3.setItemsCount(2);
+
+        Section section4 = new Section(9);
+        section4.setItemsCount(1);
+
+        Section section5 = new Section(11);
+        section5.setItemsCount(4);
+
+        sectionManager.addSection(section1);
+        sectionManager.addSection(section2);
+        sectionManager.addSection(section3);
+        sectionManager.addSection(section4);
+        sectionManager.addSection(section5);
+
+        try {
+            sectionManager.removeItem(0);
+            failBecauseExceptionWasNotThrown(IllegalArgumentException.class);
+        } catch (Exception e) {}
+
+        try {
+            sectionManager.removeItem(16);
+            failBecauseExceptionWasNotThrown(IllegalArgumentException.class);
+        } catch (Exception e) {}
+
+    }
+
+    @Test
+    public void insertItem() {
 
         sectionManager.insertItem(0, true);
 
@@ -1967,7 +2102,7 @@ public class SectionManagerTest {
         //Subheader 0
         //Item 1
         //Item 2
-        //newItem 3
+        //Item 3
         //Subheader 4
         //Item 5
         //Item 6
@@ -1992,11 +2127,29 @@ public class SectionManagerTest {
         assertThat(sectionManager.getSection(3).getSubheaderPosition()).isEqualTo(10);
         assertThat(sectionManager.getSection(3).getItemsCount()).isEqualTo(3);
 
+        sectionManager.collapseSection(2);
+
+        //Subheader 0
+        //Item 1
+        //Item 2
+        //Item 3
+        //Subheader 4
+        //Item 5
+        //Item 6
+        //Item 7
+        //Subheader 8
+        //Subheader 9
+        //Item 10
+        //Item 11
+        //newItem 12
+
+        sectionManager.insertItem(9, false);
+
 
     }
 
     @Test
-    public void test_getSection() {
+    public void getSection() {
 
         Section section1 = new Section(0);
         Section section2 = new Section(4);
@@ -2012,8 +2165,23 @@ public class SectionManagerTest {
 
     }
 
+    @Test(expected = IllegalArgumentException.class)
+    public void getSection_shouldThrowException() {
+
+        Section section1 = new Section(0);
+        Section section2 = new Section(4);
+        Section section3 = new Section(7);
+
+        sectionManager.addSection(section1);
+        sectionManager.addSection(section2);
+        sectionManager.addSection(section3);
+
+        sectionManager.getSection(3);
+
+    }
+
     @Test
-    public void test_getLastSection() {
+    public void getLastSection() {
 
         Section section1 = new Section(0);
 
@@ -2026,6 +2194,183 @@ public class SectionManagerTest {
         sectionManager.addSection(section2);
 
         assertThat(sectionManager.getLastSection()).isSameAs(section2);
+
+    }
+
+    @Test
+    public void getDataItemCount() {
+
+        Section section1 = new Section(0);
+        section1.setItemsCount(3);
+
+        Section section2 = new Section(1);
+        section2.setItemsCount(2);
+
+        Section section3 = new Section(2);
+        section3.setItemsCount(1);
+
+        sectionManager.addSection(section1);
+        sectionManager.addSection(section2);
+        sectionManager.addSection(section3);
+
+        assertThat(sectionManager.getDataItemCount()).isEqualTo(6);
+
+    }
+
+    @Test
+    public void sectionIndex() {
+
+        Section section1 = new Section(0);
+        section1.setItemsCount(3);
+
+        Section section2 = new Section(4);
+        section2.setItemsCount(2);
+
+        Section section3 = new Section(7);
+        section3.setItemsCount(1);
+
+        sectionManager.addSection(section1);
+        sectionManager.addSection(section2);
+        sectionManager.addSection(section3);
+
+        assertThat(sectionManager.sectionIndex(0)).isEqualTo(0);
+        assertThat(sectionManager.sectionIndex(1)).isEqualTo(0);
+        assertThat(sectionManager.sectionIndex(2)).isEqualTo(0);
+        assertThat(sectionManager.sectionIndex(3)).isEqualTo(0);
+        assertThat(sectionManager.sectionIndex(4)).isEqualTo(1);
+        assertThat(sectionManager.sectionIndex(5)).isEqualTo(1);
+        assertThat(sectionManager.sectionIndex(6)).isEqualTo(1);
+        assertThat(sectionManager.sectionIndex(7)).isEqualTo(2);
+        assertThat(sectionManager.sectionIndex(8)).isEqualTo(2);
+
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void sectionIndex_shouldThrowException() {
+
+        Section section1 = new Section(0);
+        section1.setItemsCount(3);
+
+        Section section2 = new Section(4);
+        section2.setItemsCount(2);
+
+        Section section3 = new Section(7);
+        section3.setItemsCount(1);
+
+        sectionManager.addSection(section1);
+        sectionManager.addSection(section2);
+        sectionManager.addSection(section3);
+
+        sectionManager.sectionIndex(9);
+
+    }
+
+    @Test
+    public void clear() {
+
+        Section section1 = new Section(0);
+        section1.setItemsCount(3);
+
+        Section section2 = new Section(4);
+        section2.setItemsCount(2);
+
+        Section section3 = new Section(7);
+        section3.setItemsCount(1);
+
+        sectionManager.addSection(section1);
+        sectionManager.addSection(section2);
+        sectionManager.addSection(section3);
+
+        sectionManager.clear();
+
+        assertTrue(sectionManager.getSections().isEmpty());
+
+    }
+
+    @Test
+    public void indexInSection() {
+
+        //Subheader 0
+        //Item 1
+        //Item 2
+        //Item 3
+        //Subheader 4
+        //Item 5
+        //Item 6
+        //Subheader 7
+        //Item 8
+
+        Section section1 = new Section(0);
+        section1.setItemsCount(3);
+
+        Section section2 = new Section(4);
+        section2.setItemsCount(2);
+
+        Section section3 = new Section(7);
+        section3.setItemsCount(1);
+
+        sectionManager.addSection(section1);
+        sectionManager.addSection(section2);
+        sectionManager.addSection(section3);
+
+        assertThat(sectionManager.positionInSection(1)).isEqualTo(0);
+        assertThat(sectionManager.positionInSection(2)).isEqualTo(1);
+        assertThat(sectionManager.positionInSection(3)).isEqualTo(2);
+        assertThat(sectionManager.positionInSection(5)).isEqualTo(0);
+        assertThat(sectionManager.positionInSection(6)).isEqualTo(1);
+        assertThat(sectionManager.positionInSection(8)).isEqualTo(0);
+
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void indexInSection_shouldThrowException() {
+
+        //Subheader 0
+        //Item 1
+        //Item 2
+        //Item 3
+        //Subheader 4
+        //Item 5
+        //Item 6
+        //Subheader 7
+        //Item 8
+
+        Section section1 = new Section(0);
+        section1.setItemsCount(3);
+
+        Section section2 = new Section(4);
+        section2.setItemsCount(2);
+
+        Section section3 = new Section(7);
+        section3.setItemsCount(1);
+
+        sectionManager.addSection(section1);
+        sectionManager.addSection(section2);
+        sectionManager.addSection(section3);
+
+        sectionManager.positionInSection(4);
+
+    }
+
+    @Test
+    public void sectionSize() {
+
+        Section section1 = new Section(0);
+        section1.setItemsCount(3);
+
+        Section section2 = new Section(4);
+        section2.setItemsCount(2);
+
+        Section section3 = new Section(7);
+        section3.setItemsCount(1);
+
+        sectionManager.addSection(section1);
+        sectionManager.addSection(section2);
+        sectionManager.addSection(section3);
+
+        assertThat(sectionManager.sectionSize(0)).isEqualTo(3);
+        assertThat(sectionManager.sectionSize(1)).isEqualTo(2);
+        assertThat(sectionManager.sectionSize(2)).isEqualTo(1);
 
     }
 

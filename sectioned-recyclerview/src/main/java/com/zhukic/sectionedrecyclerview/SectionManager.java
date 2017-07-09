@@ -4,7 +4,6 @@ import android.support.annotation.IntRange;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.jar.Pack200;
 
 /**
  * @author Vladislav Zhukov (https://github.com/zhukic)
@@ -12,22 +11,26 @@ import java.util.jar.Pack200;
 
 class SectionManager {
 
-    private List<Section> sections = new ArrayList<>();
+    private final List<Section> sections = new ArrayList<>();
 
     void addSection(Section section) {
         sections.add(section);
     }
 
     boolean isSectionSubheaderOnPosition(@IntRange(from = 0, to = Integer.MAX_VALUE) int position) {
-
         for (Section section : sections) {
             if (section.getSubheaderPosition() == position) {
                 return true;
             }
         }
-
         return false;
+    }
 
+    boolean isSectionExpanded(@IntRange(from = 0, to = Integer.MAX_VALUE) int sectionIndex) {
+        if (sectionIndex < 0 || sectionIndex >= getSections().size()) {
+            throw new IllegalArgumentException("sectionIndex: " + sectionIndex + ", size: " + getSections().size());
+        }
+        return sections.get(sectionIndex).isExpanded();
     }
 
     int expandSection(@IntRange(from = 0, to = Integer.MAX_VALUE) int sectionIndex) {
@@ -57,6 +60,10 @@ class SectionManager {
 
     int collapseSection(@IntRange(from = 0, to = Integer.MAX_VALUE) int sectionIndex) {
 
+        if (sectionIndex < 0 || sectionIndex >= getSections().size()) {
+            throw new IllegalArgumentException("sectionIndex: " + sectionIndex + ", size: " + getSections().size());
+        }
+
         final Section sectionToCollapse = sections.get(sectionIndex);
 
         if (!sectionToCollapse.isExpanded()) {
@@ -80,13 +87,11 @@ class SectionManager {
         }
     }
 
-    boolean isSectionExpanded(@IntRange(from = 0, to = Integer.MAX_VALUE) int sectionIndex) {
-        return sections.get(sectionIndex).isExpanded();
-    }
-
     int getItemPositionForSubheaderViewHolder(@IntRange(from = 0, to = Integer.MAX_VALUE) int subheaderPosition) {
 
-        //TODO check isSubheaderOnPosition
+        if (subheaderPosition < 0 || subheaderPosition >= getItemCount()) {
+            throw new IllegalArgumentException("subheaderPosition: " + subheaderPosition + ", itemCount: " + getItemCount());
+        }
 
         int itemPosition = 0;
 
@@ -100,31 +105,38 @@ class SectionManager {
 
     }
 
-    int getItemPositionForItemViewHolder(@IntRange(from = 0, to = Integer.MAX_VALUE) int holderPosition) {
+    int getItemPositionForItemViewHolder(@IntRange(from = 0, to = Integer.MAX_VALUE) int itemHolderPosition) {
 
-        //TODO check subheader is placed at holder position
+        if (itemHolderPosition < 0 || itemHolderPosition >= getItemCount()) {
+            throw new IllegalArgumentException("itemHolderPosition: " + itemHolderPosition + ", itemCount: " + getItemCount());
+        }
+        if (isSectionSubheaderOnPosition(itemHolderPosition)) {
+            throw new IllegalArgumentException("section subheader is placed at " + itemHolderPosition + " position");
+        }
 
-        int sectionIndex = sectionIndex(holderPosition);
+        int sectionIndex = sectionIndex(itemHolderPosition);
 
-        holderPosition -= sectionIndex + 1;
+        itemHolderPosition -= sectionIndex + 1;
 
         for (int i = 0; i < sectionIndex; i++) {
 
             final Section section = sections.get(i);
 
             if (!section.isExpanded()) {
-                holderPosition += section.getItemsCount();
+                itemHolderPosition += section.getItemsCount();
             }
 
         }
 
-        return holderPosition;
+        return itemHolderPosition;
 
     }
 
     int getAdapterPositionForItem(int itemPosition) {
 
-        //TODO check if itemPosition is out of range
+        if (itemPosition < 0 || itemPosition >= getDataItemCount()) {
+            throw new IllegalArgumentException("itemPosition: " + itemPosition + ", itemCount: " + getDataItemCount());
+        }
 
         int adapterPosition = 0;
 
@@ -152,7 +164,12 @@ class SectionManager {
 
     boolean removeItem(int itemAdapterPosition) {
 
-        //TODO check if subheader at itemAdapterPosition
+        if (itemAdapterPosition < 0 || itemAdapterPosition >= getItemCount()) {
+            throw new IllegalArgumentException("itemAdapterPosition: " + itemAdapterPosition + ", itemCount: " + getItemCount());
+        }
+        if (isSectionSubheaderOnPosition(itemAdapterPosition)) {
+            throw new IllegalArgumentException("section subheader is placed at " + itemAdapterPosition + " position");
+        }
 
         final int sectionIndex = sectionIndex(itemAdapterPosition);
         final Section section = sections.get(sectionIndex);
@@ -170,12 +187,15 @@ class SectionManager {
             positionsToDecrease = 1;
         }
 
+        if (!section.isExpanded()) {
+            if (isSectionRemoved) {
+                positionsToDecrease = 1;
+            }
+        }
+
         for (int i = sectionIndex + 1; i < sections.size(); i++) {
-
             final Section section1 = sections.get(i);
-
             section1.setSubheaderPosition(section1.getSubheaderPosition() - positionsToDecrease);
-
         }
 
         if (isSectionRemoved) {
@@ -186,55 +206,44 @@ class SectionManager {
 
     }
 
-    void insertItem(int adapterPosition, boolean sectionShouldBeInserted) {
+    void insertItem(int adapterPosition, boolean shouldInsertSection) {
 
-
-        if (sectionShouldBeInserted) {
+        if (shouldInsertSection) {
 
             Section newSection = new Section(adapterPosition);
-
             newSection.setItemsCount(1);
 
             if (adapterPosition == getItemCount()) {
-
                 sections.add(newSection);
-
                 return;
-
             }
 
             int sectionIndex = sectionIndex(adapterPosition);
 
             for (int i = sectionIndex; i < sections.size(); i++) {
-
                 Section section = getSection(i);
-
                 section.setSubheaderPosition(section.getSubheaderPosition() + 2);
-
             }
 
             sections.add(sectionIndex, newSection);
 
         } else {
 
-            if (isSectionSubheaderOnPosition(adapterPosition)) {
-
+            if ((isSectionSubheaderOnPosition(adapterPosition) && adapterPosition != 0) || adapterPosition == getItemCount()) {
                 adapterPosition--;
-
             }
 
-            int sectionIndex = sectionIndex(adapterPosition);
-
-            Section currentSection = getSection(sectionIndex);
-
+            int currentSectionIndex = sectionIndex(adapterPosition);
+            Section currentSection = getSection(currentSectionIndex);
             currentSection.setItemsCount(currentSection.getItemsCount() + 1);
 
-            for (int i = sectionIndex + 1; i < sections.size(); i++) {
+            if (!currentSection.isExpanded()) {
+                return;
+            }
 
+            for (int i = currentSectionIndex + 1; i < sections.size(); i++) {
                 Section section = getSection(i);
-
                 section.setSubheaderPosition(section.getSubheaderPosition() + 1);
-
             }
 
         }
@@ -242,6 +251,9 @@ class SectionManager {
     }
 
     Section getSection(@IntRange(from = 0, to = Integer.MAX_VALUE) int sectionIndex) {
+        if (sectionIndex < 0 || sectionIndex >= getSections().size()) {
+            throw new IllegalArgumentException("sectionIndex: " + sectionIndex + ", size: " + getSections().size());
+        }
         return sections.get(sectionIndex);
     }
 
@@ -249,26 +261,24 @@ class SectionManager {
         return sections.get(sections.size() - 1);
     }
 
-    int sectionIndex(@IntRange(from = 0, to = Integer.MAX_VALUE) int holderPosition) {
+    int sectionIndex(@IntRange(from = 0, to = Integer.MAX_VALUE) int adapterPosition) {
 
-        //TODO check holder position is out of range
+        if (adapterPosition < 0 || adapterPosition >= getItemCount()) {
+            throw new IllegalArgumentException("adapterPosition: " + adapterPosition + ", itemCount: " + getItemCount());
+        }
 
         int sectionIndex = 0;
 
         for (Section section : sections) {
-            if (holderPosition == section.getSubheaderPosition()) {
+            if (adapterPosition == section.getSubheaderPosition()) {
                 return sections.indexOf(section);
-            } else if (holderPosition > section.getSubheaderPosition()) {
+            } else if (adapterPosition > section.getSubheaderPosition()) {
                 sectionIndex = sections.indexOf(section);
             }
         }
 
         return sectionIndex;
 
-    }
-
-    List<Section> getSections() {
-        return sections;
     }
 
     int getItemCount() {
@@ -284,6 +294,45 @@ class SectionManager {
 
         return itemCount;
 
+    }
+
+    int getDataItemCount() {
+        int dataItemCount = 0;
+        for (Section section : sections) {
+            dataItemCount += section.getItemsCount();
+        }
+        return dataItemCount;
+    }
+
+    int positionInSection(@IntRange(from = 0, to = Integer.MAX_VALUE) int itemAdapterPosition) {
+
+        if (itemAdapterPosition < 0 || itemAdapterPosition >= getItemCount()) {
+            throw new IllegalArgumentException("itemAdapterPosition: " + itemAdapterPosition + ", itemCount: " + getItemCount());
+        }
+        if (isSectionSubheaderOnPosition(itemAdapterPosition)) {
+            throw new IllegalArgumentException("section subheader is placed at " + itemAdapterPosition + " position");
+        }
+
+        final Section section = getSection(sectionIndex(itemAdapterPosition));
+
+        return itemAdapterPosition - section.getSubheaderPosition() - 1;
+
+    }
+
+    int sectionSize(int sectionIndex) {
+        return getSection(sectionIndex).getItemsCount();
+    }
+
+    int getSectionCount() {
+        return sections.size();
+    }
+
+    List<Section> getSections() {
+        return sections;
+    }
+
+    void clear() {
+        getSections().clear();
     }
 
 }

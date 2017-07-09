@@ -2,20 +2,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="rus.recyclerviewheaders.ui.MainActivity" >
-    <group android:checkableBehavior="single">
-        <item
-            android:title="@string/action_sort_by_name"
-            android:orderInCategory="101"
-            android:id="@+id/action_sort_by_name"
-            app:showAsAction="never" />
-        <item
-            android:title="@string/action_sort_by_genre"
-            android:orderInCategory="102"
-            android:id="@+id/action_sort_by_genre"
-            app:showAsAction="never" />
-        <item android:title="@string/action_sort_by_year"
-            android:orderInCategory="103"
-            android:id="@+id/action_sort_by_year"
-            app:showAsAction="never" />
-    </group>
+    <item
+        android:title="@string/expand_all_sections"
+        android:orderInCategory="101"
+        android:id="@+id/action_expand_all_sections"
+        app:showAsAction="never" />
+    <item
+        android:title="@string/collapse_all_sections"
+        android:orderInCategory="101"
+        android:id="@+id/action_collapse_all_sections"
+        app:showAsAction="never" />
 </menu>
