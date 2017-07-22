@@ -16,7 +16,7 @@ public class SectionTest {
         Section section = new Section(10);
 
         assertEquals(10, section.getSubheaderPosition());
-        assertEquals(0, section.getItemsCount());
+        assertEquals(0, section.getItemCount());
         assertEquals(true, section.isExpanded());
 
     }

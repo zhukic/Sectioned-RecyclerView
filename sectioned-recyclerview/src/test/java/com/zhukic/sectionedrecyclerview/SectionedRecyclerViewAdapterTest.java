@@ -4,7 +4,6 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.ViewGroup;
 
-import org.hamcrest.Matchers;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
@@ -13,8 +12,6 @@ import org.robolectric.RuntimeEnvironment;
 import org.robolectric.annotation.Config;
 
 import java.util.Collections;
-
-import edu.emory.mathcs.backport.java.util.Arrays;
 
 import static org.junit.Assert.*;
 
@@ -91,13 +88,13 @@ public class SectionedRecyclerViewAdapterTest {
         assertThat(sectionedRecyclerViewAdapter.getSectionManager().getSections().size()).isEqualTo(4);
 
         assertThat(sectionManager.getSection(0).getSubheaderPosition()).isEqualTo(0);
-        assertThat(sectionManager.getSection(0).getItemsCount()).isEqualTo(2);
+        assertThat(sectionManager.getSection(0).getItemCount()).isEqualTo(2);
         assertThat(sectionManager.getSection(1).getSubheaderPosition()).isEqualTo(3);
-        assertThat(sectionManager.getSection(1).getItemsCount()).isEqualTo(1);
+        assertThat(sectionManager.getSection(1).getItemCount()).isEqualTo(1);
         assertThat(sectionManager.getSection(2).getSubheaderPosition()).isEqualTo(5);
-        assertThat(sectionManager.getSection(2).getItemsCount()).isEqualTo(1);
+        assertThat(sectionManager.getSection(2).getItemCount()).isEqualTo(1);
         assertThat(sectionManager.getSection(3).getSubheaderPosition()).isEqualTo(7);
-        assertThat(sectionManager.getSection(3).getItemsCount()).isEqualTo(3);
+        assertThat(sectionManager.getSection(3).getItemCount()).isEqualTo(3);
 
         assertThat(sectionedRecyclerViewAdapter.getItemViewType(0)).isEqualTo(SectionedRecyclerViewAdapter.TYPE_HEADER);
         assertThat(sectionedRecyclerViewAdapter.getItemViewType(1)).isNotEqualTo(SectionedRecyclerViewAdapter.TYPE_HEADER);
@@ -328,7 +325,6 @@ public class SectionedRecyclerViewAdapterTest {
 
         verify(sectionManager, times(2)).getItemCount();
         verify(sectionManager).insertItem(1, false);
-        verifyNoMoreInteractions(sectionManager);
         reset(sectionManager);
 
         verify(adapterDataObserver).onItemRangeInserted(1, 1);
@@ -348,7 +344,6 @@ public class SectionedRecyclerViewAdapterTest {
 
         verify(sectionManager, times(2)).getItemCount();
         verify(sectionManager).insertItem(1, false);
-        verifyNoMoreInteractions(sectionManager);
         reset(sectionManager);
 
         verify(adapterDataObserver).onItemRangeInserted(1, 1);
@@ -356,6 +351,8 @@ public class SectionedRecyclerViewAdapterTest {
         reset(adapterDataObserver);
 
         when(sectionManager.getItemCount()).thenReturn(4);
+        when(sectionManager.getSectionsCount()).thenReturn(1);
+        when(sectionManager.isSectionExpanded(0)).thenReturn(true);
 
         adapterPosition = sectionedRecyclerViewAdapter.notifyItemInsertedAtPosition(3);
 
@@ -369,7 +366,6 @@ public class SectionedRecyclerViewAdapterTest {
 
         verify(sectionManager, times(3)).getItemCount();
         verify(sectionManager).insertItem(4, false);
-        verifyNoMoreInteractions(sectionManager);
         reset(sectionManager);
 
         verify(adapterDataObserver).onItemRangeInserted(4, 1);
@@ -392,7 +388,6 @@ public class SectionedRecyclerViewAdapterTest {
 
         verify(sectionManager, times(3)).getItemCount();
         verify(sectionManager).insertItem(5, true);
-        verifyNoMoreInteractions(sectionManager);
         reset(sectionManager);
 
         verify(adapterDataObserver).onItemRangeInserted(5, 2);
@@ -664,6 +659,7 @@ public class SectionedRecyclerViewAdapterTest {
 
         when(sectionManager.getAdapterPositionForItem(itemPosition)).thenReturn(1);
         when(sectionManager.removeItem(itemAdapterPosition)).thenReturn(true);
+        when(sectionManager.getItemCount()).thenReturn(2);
 
         int actualAdapterPosition = sectionedRecyclerViewAdapter.notifyItemRemovedAtPosition(itemPosition);
 
@@ -671,6 +667,7 @@ public class SectionedRecyclerViewAdapterTest {
 
         verify(sectionManager).getAdapterPositionForItem(itemPosition);
         verify(sectionManager).removeItem(itemAdapterPosition);
+        verify(sectionManager).getItemCount();
         verifyNoMoreInteractions(sectionManager);
 
         verify(adapterDataObserver).onItemRangeRemoved(itemAdapterPosition - 1, 2);
@@ -722,6 +719,7 @@ public class SectionedRecyclerViewAdapterTest {
 
         when(sectionManager.getAdapterPositionForItem(itemPosition)).thenReturn(1);
         when(sectionManager.removeItem(itemAdapterPosition)).thenReturn(false);
+        when(sectionManager.getItemCount()).thenReturn(2);
 
         int actualAdapterPosition = sectionedRecyclerViewAdapter.notifyItemRemovedAtPosition(itemPosition);
 
@@ -729,6 +727,7 @@ public class SectionedRecyclerViewAdapterTest {
 
         verify(sectionManager).getAdapterPositionForItem(itemPosition);
         verify(sectionManager).removeItem(itemAdapterPosition);
+        verify(sectionManager).getItemCount();
         verifyNoMoreInteractions(sectionManager);
 
         verify(adapterDataObserver).onItemRangeRemoved(itemAdapterPosition, 1);
@@ -831,12 +830,14 @@ public class SectionedRecyclerViewAdapterTest {
         int position = 0;
 
         when(sectionManager.isSectionSubheaderOnPosition(position)).thenReturn(isSubheaderAtPosition);
+        when(sectionManager.getItemCount()).thenReturn(5);
 
         Boolean result = sectionedRecyclerViewAdapter.isSubheaderAtPosition(position);
 
         assertThat(isSubheaderAtPosition).isSameAs(result);
 
         verify(sectionManager).isSectionSubheaderOnPosition(position);
+        verify(sectionManager).getItemCount();
         verifyNoMoreInteractions(sectionManager);
 
     }
@@ -885,14 +886,14 @@ public class SectionedRecyclerViewAdapterTest {
         Section section = new Section(subheaderPosition);
         Integer expandedItemCount = 5;
 
-        when(sectionManager.getSectionCount()).thenReturn(1);
+        when(sectionManager.getSectionsCount()).thenReturn(1);
         when(sectionManager.isSectionExpanded(sectionIndex)).thenReturn(false);
         when(sectionManager.getSection(sectionIndex)).thenReturn(section);
         when(sectionManager.expandSection(sectionIndex)).thenReturn(expandedItemCount);
 
         sectionedRecyclerViewAdapter.expandSection(sectionIndex);
 
-        verify(sectionManager).getSectionCount();
+        verify(sectionManager).getSectionsCount();
         verify(sectionManager).isSectionExpanded(sectionIndex);
         verify(sectionManager).getSection(sectionIndex);
         verify(sectionManager).expandSection(sectionIndex);
@@ -945,12 +946,12 @@ public class SectionedRecyclerViewAdapterTest {
 
         Integer sectionIndex = 0;
 
-        when(sectionManager.getSectionCount()).thenReturn(1);
+        when(sectionManager.getSectionsCount()).thenReturn(1);
         when(sectionManager.isSectionExpanded(sectionIndex)).thenReturn(true);
 
         sectionedRecyclerViewAdapter.expandSection(sectionIndex);
 
-        verify(sectionManager).getSectionCount();
+        verify(sectionManager).getSectionsCount();
         verify(sectionManager).isSectionExpanded(sectionIndex);
         verifyNoMoreInteractions(sectionManager);
 
@@ -1051,7 +1052,7 @@ public class SectionedRecyclerViewAdapterTest {
         Section section = new Section(subheaderPosition);
         Integer collapsedItemCount = 5;
 
-        when(sectionManager.getSectionCount()).thenReturn(1);
+        when(sectionManager.getSectionsCount()).thenReturn(1);
         when(sectionManager.getSections()).thenReturn(Collections.singletonList(section));
         when(sectionManager.isSectionExpanded(sectionIndex)).thenReturn(true);
         when(sectionManager.getSection(sectionIndex)).thenReturn(section);
@@ -1059,7 +1060,7 @@ public class SectionedRecyclerViewAdapterTest {
 
         sectionedRecyclerViewAdapter.collapseSection(sectionIndex);
 
-        verify(sectionManager).getSectionCount();
+        verify(sectionManager).getSectionsCount();
         verify(sectionManager).isSectionExpanded(sectionIndex);
         verify(sectionManager).getSection(sectionIndex);
         verify(sectionManager).collapseSection(sectionIndex);
@@ -1112,13 +1113,13 @@ public class SectionedRecyclerViewAdapterTest {
 
         Integer sectionIndex = 0;
 
-        when(sectionManager.getSectionCount()).thenReturn(1);
+        when(sectionManager.getSectionsCount()).thenReturn(1);
         when(sectionManager.getSections()).thenReturn(Collections.singletonList(new Section(0)));
         when(sectionManager.isSectionExpanded(sectionIndex)).thenReturn(false);
 
         sectionedRecyclerViewAdapter.collapseSection(sectionIndex);
 
-        verify(sectionManager).getSectionCount();
+        verify(sectionManager).getSectionsCount();
         verify(sectionManager).isSectionExpanded(sectionIndex);
         verifyNoMoreInteractions(sectionManager);
 
@@ -1214,14 +1215,14 @@ public class SectionedRecyclerViewAdapterTest {
         Integer sectionIndex = 0;
         Boolean isSectionExpanded = true;
 
-        when(sectionManager.getSectionCount()).thenReturn(1);
+        when(sectionManager.getSectionsCount()).thenReturn(1);
         when(sectionManager.isSectionExpanded(sectionIndex)).thenReturn(isSectionExpanded);
 
         Boolean actualIsSectionExpanded = sectionedRecyclerViewAdapter.isSectionExpanded(sectionIndex);
 
         assertThat(actualIsSectionExpanded).isSameAs(isSectionExpanded);
 
-        verify(sectionManager).getSectionCount();
+        verify(sectionManager).getSectionsCount();
         verify(sectionManager).isSectionExpanded(sectionIndex);
         verifyNoMoreInteractions(sectionManager);
 
@@ -1322,7 +1323,7 @@ public class SectionedRecyclerViewAdapterTest {
         when(sectionManager.isSectionSubheaderOnPosition(adapterPosition)).thenReturn(false);
         when(sectionManager.positionInSection(adapterPosition)).thenReturn(positionInSection);
 
-        Integer actualPositionInSection = sectionedRecyclerViewAdapter.getPositionInSection(adapterPosition);
+        Integer actualPositionInSection = sectionedRecyclerViewAdapter.getItemPositionInSection(adapterPosition);
 
         assertThat(actualPositionInSection).isSameAs(positionInSection);
 
@@ -1483,7 +1484,7 @@ public class SectionedRecyclerViewAdapterTest {
         Integer sectionSize = 3;
 
         when(sectionManager.getItemCount()).thenReturn(4);
-        when(sectionManager.getSectionCount()).thenReturn(1);
+        when(sectionManager.getSectionsCount()).thenReturn(1);
         when(sectionManager.sectionIndex(adapterPosition)).thenReturn(sectionIndex);
         when(sectionManager.sectionSize(sectionIndex)).thenReturn(sectionSize);
         when(sectionManager.isSectionSubheaderOnPosition(adapterPosition)).thenReturn(false);
@@ -1494,7 +1495,7 @@ public class SectionedRecyclerViewAdapterTest {
         assertTrue(actualIsFirstItemInSection);
 
         verify(sectionManager, times(2)).getItemCount();
-        verify(sectionManager).getSectionCount();
+        verify(sectionManager).getSectionsCount();
         verify(sectionManager).sectionIndex(adapterPosition);
         verify(sectionManager).sectionSize(sectionIndex);
         verify(sectionManager).isSectionSubheaderOnPosition(adapterPosition);
@@ -1512,7 +1513,7 @@ public class SectionedRecyclerViewAdapterTest {
     @Test
     public void getSectionCount() {
         init();
-        assertThat(sectionedRecyclerViewAdapter.getSectionCount()).isEqualTo(4);
+        assertThat(sectionedRecyclerViewAdapter.getSectionsCount()).isEqualTo(4);
     }
 
 }

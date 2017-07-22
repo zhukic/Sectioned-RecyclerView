@@ -45,10 +45,10 @@ class SectionManager {
 
         for (int i = sectionIndex + 1; i < sections.size(); i++) {
             final Section section = sections.get(i);
-            section.setSubheaderPosition(section.getSubheaderPosition() + sectionToExpand.getItemsCount());
+            section.setSubheaderPosition(section.getSubheaderPosition() + sectionToExpand.getItemCount());
         }
 
-        return sectionToExpand.getItemsCount();
+        return sectionToExpand.getItemCount();
 
     }
 
@@ -74,10 +74,10 @@ class SectionManager {
 
         for (int i = sectionIndex + 1; i < sections.size(); i++) {
             final Section section = sections.get(i);
-            section.setSubheaderPosition(section.getSubheaderPosition() - sectionToCollapse.getItemsCount());
+            section.setSubheaderPosition(section.getSubheaderPosition() - sectionToCollapse.getItemCount());
         }
 
-        return sectionToCollapse.getItemsCount();
+        return sectionToCollapse.getItemCount();
 
     }
 
@@ -98,7 +98,7 @@ class SectionManager {
         int sectionIndex = sectionIndex(subheaderPosition);
 
         for (int i = 0; i < sectionIndex; i++) {
-            itemPosition += sections.get(i).getItemsCount();
+            itemPosition += sections.get(i).getItemCount();
         }
 
         return itemPosition;
@@ -123,7 +123,7 @@ class SectionManager {
             final Section section = sections.get(i);
 
             if (!section.isExpanded()) {
-                itemHolderPosition += section.getItemsCount();
+                itemHolderPosition += section.getItemCount();
             }
 
         }
@@ -138,6 +138,10 @@ class SectionManager {
             throw new IllegalArgumentException("itemPosition: " + itemPosition + ", itemCount: " + getDataItemCount());
         }
 
+        if (!sections.get(sectionIndexByItemPosition(itemPosition)).isExpanded()) {
+            return -1;
+        }
+
         int adapterPosition = 0;
 
         int itemCount = 0;
@@ -147,11 +151,11 @@ class SectionManager {
             adapterPosition += 1;
 
             if (!section.isExpanded()) {
-                adapterPosition -= section.getItemsCount();
+                adapterPosition -= section.getItemCount();
             }
 
-            if (itemCount + section.getItemsCount() <= itemPosition) {
-                itemCount += section.getItemsCount();
+            if (itemCount + section.getItemCount() <= itemPosition) {
+                itemCount += section.getItemCount();
             } else {
                 break;
             }
@@ -178,12 +182,12 @@ class SectionManager {
 
         int positionsToDecrease;
 
-        if (section.getItemsCount() == 1) {
+        if (section.getItemCount() == 1) {
             isSectionRemoved = true;
             positionsToDecrease = 2;
         } else {
             isSectionRemoved = false;
-            section.setItemsCount(section.getItemsCount() - 1);
+            section.setItemsCount(section.getItemCount() - 1);
             positionsToDecrease = 1;
         }
 
@@ -235,7 +239,7 @@ class SectionManager {
 
             int currentSectionIndex = sectionIndex(adapterPosition);
             Section currentSection = getSection(currentSectionIndex);
-            currentSection.setItemsCount(currentSection.getItemsCount() + 1);
+            currentSection.setItemsCount(currentSection.getItemCount() + 1);
 
             if (!currentSection.isExpanded()) {
                 return;
@@ -281,6 +285,28 @@ class SectionManager {
 
     }
 
+    int sectionIndexByItemPosition(@IntRange(from = 0, to = Integer.MAX_VALUE) int itemPosition) {
+
+        if (itemPosition < 0) {
+            throw new IllegalArgumentException("itemPosition < 0");
+        }
+
+        int itemCount = 0;
+
+        for (Section section : sections) {
+
+            itemCount += section.getItemCount();
+
+            if (itemCount > itemPosition) {
+                return sections.indexOf(section);
+            }
+
+        }
+
+        return sections.size() - 1;
+
+    }
+
     int getItemCount() {
 
         int itemCount = 0;
@@ -288,7 +314,7 @@ class SectionManager {
         for (Section section : sections) {
             itemCount += 1;
             if (section.isExpanded()) {
-                itemCount += section.getItemsCount();
+                itemCount += section.getItemCount();
             }
         }
 
@@ -299,7 +325,7 @@ class SectionManager {
     int getDataItemCount() {
         int dataItemCount = 0;
         for (Section section : sections) {
-            dataItemCount += section.getItemsCount();
+            dataItemCount += section.getItemCount();
         }
         return dataItemCount;
     }
@@ -320,10 +346,10 @@ class SectionManager {
     }
 
     int sectionSize(int sectionIndex) {
-        return getSection(sectionIndex).getItemsCount();
+        return getSection(sectionIndex).getItemCount();
     }
 
-    int getSectionCount() {
+    int getSectionsCount() {
         return sections.size();
     }
 

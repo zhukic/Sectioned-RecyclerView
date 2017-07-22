@@ -26,7 +26,7 @@ class Section {
         this.subheaderPosition = subheaderPosition;
     }
 
-    int getItemsCount() {
+    int getItemCount() {
         return itemsCount;
     }
 
