@@ -22,7 +22,7 @@ public boolean onPlaceSubheaderBetweenItems(int position) {
     final Movie movie = movieList.get(position);
     final Movie nextMovie = movieList.get(position + 1);
     
-    //The subheader will be placed between two neighboring items if the movie's first characters are different.
+    //The subheader will be placed between two neighboring items if the first movie characters are different.
     return !movie.getName().substring(0, 1).equals(nextMovie.getName().substring(0, 1));
 }
 ```
