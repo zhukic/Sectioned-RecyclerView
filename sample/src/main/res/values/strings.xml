@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">SectionedRV Movies</string>
+    <string name="app_name">Movies</string>
     <string name="action_settings">Settings</string>
     <string name="action_sort_by_name"> Sort by name</string>
     <string name="action_sort_by_genre"> Sort by genre</string>
@@ -9,4 +9,6 @@
     <string name="name">Name</string>
     <string name="year">Year</string>
     <string name="genre">Genre</string>
+    <string name="expand_all_sections">Expand all sections</string>
+    <string name="collapse_all_sections">Collapse all sections</string>
 </resources>

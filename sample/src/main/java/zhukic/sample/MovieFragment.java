@@ -8,6 +8,9 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -23,8 +26,9 @@ import zhukic.sample.adapters.MovieAdapterByName;
 import zhukic.sectionedrecyclerview.R;
 
 /**
- * Created by RUS on 04.09.2016.
+ * @author Vladislav Zhukov (https://github.com/zhukic)
  */
+
 public class MovieFragment extends Fragment implements BaseMovieAdapter.OnItemClickListener, NewMovieDialogFragment.DialogListener {
 
     private List<Movie> mMovieList;
@@ -34,6 +38,12 @@ public class MovieFragment extends Fragment implements BaseMovieAdapter.OnItemCl
     private RecyclerView recyclerView;
 
     private BaseMovieAdapter mSectionedRecyclerAdapter;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
 
     @Nullable
     @Override
@@ -113,6 +123,15 @@ public class MovieFragment extends Fragment implements BaseMovieAdapter.OnItemCl
         mSectionedRecyclerAdapter.notifyItemRemovedAtPosition(index);
     }
 
+    @Override
+    public void onSubheaderClicked(int position) {
+        if (mSectionedRecyclerAdapter.isSectionExpanded(mSectionedRecyclerAdapter.getSectionIndex(position))) {
+            mSectionedRecyclerAdapter.collapseSection(mSectionedRecyclerAdapter.getSectionIndex(position));
+        } else {
+            mSectionedRecyclerAdapter.expandSection(mSectionedRecyclerAdapter.getSectionIndex(position));
+        }
+    }
+
     public void onFabClick() {
         NewMovieDialogFragment newMovieDialogFragment = new NewMovieDialogFragment();
         newMovieDialogFragment.setTargetFragment(this, 1);
@@ -130,5 +149,25 @@ public class MovieFragment extends Fragment implements BaseMovieAdapter.OnItemCl
         }
         mMovieList.add(mMovieList.size(), movie);
         mSectionedRecyclerAdapter.notifyItemInsertedAtPosition(mMovieList.size() - 1);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+            case R.id.action_expand_all_sections:
+                mSectionedRecyclerAdapter.expandAllSections();
+                break;
+            case R.id.action_collapse_all_sections:
+                mSectionedRecyclerAdapter.collapseAllSections();
+                break;
+        }
+
+        return true;
     }
 }

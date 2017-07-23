@@ -7,8 +7,9 @@ import java.util.List;
 import zhukic.sample.Movie;
 
 /**
- * Created by Vladislav Zhukov on 04.09.2016.
+ * @author Vladislav Zhukov (https://github.com/zhukic)
  */
+
 public class MovieAdapterByDecade extends BaseMovieAdapter {
 
     public MovieAdapterByDecade(List<Movie> itemList) {
@@ -31,16 +32,12 @@ public class MovieAdapterByDecade extends BaseMovieAdapter {
         holder.textMovieGenre.setText(movie.getGenre());
         holder.textMovieYear.setText(String.valueOf(movie.getYear()));
 
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onItemClickListener.onItemClicked(movie);
-            }
-        });
+        holder.itemView.setOnClickListener(v -> onItemClickListener.onItemClicked(movie));
     }
 
     @Override
     public void onBindSubheaderViewHolder(SubheaderHolder subheaderHolder, int nextItemPosition) {
+        super.onBindSubheaderViewHolder(subheaderHolder, nextItemPosition);
         final Movie nextMovie = movieList.get(nextItemPosition);
         String decade = String.valueOf(nextMovie.getYear() - nextMovie.getYear() % 10) + "s";
         subheaderHolder.mSubheaderText.setText(decade);
