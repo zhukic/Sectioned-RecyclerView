@@ -65,6 +65,8 @@ public class Adapter extends SectionedRecyclerViewAdapter<SubheaderViewHolder, I
     public void onBindSubheaderViewHolder(SubheaderViewHolder subheaderViewHolder, int nextItemPosition) {
         //Setup subheader view
         //nextItemPosition - position of the first item in the section to which this subheader belongs
+        final Movie nextMovie = movieList.get(nextItemPosition);
+        subheaderHolder.subheaderText.setText(nextMovie.getName().substring(0, 1));
     }
     
     @Override
