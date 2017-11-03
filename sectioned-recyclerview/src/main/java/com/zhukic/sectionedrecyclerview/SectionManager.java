@@ -2,6 +2,10 @@ package com.zhukic.sectionedrecyclerview;
 
 import android.support.annotation.IntRange;
 
+import com.zhukic.sectionedrecyclerview.result.NotifyItemChangedResult;
+import com.zhukic.sectionedrecyclerview.result.NotifyItemInsertedResult;
+import com.zhukic.sectionedrecyclerview.result.NotifyItemRemovedResult;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,6 +16,34 @@ import java.util.List;
 class SectionManager {
 
     private final List<Section> sections = new ArrayList<>();
+
+    void init(SectionProvider sectionProvider) {
+
+        this.sections.clear();
+
+        if (sectionProvider.getItemSize() != 0) {
+            this.sections.add(new Section(0));
+        } else {
+            return;
+        }
+
+        int lastSectionItemCount = sectionProvider.getItemSize();
+
+        for (int i = 1; i < sectionProvider.getItemSize(); i++) {
+            if (sectionProvider.onPlaceSubheaderBetweenItems(i - 1)) {
+                final Section section = new Section(i + getSections().size());
+                final Section previousSection = getLastSection();
+                final int sectionItemCount = section.getSubheaderPosition() - previousSection.getSubheaderPosition() - 1;
+                previousSection.setItemsCount(sectionItemCount);
+                sections.add(section);
+                lastSectionItemCount -= sectionItemCount;
+            }
+        }
+
+        final Section lastSection = getLastSection();
+        lastSection.setItemsCount(lastSectionItemCount);
+
+    }
 
     void addSection(Section section) {
         sections.add(section);
@@ -166,14 +198,21 @@ class SectionManager {
 
     }
 
-    boolean removeItem(int itemAdapterPosition) {
+    NotifyItemChangedResult onItemChanged(int itemPosition) {
 
-        if (itemAdapterPosition < 0 || itemAdapterPosition >= getItemCount()) {
-            throw new IllegalArgumentException("itemAdapterPosition: " + itemAdapterPosition + ", itemCount: " + getItemCount());
-        }
-        if (isSectionSubheaderOnPosition(itemAdapterPosition)) {
-            throw new IllegalArgumentException("section subheader is placed at " + itemAdapterPosition + " position");
-        }
+        final int adapterPosition = getAdapterPositionForItem(itemPosition);
+
+        final int subheaderPosition = sections.get(sectionIndex(adapterPosition)).getSubheaderPosition();
+
+        return new NotifyItemChangedResult(getAdapterPositionForItem(itemPosition), 1, subheaderPosition);
+
+    }
+
+    NotifyItemRemovedResult onItemRemoved(int itemPosition) {
+
+        final int itemAdapterPosition = getAdapterPositionForItem(itemPosition);
+
+        final boolean isSectionCollapsed = !isSectionExpanded(sectionIndex(itemAdapterPosition));
 
         final int sectionIndex = sectionIndex(itemAdapterPosition);
         final Section section = sections.get(sectionIndex);
@@ -191,10 +230,8 @@ class SectionManager {
             positionsToDecrease = 1;
         }
 
-        if (!section.isExpanded()) {
-            if (isSectionRemoved) {
-                positionsToDecrease = 1;
-            }
+        if (!section.isExpanded() && isSectionRemoved) {
+            positionsToDecrease = 1;
         }
 
         for (int i = sectionIndex + 1; i < sections.size(); i++) {
@@ -206,8 +243,66 @@ class SectionManager {
             sections.remove(section);
         }
 
-        return isSectionRemoved;
+        if (isSectionRemoved) {
+            return new NotifyItemRemovedResult(itemAdapterPosition - 1, 2, itemAdapterPosition - 1, true);
+        } else {
+            if (isSectionCollapsed) {
+                return null;
+            }
+            return new NotifyItemRemovedResult(itemAdapterPosition, 1, section.getSubheaderPosition(), false);
+        }
 
+    }
+
+    NotifyItemInsertedResult onItemInserted(int itemPosition, SectionProvider sectionProvider) {
+        if (itemPosition == 0) {
+            if (getItemCount() == 0 || sectionProvider.onPlaceSubheaderBetweenItems(itemPosition)) {
+                insertItem(0, true);
+                return new NotifyItemInsertedResult(0, 2, 0, true);
+            } else {
+                insertItem(1, false);
+                if (getSectionsCount() > 0 && !isSectionExpanded(0)) {
+                    return null;
+                }
+                return new NotifyItemInsertedResult(1, 1, 0, false);
+            }
+        } else if (itemPosition == sectionProvider.getItemSize() - 1) {
+            int itemCount = getItemCount();
+            if (sectionProvider.onPlaceSubheaderBetweenItems(itemPosition - 1)) {
+                insertItem(itemCount, true);
+                return new NotifyItemInsertedResult(itemCount, 2, itemCount, true);
+            } else {
+                insertItem(itemCount, false);
+                if (!isSectionExpanded(getSectionsCount() - 1)) {
+                    return null;
+                }
+                return new NotifyItemInsertedResult(itemCount, 1, getLastSection().getSubheaderPosition(), false);
+            }
+        } else {
+            int itemAdapterPosition = getAdapterPositionForItem(itemPosition);
+            if (sectionProvider.onPlaceSubheaderBetweenItems(itemPosition - 1) && sectionProvider.onPlaceSubheaderBetweenItems(itemPosition)) {
+                insertItem(itemAdapterPosition - 1, true);
+                return new NotifyItemInsertedResult(itemAdapterPosition - 1, 2, itemAdapterPosition - 1, true);
+            } else if (sectionProvider.onPlaceSubheaderBetweenItems(itemPosition - 1)) {
+                insertItem(itemAdapterPosition, false);
+                if (!isSectionExpanded(sectionIndex(itemAdapterPosition))) {
+                    return null;
+                }
+                return new NotifyItemInsertedResult(itemAdapterPosition, 1, getSection(sectionIndex(itemAdapterPosition)).getSubheaderPosition(), false);
+            } else if (sectionProvider.onPlaceSubheaderBetweenItems(itemPosition)) {
+                insertItem(itemAdapterPosition - 1, false);
+                if (!isSectionExpanded(sectionIndex(itemAdapterPosition - 1))) {
+                    return null;
+                }
+                return new NotifyItemInsertedResult(itemAdapterPosition - 1, 1, getSection(sectionIndex(itemAdapterPosition - 1)).getSubheaderPosition(), false);
+            } else {
+                insertItem(itemAdapterPosition, false);
+                if (!isSectionExpanded(sectionIndex(itemAdapterPosition))) {
+                    return null;
+                }
+                return new NotifyItemInsertedResult(itemAdapterPosition, 1, getSection(sectionIndex(itemAdapterPosition)).getSubheaderPosition(), false);
+            }
+        }
     }
 
     void insertItem(int adapterPosition, boolean shouldInsertSection) {
@@ -322,6 +417,7 @@ class SectionManager {
 
     }
 
+    //TODO remove, we have sectionProvider.getItemCount()
     int getDataItemCount() {
         int dataItemCount = 0;
         for (Section section : sections) {

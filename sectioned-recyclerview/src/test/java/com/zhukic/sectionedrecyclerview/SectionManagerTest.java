@@ -1,5 +1,7 @@
 package com.zhukic.sectionedrecyclerview;
 
+import com.zhukic.sectionedrecyclerview.result.NotifyItemRemovedResult;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -26,6 +28,49 @@ public class SectionManagerTest {
     @Test
     public void constructor() {
         assertTrue(sectionManager.getSections().isEmpty());
+    }
+
+    @Test
+    public void init() {
+
+        SectionProvider sectionProvider = new SectionProvider() {
+            @Override
+            public boolean onPlaceSubheaderBetweenItems(int position) {
+                if (position == 3 || position == 5) {
+                    return true;
+                }
+                return false;
+            }
+
+            @Override
+            public int getItemSize() {
+                return 9;
+            }
+        };
+
+        //Subheader 0
+        //Item
+        //Item
+        //Item
+        //Item
+        //Subheader 5
+        //Item
+        //Item
+        //Subheader 8
+        //Item
+        //Item
+        //Item
+
+        sectionManager.init(sectionProvider);
+
+        assertThat(sectionManager.getSectionsCount()).isEqualTo(3);
+
+        assertThat(sectionManager.getSection(0).getSubheaderPosition()).isEqualTo(0);
+        assertThat(sectionManager.getSection(0).getItemCount()).isEqualTo(4);
+        assertThat(sectionManager.getSection(1).getSubheaderPosition()).isEqualTo(5);
+        assertThat(sectionManager.getSection(1).getItemCount()).isEqualTo(2);
+        assertThat(sectionManager.getSection(2).getSubheaderPosition()).isEqualTo(8);
+        assertThat(sectionManager.getSection(2).getItemCount()).isEqualTo(3);
     }
 
     @Test
@@ -1648,7 +1693,7 @@ public class SectionManagerTest {
         sectionManager.addSection(section4);
         sectionManager.addSection(section5);
 
-        boolean isSectionRemoved = sectionManager.removeItem(13);
+        NotifyItemRemovedResult notifyItemRemovedResult = sectionManager.onItemRemoved(8);
 
         //Subheader 0
         //Item 1 ( index = 0 )
@@ -1666,7 +1711,10 @@ public class SectionManagerTest {
         //Item 13 ( index = 8 )
         //Item 14 ( index = 9 )
 
-        assertFalse(isSectionRemoved);
+        assertThat(notifyItemRemovedResult.getPositionStart()).isEqualTo(13);
+        assertThat(notifyItemRemovedResult.getItemCount()).isEqualTo(1);
+        assertThat(notifyItemRemovedResult.getSubheaderPosition()).isEqualTo(11);
+        assertFalse(notifyItemRemovedResult.isSectionRemoved());
 
         assertThat(sectionManager.getItemCount()).isEqualTo(15);
 
@@ -1684,7 +1732,7 @@ public class SectionManagerTest {
         assertThat(section4.getItemCount()).isEqualTo(1);
         assertThat(section5.getItemCount()).isEqualTo(3);
 
-        isSectionRemoved = sectionManager.removeItem(10);
+        notifyItemRemovedResult = sectionManager.onItemRemoved(6);
 
         //Subheader 0
         //Item 1 ( index = 0 )
@@ -1700,7 +1748,10 @@ public class SectionManagerTest {
         //Item 11 ( index = 7 )
         //Item 12 ( index = 8 )
 
-        assertTrue(isSectionRemoved);
+        assertThat(notifyItemRemovedResult.getPositionStart()).isEqualTo(9);
+        assertThat(notifyItemRemovedResult.getItemCount()).isEqualTo(2);
+        assertThat(notifyItemRemovedResult.getSubheaderPosition()).isEqualTo(9);
+        assertTrue(notifyItemRemovedResult.isSectionRemoved());
 
         assertThat(sectionManager.getItemCount()).isEqualTo(13);
 
@@ -1716,7 +1767,7 @@ public class SectionManagerTest {
         assertThat(section3.getItemCount()).isEqualTo(2);
         assertThat(section5.getItemCount()).isEqualTo(3);
 
-        isSectionRemoved = sectionManager.removeItem(1);
+        notifyItemRemovedResult = sectionManager.onItemRemoved(0);
 
         //Subheader 0
         //Item 1 ( index = 0 )
@@ -1731,7 +1782,10 @@ public class SectionManagerTest {
         //Item 10 ( index = 6 )
         //Item 11 ( index = 7 )
 
-        assertFalse(isSectionRemoved);
+        assertThat(notifyItemRemovedResult.getPositionStart()).isEqualTo(1);
+        assertThat(notifyItemRemovedResult.getItemCount()).isEqualTo(1);
+        assertThat(notifyItemRemovedResult.getSubheaderPosition()).isEqualTo(0);
+        assertFalse(notifyItemRemovedResult.isSectionRemoved());
 
         assertThat(sectionManager.getItemCount()).isEqualTo(12);
 
@@ -1747,7 +1801,7 @@ public class SectionManagerTest {
         assertThat(section3.getItemCount()).isEqualTo(2);
         assertThat(section5.getItemCount()).isEqualTo(3);
 
-        isSectionRemoved = sectionManager.removeItem(1);
+        notifyItemRemovedResult = sectionManager.onItemRemoved(0);
 
         //Subheader 0
         //Item 1 ( index = 0 )
@@ -1761,7 +1815,10 @@ public class SectionManagerTest {
         //Item 9 ( index = 5 )
         //Item 10 ( index = 6 )
 
-        assertFalse(isSectionRemoved);
+        assertThat(notifyItemRemovedResult.getPositionStart()).isEqualTo(1);
+        assertThat(notifyItemRemovedResult.getItemCount()).isEqualTo(1);
+        assertThat(notifyItemRemovedResult.getSubheaderPosition()).isEqualTo(0);
+        assertFalse(notifyItemRemovedResult.isSectionRemoved());
 
         assertThat(sectionManager.getItemCount()).isEqualTo(11);
 
@@ -1777,7 +1834,7 @@ public class SectionManagerTest {
         assertThat(section3.getItemCount()).isEqualTo(2);
         assertThat(section5.getItemCount()).isEqualTo(3);
 
-        isSectionRemoved = sectionManager.removeItem(1);
+        notifyItemRemovedResult = sectionManager.onItemRemoved(0);
 
         //Subheader 0
         //Item 1 ( index = 0 )
@@ -1789,7 +1846,10 @@ public class SectionManagerTest {
         //Item 7 ( index = 4 )
         //Item 8 ( index = 5 )
 
-        assertTrue(isSectionRemoved);
+        assertThat(notifyItemRemovedResult.getPositionStart()).isEqualTo(0);
+        assertThat(notifyItemRemovedResult.getItemCount()).isEqualTo(2);
+        assertThat(notifyItemRemovedResult.getSubheaderPosition()).isEqualTo(0);
+        assertTrue(notifyItemRemovedResult.isSectionRemoved());
 
         assertThat(sectionManager.getItemCount()).isEqualTo(9);
 
@@ -1803,7 +1863,7 @@ public class SectionManagerTest {
         assertThat(section3.getItemCount()).isEqualTo(2);
         assertThat(section5.getItemCount()).isEqualTo(3);
 
-        isSectionRemoved = sectionManager.removeItem(3);
+        notifyItemRemovedResult = sectionManager.onItemRemoved(1);
 
         //Subheader 0
         //Item 1 ( index = 0 )
@@ -1814,7 +1874,10 @@ public class SectionManagerTest {
         //Item 6 ( index = 3 )
         //Item 7 ( index = 4 )
 
-        assertFalse(isSectionRemoved);
+        assertThat(notifyItemRemovedResult.getPositionStart()).isEqualTo(3);
+        assertThat(notifyItemRemovedResult.getItemCount()).isEqualTo(1);
+        assertThat(notifyItemRemovedResult.getSubheaderPosition()).isEqualTo(2);
+        assertFalse(notifyItemRemovedResult.isSectionRemoved());
 
         assertThat(sectionManager.getItemCount()).isEqualTo(8);
 
@@ -1828,7 +1891,7 @@ public class SectionManagerTest {
         assertThat(section3.getItemCount()).isEqualTo(1);
         assertThat(section5.getItemCount()).isEqualTo(3);
 
-        isSectionRemoved = sectionManager.removeItem(3);
+        notifyItemRemovedResult = sectionManager.onItemRemoved(1);
 
         //Subheader 0
         //Item 1 ( index = 0 )
@@ -1837,7 +1900,10 @@ public class SectionManagerTest {
         //Item 4 ( index = 2 )
         //Item 5 ( index = 3 )
 
-        assertTrue(isSectionRemoved);
+        assertThat(notifyItemRemovedResult.getPositionStart()).isEqualTo(2);
+        assertThat(notifyItemRemovedResult.getItemCount()).isEqualTo(2);
+        assertThat(notifyItemRemovedResult.getSubheaderPosition()).isEqualTo(2);
+        assertTrue(notifyItemRemovedResult.isSectionRemoved());
 
         assertThat(sectionManager.getItemCount()).isEqualTo(6);
 
@@ -1849,7 +1915,7 @@ public class SectionManagerTest {
         assertThat(section2.getItemCount()).isEqualTo(1);
         assertThat(section5.getItemCount()).isEqualTo(3);
 
-        isSectionRemoved = sectionManager.removeItem(5);
+        notifyItemRemovedResult = sectionManager.onItemRemoved(3);
 
         //Subheader 0
         //Item 1 ( index = 0 )
@@ -1857,7 +1923,10 @@ public class SectionManagerTest {
         //Item 3 ( index = 1 )
         //Item 4 ( index = 2 )
 
-        assertFalse(isSectionRemoved);
+        assertThat(notifyItemRemovedResult.getPositionStart()).isEqualTo(5);
+        assertThat(notifyItemRemovedResult.getItemCount()).isEqualTo(1);
+        assertThat(notifyItemRemovedResult.getSubheaderPosition()).isEqualTo(2);
+        assertFalse(notifyItemRemovedResult.isSectionRemoved());
 
         assertThat(sectionManager.getItemCount()).isEqualTo(5);
 
@@ -1869,14 +1938,17 @@ public class SectionManagerTest {
         assertThat(section2.getItemCount()).isEqualTo(1);
         assertThat(section5.getItemCount()).isEqualTo(2);
 
-        isSectionRemoved = sectionManager.removeItem(4);
+        notifyItemRemovedResult = sectionManager.onItemRemoved(2);
 
         //Subheader 0
         //Item 1 ( index = 0 )
         //Subheader 2
         //Item 3 ( index = 1 )
 
-        assertFalse(isSectionRemoved);
+        assertThat(notifyItemRemovedResult.getPositionStart()).isEqualTo(4);
+        assertThat(notifyItemRemovedResult.getItemCount()).isEqualTo(1);
+        assertThat(notifyItemRemovedResult.getSubheaderPosition()).isEqualTo(2);
+        assertFalse(notifyItemRemovedResult.isSectionRemoved());
 
         assertThat(sectionManager.getItemCount()).isEqualTo(4);
 
@@ -1888,12 +1960,15 @@ public class SectionManagerTest {
         assertThat(section2.getItemCount()).isEqualTo(1);
         assertThat(section5.getItemCount()).isEqualTo(1);
 
-        isSectionRemoved = sectionManager.removeItem(3);
+        notifyItemRemovedResult = sectionManager.onItemRemoved(1);
 
         //Subheader 0
         //Item 1 ( index = 0 )
 
-        assertTrue(isSectionRemoved);
+        assertThat(notifyItemRemovedResult.getPositionStart()).isEqualTo(2);
+        assertThat(notifyItemRemovedResult.getItemCount()).isEqualTo(2);
+        assertThat(notifyItemRemovedResult.getSubheaderPosition()).isEqualTo(2);
+        assertTrue(notifyItemRemovedResult.isSectionRemoved());
 
         assertThat(sectionManager.getItemCount()).isEqualTo(2);
 
@@ -1903,11 +1978,14 @@ public class SectionManagerTest {
 
         assertThat(section2.getItemCount()).isEqualTo(1);
 
-        isSectionRemoved = sectionManager.removeItem(1);
+        notifyItemRemovedResult = sectionManager.onItemRemoved(0);
 
         //
 
-        assertTrue(isSectionRemoved);
+        assertThat(notifyItemRemovedResult.getPositionStart()).isEqualTo(0);
+        assertThat(notifyItemRemovedResult.getItemCount()).isEqualTo(2);
+        assertThat(notifyItemRemovedResult.getSubheaderPosition()).isEqualTo(0);
+        assertTrue(notifyItemRemovedResult.isSectionRemoved());
 
         assertThat(sectionManager.getItemCount()).isEqualTo(0);
 
@@ -1939,7 +2017,7 @@ public class SectionManagerTest {
         sectionManager.addSection(section4);
         sectionManager.addSection(section5);
 
-        try {
+        /*try {
             sectionManager.removeItem(0);
             failBecauseExceptionWasNotThrown(IllegalArgumentException.class);
         } catch (Exception e) {}
@@ -1947,7 +2025,7 @@ public class SectionManagerTest {
         try {
             sectionManager.removeItem(16);
             failBecauseExceptionWasNotThrown(IllegalArgumentException.class);
-        } catch (Exception e) {}
+        } catch (Exception e) {}*/
 
     }
 
