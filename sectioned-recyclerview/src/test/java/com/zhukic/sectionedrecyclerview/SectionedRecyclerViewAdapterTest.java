@@ -53,7 +53,7 @@ public class SectionedRecyclerViewAdapterTest {
         //Item 10 ( index = 6 )
 
         sectionedRecyclerViewAdapter = mock(SectionedRecyclerViewAdapter.class, Mockito.CALLS_REAL_METHODS);
-        sectionManager = new SectionManager();
+        sectionManager = new SectionManager(sectionedRecyclerViewAdapter);
 
         sectionedRecyclerViewAdapter.setSectionManager(sectionManager);
 
@@ -1000,7 +1000,7 @@ public class SectionedRecyclerViewAdapterTest {
 
         sectionedRecyclerViewAdapter.expandAllSections();
 
-        verify(sectionManager).expandAllSections();
+        verify(sectionManager).expandAllSections(true);
         verifyNoMoreInteractions(sectionManager);
 
         verify(adapterDataObserver).onChanged();
@@ -1056,7 +1056,7 @@ public class SectionedRecyclerViewAdapterTest {
         when(sectionManager.getSections()).thenReturn(Collections.singletonList(section));
         when(sectionManager.isSectionExpanded(sectionIndex)).thenReturn(true);
         when(sectionManager.getSection(sectionIndex)).thenReturn(section);
-        when(sectionManager.collapseSection(sectionIndex)).thenReturn(collapsedItemCount);
+        //when(sectionManager.collapseSection(sectionIndex)).thenReturn(collapsedItemCount);
 
         sectionedRecyclerViewAdapter.collapseSection(sectionIndex);
 
@@ -1168,7 +1168,7 @@ public class SectionedRecyclerViewAdapterTest {
 
         sectionedRecyclerViewAdapter.collapseAllSections();
 
-        verify(sectionManager).collapseAllSections();
+        verify(sectionManager).collapseAllSections(true);
         verifyNoMoreInteractions(sectionManager);
 
         verify(adapterDataObserver).onChanged();

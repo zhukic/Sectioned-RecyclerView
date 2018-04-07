@@ -1,7 +1,5 @@
 package zhukic.sample.adapters;
 
-import android.view.View;
-
 import java.util.List;
 
 import zhukic.sample.Movie;

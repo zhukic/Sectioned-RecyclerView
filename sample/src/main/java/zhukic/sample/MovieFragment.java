@@ -39,6 +39,8 @@ public class MovieFragment extends Fragment implements BaseMovieAdapter.OnItemCl
 
     private BaseMovieAdapter mSectionedRecyclerAdapter;
 
+    private GridDividerDecoration gridDividerDecoration;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,6 +58,9 @@ public class MovieFragment extends Fragment implements BaseMovieAdapter.OnItemCl
         recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        gridDividerDecoration = new GridDividerDecoration(getContext());
+        recyclerView.addItemDecoration(gridDividerDecoration);
 
         Resources resources = getResources();
         String[] names = resources.getStringArray(R.array.names);
@@ -161,10 +166,10 @@ public class MovieFragment extends Fragment implements BaseMovieAdapter.OnItemCl
 
         switch (item.getItemId()) {
             case R.id.action_expand_all_sections:
-                mSectionedRecyclerAdapter.expandAllSections();
+                mSectionedRecyclerAdapter.expandAllSections(false);
                 break;
             case R.id.action_collapse_all_sections:
-                mSectionedRecyclerAdapter.collapseAllSections();
+                mSectionedRecyclerAdapter.collapseAllSections(false);
                 break;
         }
 

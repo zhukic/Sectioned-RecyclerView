@@ -4,6 +4,7 @@ package com.zhukic.sectionedrecyclerview.result;
  * @author Vladislav Zhukov (https://github.com/zhukic)
  */
 
+//TODO rename class
 public class NotifyResult {
 
     private final int positionStart;

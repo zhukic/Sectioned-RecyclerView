@@ -4,9 +4,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.ViewGroup;
 
-import com.zhukic.sectionedrecyclerview.result.NotifyItemChangedResult;
-import com.zhukic.sectionedrecyclerview.result.NotifyItemInsertedResult;
-import com.zhukic.sectionedrecyclerview.result.NotifyItemRemovedResult;
+import com.zhukic.sectionedrecyclerview.result.NotifyResultNew;
 
 /**
  * @author Vladislav Zhukov (https://github.com/zhukic)
@@ -20,7 +18,7 @@ public abstract class SectionedRecyclerViewAdapter<SH extends RecyclerView.ViewH
     private SectionManager sectionManager;
 
     public SectionedRecyclerViewAdapter() {
-        this.sectionManager = new SectionManager();
+        this.sectionManager = new SectionManager(this);
     }
 
     SectionedRecyclerViewAdapter(SectionManager sectionManager) {
@@ -29,7 +27,7 @@ public abstract class SectionedRecyclerViewAdapter<SH extends RecyclerView.ViewH
 
     @Override
     public void onAttachedToRecyclerView(RecyclerView recyclerView) {
-        sectionManager.init(this);
+        sectionManager.init();
     }
 
     public abstract VH onCreateItemViewHolder(ViewGroup parent, int viewType);
@@ -92,26 +90,36 @@ public abstract class SectionedRecyclerViewAdapter<SH extends RecyclerView.ViewH
         return sectionManager.getItemCount();
     }
 
+    private void applyResult(NotifyResultNew notifyResultNew) {
+        for (Notifier notifier : notifyResultNew.getNotifiers()) {
+            applyNotifier(notifier);
+        }
+    }
+
+    private void applyNotifier(Notifier notifier) {
+        switch (notifier.getType()) {
+            case ALL_DATA_CHANGED:
+                notifyDataChanged();
+                break;
+            case CHANGED:
+                notifyItemRangeChanged(notifier.getPositionStart(), notifier.getItemCount());
+                break;
+            case INSERTED:
+                notifyItemRangeInserted(notifier.getPositionStart(), notifier.getItemCount());
+                break;
+            case REMOVED:
+                notifyItemRangeRemoved(notifier.getPositionStart(), notifier.getItemCount());
+                break;
+        }
+    }
+
     public final void notifyDataChanged() {
-        sectionManager.init(this);
+        sectionManager.init();
         notifyDataSetChanged();
     }
 
-    //TODO item position assertion
-    public final int notifyItemChangedAtPosition(int itemPosition, boolean shouldNotifySectionSubheader) {
-
-        final NotifyItemChangedResult result = sectionManager.onItemChanged(itemPosition);
-
-        notifyItemRangeChanged(result.getPositionStart(), result.getItemCount());
-
-        if (shouldNotifySectionSubheader) {
-            notifyItemChanged(result.getSubheaderPosition());
-        }
-
-        return result.getPositionStart();
-
-    }
-
+    //TODO А ЧТО ЕСЛИ СЕКЦИЯ COLLAPSED?
+    //TODO notify subheader
     /**
      * Notify that item at {@code itemPosition} has been changed.
      *
@@ -119,22 +127,18 @@ public abstract class SectionedRecyclerViewAdapter<SH extends RecyclerView.ViewH
      * @return adapter position of the changed item.
      */
     public final int notifyItemChangedAtPosition(int itemPosition) {
-        return notifyItemChangedAtPosition(itemPosition, false);
+        final NotifyResultNew result = sectionManager.onItemChanged(itemPosition);
+        applyResult(result);
+        return result.getPositionStart();
     }
 
-    //TODO
-    public final int notifyItemsChanged(int positionStart, int itemCount, boolean shouldNotifySectionSubheaders) {
-        return 0;
-    }
-
-    //TODO
-    public final int notifyItemsChanged(int positionStart, int itemCount) {
-        return notifyItemsChanged(positionStart, itemCount, false);
-    }
-
+    //TODO А ЧТО ЕСЛИ СЕКЦИЯ COLLAPSED?
     public final int notifyItemInsertedAtPosition(int itemPosition, boolean shouldNotifySectionSubheader) {
+        final NotifyResultNew result = sectionManager.onItemInserted(itemPosition);
+        applyResult(result);
+        return result.getPositionStart();
 
-        final NotifyItemInsertedResult result = sectionManager.onItemInserted(itemPosition, this);
+        /*final NotifyItemInsertedResult result = sectionManager.onItemInserted(itemPosition);
 
         if (result == null) {
             return -1;
@@ -146,7 +150,7 @@ public abstract class SectionedRecyclerViewAdapter<SH extends RecyclerView.ViewH
             notifyItemChanged(result.getSubheaderPosition());
         }
 
-        return result.getPositionStart();
+        return result.getPositionStart();*/
 
     }
 
@@ -161,21 +165,13 @@ public abstract class SectionedRecyclerViewAdapter<SH extends RecyclerView.ViewH
         return notifyItemInsertedAtPosition(itemPosition, false);
     }
 
-    //TODO
-    public final int notifyItemsInserted(int positionStart, int itemCount, boolean shouldNotifySectionSubheaders) {
-        notifyItemRangeInserted(0, 0);
-        return 0;
-    }
+    //TODO А ЧТО ЕСЛИ СЕКЦИЯ COLLAPSED?
+    public final int notifyItemRemovedAtPosition(int itemPosition, boolean notifySectionSubheader) {
+        final NotifyResultNew result = sectionManager.onItemRemoved(new Integer(itemPosition));
+        applyResult(result);
+        return result.getPositionStart();
 
-    //TODO
-    public final int notifyItemsInserted(int positionStart, int itemCount) {
-        notifyItemsInserted(positionStart, itemCount, false);
-        return 0;
-    }
-
-    public final int notifyItemRemovedAtPosition(int itemPosition, boolean shouldNotifySectionSubheader) {
-
-        final NotifyItemRemovedResult result = sectionManager.onItemRemoved(itemPosition);
+        /*final NotifyItemRemovedResult result = sectionManager.onItemRemoved(itemPosition);
 
         if (result == null) {
             return -1;
@@ -183,11 +179,11 @@ public abstract class SectionedRecyclerViewAdapter<SH extends RecyclerView.ViewH
 
         notifyItemRangeRemoved(result.getPositionStart(), result.getItemCount());
 
-        if (!result.isSectionRemoved() && shouldNotifySectionSubheader) {
+        if (!result.isSectionRemoved() && notifySectionSubheader) {
             notifyItemChanged(result.getSubheaderPosition());
         }
 
-        return result.getPositionStart();
+        return result.getPositionStart();*/
 
     }
 
@@ -200,16 +196,6 @@ public abstract class SectionedRecyclerViewAdapter<SH extends RecyclerView.ViewH
      */
     public final int notifyItemRemovedAtPosition(int itemPosition) {
         return notifyItemRemovedAtPosition(itemPosition, false);
-    }
-
-    //TODO
-    public final int notifyItemsRemoved(int positionStart, int itemCount, boolean shouldNotifySectionSubheaders) {
-        return 0;
-    }
-
-    //TODO
-    public final int notifyItemsRemoved(int positionStart, int itemCount) {
-        return 0;
     }
 
     public final void setGridLayoutManager(final GridLayoutManager gridLayoutManager) {
@@ -239,31 +225,35 @@ public abstract class SectionedRecyclerViewAdapter<SH extends RecyclerView.ViewH
         return sectionManager.isSectionSubheaderOnPosition(adapterPosition);
     }
 
+    public final void expandSection(int sectionIndex, boolean shouldNotifySectionSubheader) {
+        final NotifyResultNew result = sectionManager.expandSection(sectionIndex, shouldNotifySectionSubheader);
+        applyResult(result);
+    }
+
     /**
      * Expand the section at the specified index.
      *
      * @param sectionIndex index of the section to be expanded.
      */
     public final void expandSection(int sectionIndex) {
+        expandSection(sectionIndex, true);
+    }
 
-        if (isSectionExpanded(sectionIndex)) {
-            return;
-        }
-
-        int sectionSubheaderPosition = sectionManager.getSection(sectionIndex).getSubheaderPosition();
-        notifyItemChanged(sectionSubheaderPosition);
-
-        int insertedItemCount = sectionManager.expandSection(sectionIndex);
-        notifyItemRangeInserted(sectionSubheaderPosition + 1, insertedItemCount);
-
+    public final void expandAllSections(boolean notifySectionSubheaders) {
+        final NotifyResultNew result = sectionManager.expandAllSections(notifySectionSubheaders);
+        applyResult(result);
     }
 
     /**
      * Expand all sections.
      */
     public final void expandAllSections() {
-        sectionManager.expandAllSections();
-        notifyDataSetChanged();
+        expandAllSections(true);
+    }
+
+    public final void collapseSection(int sectionIndex, boolean shouldNotifySectionSubheader) {
+        final NotifyResultNew result = sectionManager.collapseSection(sectionIndex, shouldNotifySectionSubheader);
+        applyResult(result);
     }
 
     /**
@@ -272,25 +262,22 @@ public abstract class SectionedRecyclerViewAdapter<SH extends RecyclerView.ViewH
      * @param sectionIndex index of the section to be collapsed.
      */
     public final void collapseSection(int sectionIndex) {
+        collapseSection(sectionIndex, true);
+    }
 
-        if (!isSectionExpanded(sectionIndex)) {
-            return;
-        }
-
-        int sectionSubheaderPosition = sectionManager.getSection(sectionIndex).getSubheaderPosition();
-        notifyItemChanged(sectionSubheaderPosition);
-
-        int removedItemCount = sectionManager.collapseSection(sectionIndex);
-        notifyItemRangeRemoved(sectionSubheaderPosition + 1, removedItemCount);
-
+    /**
+     * Collapse all sections.
+     */
+    public final void collapseAllSections(boolean notifySectionSubheaders) {
+        final NotifyResultNew result = sectionManager.collapseAllSections(notifySectionSubheaders);
+        applyResult(result);
     }
 
     /**
      * Collapse all sections.
      */
     public final void collapseAllSections() {
-        sectionManager.collapseAllSections();
-        notifyDataSetChanged();
+        collapseAllSections(true);
     }
 
     /**
@@ -314,6 +301,7 @@ public abstract class SectionedRecyclerViewAdapter<SH extends RecyclerView.ViewH
      * @return the index of the section which contains the item at the specified adapterPosition.
      * @throws IndexOutOfBoundsException if the adapter position is out of range.
      */
+    //TODO А ЕСЛИ СЕКЦИЯ COLLAPSED, ТО ЧТО ТОГДА?
     public final int getSectionIndex(int adapterPosition) {
         if (adapterPosition < 0 || adapterPosition >= getItemCount()) {
             throw new IndexOutOfBoundsException("adapterPosition: " + adapterPosition + ", itemCount: " + getItemCount());
@@ -350,7 +338,6 @@ public abstract class SectionedRecyclerViewAdapter<SH extends RecyclerView.ViewH
      * @throws IndexOutOfBoundsException if the adapter position is out of range.
      */
     public final boolean isFirstItemInSection(int adapterPosition) {
-        //TODO adapterPosition assert
         return getItemPositionInSection(adapterPosition) == 0;
     }
 
@@ -364,7 +351,6 @@ public abstract class SectionedRecyclerViewAdapter<SH extends RecyclerView.ViewH
      * @throws IndexOutOfBoundsException if the adapter position is out of range.
      */
     public final boolean isLastItemInSection(int adapterPosition) {
-        //TODO adapterPosition assert
         return getItemPositionInSection(adapterPosition) == getSectionSize(getSectionIndex(adapterPosition)) - 1;
     }
 
@@ -405,10 +391,12 @@ public abstract class SectionedRecyclerViewAdapter<SH extends RecyclerView.ViewH
         return sectionManager.getSectionsCount();
     }
 
+    //TODO remove
     SectionManager getSectionManager() {
         return sectionManager;
     }
 
+    //TODO remove
     void setSectionManager(SectionManager sectionManager) {
         this.sectionManager = sectionManager;
     }

@@ -1,16 +1,21 @@
 package com.zhukic.sectionedrecyclerview;
 
 import com.zhukic.sectionedrecyclerview.result.NotifyItemRemovedResult;
+import com.zhukic.sectionedrecyclerview.result.NotifyResultNew;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mockito;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 
 import static org.junit.Assert.*;
 
 import static org.assertj.core.api.Java6Assertions.*;
+
+import static org.mockito.Mockito.*;
 
 /**
  * @author Vladislav Zhukov (https://github.com/zhukic)
@@ -20,9 +25,12 @@ public class SectionManagerTest {
 
     private SectionManager sectionManager;
 
+    private SectionProvider sectionProvider;
+
     @Before
     public void beforeEachTest() {
-        sectionManager = new SectionManager();
+        sectionProvider = Mockito.mock(SectionProvider.class);
+        sectionManager = new SectionManager(sectionProvider);
     }
 
     @Test
@@ -61,7 +69,7 @@ public class SectionManagerTest {
         //Item
         //Item
 
-        sectionManager.init(sectionProvider);
+        sectionManager.init();
 
         assertThat(sectionManager.getSectionsCount()).isEqualTo(3);
 
@@ -117,15 +125,15 @@ public class SectionManagerTest {
         //Subheader 2
 
         Section section1 = new Section(0);
-        section1.setItemsCount(3);
+        section1.setItemCount(3);
         section1.setExpanded(false);
 
         Section section2 = new Section(1);
-        section2.setItemsCount(2);
+        section2.setItemCount(2);
         section2.setExpanded(false);
 
         Section section3 = new Section(2);
-        section3.setItemsCount(1);
+        section3.setItemCount(1);
         section3.setExpanded(false);
 
         sectionManager.addSection(section1);
@@ -233,15 +241,15 @@ public class SectionManagerTest {
         //Subheader 2
 
         Section section1 = new Section(0);
-        section1.setItemsCount(5);
+        section1.setItemCount(5);
         section1.setExpanded(false);
 
         Section section2 = new Section(1);
-        section2.setItemsCount(1);
+        section2.setItemCount(1);
         section2.setExpanded(false);
 
         Section section3 = new Section(2);
-        section3.setItemsCount(3);
+        section3.setItemCount(3);
         section3.setExpanded(false);
 
         sectionManager.addSection(section1);
@@ -354,15 +362,15 @@ public class SectionManagerTest {
         //Subheader 2
 
         Section section1 = new Section(0);
-        section1.setItemsCount(1);
+        section1.setItemCount(1);
         section1.setExpanded(false);
 
         Section section2 = new Section(1);
-        section2.setItemsCount(1);
+        section2.setItemCount(1);
         section2.setExpanded(false);
 
         Section section3 = new Section(2);
-        section3.setItemsCount(2);
+        section3.setItemCount(2);
         section3.setExpanded(false);
 
         sectionManager.addSection(section1);
@@ -474,23 +482,23 @@ public class SectionManagerTest {
         //Item 13
 
         Section section1 = new Section(0);
-        section1.setItemsCount(3);
+        section1.setItemCount(3);
 
         Section section2 = new Section(4);
-        section2.setItemsCount(1);
+        section2.setItemCount(1);
 
         Section section3 = new Section(6);
-        section3.setItemsCount(2);
+        section3.setItemCount(2);
 
         Section section4 = new Section(9);
-        section4.setItemsCount(4);
+        section4.setItemCount(4);
 
         sectionManager.addSection(section1);
         sectionManager.addSection(section2);
         sectionManager.addSection(section3);
         sectionManager.addSection(section4);
 
-        sectionManager.collapseAllSections();
+        sectionManager.collapseAllSections(true);
 
         //Subheader 0
         //Subheader 1
@@ -509,7 +517,7 @@ public class SectionManagerTest {
         assertFalse(section3.isExpanded());
         assertFalse(section4.isExpanded());
 
-        sectionManager.expandAllSections();
+        sectionManager.expandAllSections(true);
 
         //Subheader 0
         //Item 1
@@ -559,23 +567,23 @@ public class SectionManagerTest {
         //Item 13
 
         Section section1 = new Section(0);
-        section1.setItemsCount(3);
+        section1.setItemCount(3);
 
         Section section2 = new Section(4);
-        section2.setItemsCount(1);
+        section2.setItemCount(1);
 
         Section section3 = new Section(6);
-        section3.setItemsCount(2);
+        section3.setItemCount(2);
 
         Section section4 = new Section(9);
-        section4.setItemsCount(4);
+        section4.setItemCount(4);
 
         sectionManager.addSection(section1);
         sectionManager.addSection(section2);
         sectionManager.addSection(section3);
         sectionManager.addSection(section4);
 
-        sectionManager.collapseAllSections();
+        sectionManager.collapseAllSections(true);
 
         //Subheader 0
         //Subheader 1
@@ -607,7 +615,7 @@ public class SectionManagerTest {
         //Item 7
         //Subheader 8
 
-        sectionManager.expandAllSections();
+        sectionManager.expandAllSections(true);
 
         //Subheader 0
         //Item 1
@@ -652,13 +660,13 @@ public class SectionManagerTest {
         //Item
 
         Section section1 = new Section(0);
-        section1.setItemsCount(3);
+        section1.setItemCount(3);
 
         Section section2 = new Section(4);
-        section2.setItemsCount(2);
+        section2.setItemCount(2);
 
         Section section3 = new Section(7);
-        section3.setItemsCount(1);
+        section3.setItemCount(1);
 
         sectionManager.addSection(section1);
         sectionManager.addSection(section2);
@@ -759,13 +767,13 @@ public class SectionManagerTest {
         //Item
 
         Section section1 = new Section(0);
-        section1.setItemsCount(3);
+        section1.setItemCount(3);
 
         Section section2 = new Section(4);
-        section2.setItemsCount(2);
+        section2.setItemCount(2);
 
         Section section3 = new Section(7);
-        section3.setItemsCount(5);
+        section3.setItemCount(5);
 
         sectionManager.addSection(section1);
         sectionManager.addSection(section2);
@@ -875,13 +883,13 @@ public class SectionManagerTest {
         //Item
 
         Section section1 = new Section(0);
-        section1.setItemsCount(3);
+        section1.setItemCount(3);
 
         Section section2 = new Section(4);
-        section2.setItemsCount(2);
+        section2.setItemCount(2);
 
         Section section3 = new Section(7);
-        section3.setItemsCount(5);
+        section3.setItemCount(5);
 
         sectionManager.addSection(section1);
         sectionManager.addSection(section2);
@@ -1001,23 +1009,23 @@ public class SectionManagerTest {
         //Item 13
 
         Section section1 = new Section(0);
-        section1.setItemsCount(3);
+        section1.setItemCount(3);
 
         Section section2 = new Section(4);
-        section2.setItemsCount(1);
+        section2.setItemCount(1);
 
         Section section3 = new Section(6);
-        section3.setItemsCount(2);
+        section3.setItemCount(2);
 
         Section section4 = new Section(9);
-        section4.setItemsCount(4);
+        section4.setItemCount(4);
 
         sectionManager.addSection(section1);
         sectionManager.addSection(section2);
         sectionManager.addSection(section3);
         sectionManager.addSection(section4);
 
-        sectionManager.collapseAllSections();
+        sectionManager.collapseAllSections(true);
 
         assertThat(sectionManager.getItemCount()).isEqualTo(4);
 
@@ -1052,16 +1060,16 @@ public class SectionManagerTest {
         //Item 13
 
         Section section1 = new Section(0);
-        section1.setItemsCount(3);
+        section1.setItemCount(3);
 
         Section section2 = new Section(4);
-        section2.setItemsCount(1);
+        section2.setItemCount(1);
 
         Section section3 = new Section(6);
-        section3.setItemsCount(2);
+        section3.setItemCount(2);
 
         Section section4 = new Section(9);
-        section4.setItemsCount(4);
+        section4.setItemCount(4);
 
         sectionManager.addSection(section1);
         sectionManager.addSection(section2);
@@ -1081,7 +1089,7 @@ public class SectionManagerTest {
         //Item 7
         //Item 8
 
-        sectionManager.collapseAllSections();
+        sectionManager.collapseAllSections(true);
 
         //Subheader 0
         //Subheader 1
@@ -1150,13 +1158,13 @@ public class SectionManagerTest {
         //Item
 
         Section section1 = new Section(0);
-        section1.setItemsCount(3);
+        section1.setItemCount(3);
 
         Section section2 = new Section(4);
-        section2.setItemsCount(2);
+        section2.setItemCount(2);
 
         Section section3 = new Section(7);
-        section3.setItemsCount(1);
+        section3.setItemCount(1);
 
         sectionManager.addSection(section1);
         sectionManager.addSection(section2);
@@ -1249,13 +1257,13 @@ public class SectionManagerTest {
     public void getItemPositionForSubheaderViewHolder_shouldThrowException() {
 
         Section section1 = new Section(0);
-        section1.setItemsCount(3);
+        section1.setItemCount(3);
 
         Section section2 = new Section(4);
-        section2.setItemsCount(2);
+        section2.setItemCount(2);
 
         Section section3 = new Section(7);
-        section3.setItemsCount(1);
+        section3.setItemCount(1);
 
         sectionManager.addSection(section1);
         sectionManager.addSection(section2);
@@ -1279,13 +1287,13 @@ public class SectionManagerTest {
         //Item 8
 
         Section section1 = new Section(0);
-        section1.setItemsCount(3);
+        section1.setItemCount(3);
 
         Section section2 = new Section(4);
-        section2.setItemsCount(2);
+        section2.setItemCount(2);
 
         Section section3 = new Section(7);
-        section3.setItemsCount(1);
+        section3.setItemCount(1);
 
         sectionManager.addSection(section1);
         sectionManager.addSection(section2);
@@ -1378,13 +1386,13 @@ public class SectionManagerTest {
     public void getItemPositionForItemViewHolder_shouldThrowException() {
 
         Section section1 = new Section(0);
-        section1.setItemsCount(3);
+        section1.setItemCount(3);
 
         Section section2 = new Section(4);
-        section2.setItemsCount(2);
+        section2.setItemCount(2);
 
         Section section3 = new Section(7);
-        section3.setItemsCount(1);
+        section3.setItemCount(1);
 
         sectionManager.addSection(section1);
         sectionManager.addSection(section2);
@@ -1421,16 +1429,16 @@ public class SectionManagerTest {
         //Item 13 ( index = 9 )
 
         Section section1 = new Section(0);
-        section1.setItemsCount(3);
+        section1.setItemCount(3);
 
         Section section2 = new Section(4);
-        section2.setItemsCount(2);
+        section2.setItemCount(2);
 
         Section section3 = new Section(7);
-        section3.setItemsCount(4);
+        section3.setItemCount(4);
 
         Section section4 = new Section(12);
-        section4.setItemsCount(1);
+        section4.setItemCount(1);
 
         sectionManager.addSection(section1);
         sectionManager.addSection(section2);
@@ -1632,16 +1640,16 @@ public class SectionManagerTest {
     public void getAdapterPositionForItem_shouldThrowException() {
 
         Section section1 = new Section(0);
-        section1.setItemsCount(3);
+        section1.setItemCount(3);
 
         Section section2 = new Section(4);
-        section2.setItemsCount(2);
+        section2.setItemCount(2);
 
         Section section3 = new Section(7);
-        section3.setItemsCount(4);
+        section3.setItemCount(4);
 
         Section section4 = new Section(12);
-        section4.setItemsCount(1);
+        section4.setItemCount(1);
 
         sectionManager.addSection(section1);
         sectionManager.addSection(section2);
@@ -1649,6 +1657,603 @@ public class SectionManagerTest {
         sectionManager.addSection(section4);
 
         sectionManager.getAdapterPositionForItem(10);
+
+    }
+
+    @Test
+    public void onItemChanged() {
+
+        //Subheader 0
+        //Item 1 ( index = 0 )
+        //Item 2 ( index = 1 )
+        //Item 3 ( index = 2 )
+        //Subheader 4
+        //Item 5 ( index = 3 )
+        //Subheader 6
+        //Item 7 ( index = 4 )
+        //Item 8 ( index = 5 )
+        //Subheader 9
+        //Item 10 ( index = 6 )
+        //Subheader 11
+        //Item 12 ( index = 7 )
+        //Item 13 ( index = 8 )
+        //Item 14 ( index = 9 )
+        //Item 15 ( index = 10 )
+
+        sectionManager.addSection(Section.create(0, 3));
+        sectionManager.addSection(Section.create(4, 1));
+        sectionManager.addSection(Section.create(6, 2));
+        sectionManager.addSection(Section.create(9, 1));
+        sectionManager.addSection(Section.create(11, 4));
+
+        when(sectionProvider.getItemSize()).thenReturn(11);
+
+        when(sectionProvider.onPlaceSubheaderBetweenItems(2)).thenReturn(true);
+        when(sectionProvider.onPlaceSubheaderBetweenItems(3)).thenReturn(true);
+
+        NotifyResultNew actualResult = sectionManager.onItemChanged(3);
+
+        //Subheader 0
+        //Item 1 ( index = 0 )
+        //Item 2 ( index = 1 )
+        //Item 3 ( index = 2 )
+        //Subheader 4
+        //Item 5 ( index = 3 )
+        //Subheader 6
+        //Item 7 ( index = 4 )
+        //Item 8 ( index = 5 )
+        //Subheader 9
+        //Item 10 ( index = 6 )
+        //Subheader 11
+        //Item 12 ( index = 7 )
+        //Item 13 ( index = 8 )
+        //Item 14 ( index = 9 )
+        //Item 15 ( index = 10 )
+
+        NotifyResultNew expectedResult = NotifyResultNew.create(Arrays.asList(
+                Notifier.createChanged(4, 2)
+        ));
+
+        assertThat(actualResult).isEqualTo(expectedResult);
+
+        List<Section> expectedSections = Arrays.asList(
+                Section.create(0, 3),
+                Section.create(4, 1),
+                Section.create(6, 2),
+                Section.create(9, 1),
+                Section.create(11, 4)
+        );
+
+        assertThat(sectionManager.getSections()).containsExactlyElementsOf(expectedSections);
+
+        //__________________________________________________________________________________________
+
+        when(sectionProvider.onPlaceSubheaderBetweenItems(2)).thenReturn(false);
+        when(sectionProvider.onPlaceSubheaderBetweenItems(3)).thenReturn(true);
+
+        actualResult = sectionManager.onItemChanged(3);
+
+        //Subheader 0
+        //Item 1 ( index = 0 )
+        //Item 2 ( index = 1 )
+        //Item 3 ( index = 2 )
+        //Item 4 ( index = 3 )
+        //Subheader 5
+        //Item 6 ( index = 4 )
+        //Item 7 ( index = 5 )
+        //Subheader 8
+        //Item 9 ( index = 6 )
+        //Subheader 10
+        //Item 11 ( index = 7 )
+        //Item 12 ( index = 8 )
+        //Item 13 ( index = 9 )
+        //Item 14 ( index = 10 )
+
+        expectedResult = NotifyResultNew.create(Arrays.asList(
+                Notifier.createChanged(4, 1),
+                Notifier.createChanged(5, 1)
+        ));
+
+        assertThat(actualResult).isEqualTo(expectedResult);
+
+        expectedSections = Arrays.asList(
+                Section.create(0, 4),
+                Section.create(5, 2),
+                Section.create(8, 1),
+                Section.create(10, 4)
+        );
+
+        assertThat(sectionManager.getSections()).containsExactlyElementsOf(expectedSections);
+
+        //__________________________________________________________________________________________
+
+        when(sectionProvider.onPlaceSubheaderBetweenItems(3)).thenReturn(false);
+        when(sectionProvider.onPlaceSubheaderBetweenItems(4)).thenReturn(true);
+
+        actualResult = sectionManager.onItemChanged(4);
+
+        //Subheader 0
+        //Item 1 ( index = 0 )
+        //Item 2 ( index = 1 )
+        //Item 3 ( index = 2 )
+        //Item 4 ( index = 3 )
+        //Item 5 ( index = 4 )
+        //Subheader 6
+        //Item 7 ( index = 5 )
+        //Subheader 8
+        //Item 9 ( index = 6 )
+        //Subheader 10
+        //Item 11 ( index = 7 )
+        //Item 12 ( index = 8 )
+        //Item 13 ( index = 9 )
+        //Item 14 ( index = 10 )
+
+        expectedResult = NotifyResultNew.create(Arrays.asList(
+                Notifier.createChanged(5, 2)
+        ));
+
+        assertThat(actualResult).isEqualTo(expectedResult);
+
+        expectedSections = Arrays.asList(
+                Section.create(0, 5),
+                Section.create(6, 1),
+                Section.create(8, 1),
+                Section.create(10, 4)
+        );
+
+        assertThat(sectionManager.getSections()).containsExactlyElementsOf(expectedSections);
+
+        //__________________________________________________________________________________________
+
+        when(sectionProvider.onPlaceSubheaderBetweenItems(4)).thenReturn(false);
+        when(sectionProvider.onPlaceSubheaderBetweenItems(5)).thenReturn(true);
+
+        actualResult = sectionManager.onItemChanged(5);
+
+        //Subheader 0
+        //Item 1 ( index = 0 )
+        //Item 2 ( index = 1 )
+        //Item 3 ( index = 2 )
+        //Item 4 ( index = 3 )
+        //Item 5 ( index = 4 )
+        //Item 6 ( index = 5 )
+        //Subheader 7
+        //Item 8 ( index = 6 )
+        //Subheader 9
+        //Item 10 ( index = 7 )
+        //Item 11 ( index = 8 )
+        //Item 12 ( index = 9 )
+        //Item 13 ( index = 10 )
+
+        expectedResult = NotifyResultNew.create(Arrays.asList(
+                Notifier.createChanged(6),
+                Notifier.createRemoved(7)
+        ));
+
+        assertThat(actualResult).isEqualTo(expectedResult);
+
+        expectedSections = Arrays.asList(
+                Section.create(0, 6),
+                Section.create(7, 1),
+                Section.create(9, 4)
+        );
+
+        assertThat(sectionManager.getSections()).containsExactlyElementsOf(expectedSections);
+
+        //__________________________________________________________________________________________
+
+        when(sectionProvider.onPlaceSubheaderBetweenItems(5)).thenReturn(false);
+        when(sectionProvider.onPlaceSubheaderBetweenItems(6)).thenReturn(true);
+
+        actualResult = sectionManager.onItemChanged(6);
+
+        //Subheader 0
+        //Item 1 ( index = 0 )
+        //Item 2 ( index = 1 )
+        //Item 3 ( index = 2 )
+        //Item 4 ( index = 3 )
+        //Item 5 ( index = 4 )
+        //Item 6 ( index = 5 )
+        //Item 7 ( index = 6 )
+        //Subheader 8
+        //Item 9 ( index = 7 )
+        //Item 10 ( index = 8 )
+        //Item 11 ( index = 9 )
+        //Item 12 ( index = 10 )
+
+        expectedResult = NotifyResultNew.create(Arrays.asList(
+                Notifier.createChanged(7),
+                Notifier.createRemoved(8)
+        ));
+
+        assertThat(actualResult).isEqualTo(expectedResult);
+
+        expectedSections = Arrays.asList(
+                Section.create(0, 7),
+                Section.create(8, 4)
+        );
+
+        assertThat(sectionManager.getSections()).containsExactlyElementsOf(expectedSections);
+
+        //__________________________________________________________________________________________
+
+        when(sectionProvider.onPlaceSubheaderBetweenItems(0)).thenReturn(true);
+
+        actualResult = sectionManager.onItemChanged(0);
+
+        //Subheader 0
+        //Item 1 ( index = 0 )
+        //Subheader 2
+        //Item 3 ( index = 1 )
+        //Item 4 ( index = 2 )
+        //Item 5 ( index = 3 )
+        //Item 6 ( index = 4 )
+        //Item 7 ( index = 5 )
+        //Item 8 ( index = 6 )
+        //Subheader 9
+        //Item 10 ( index = 7 )
+        //Item 11 ( index = 8 )
+        //Item 12 ( index = 9 )
+        //Item 13 ( index = 10 )
+
+        expectedResult = NotifyResultNew.create(Arrays.asList(
+                Notifier.createChanged(0, 2),
+                Notifier.createInserted(2)
+        ));
+
+        assertThat(actualResult).isEqualTo(expectedResult);
+
+        expectedSections = Arrays.asList(
+                Section.create(0, 1),
+                Section.create(2, 6),
+                Section.create(9, 4)
+        );
+
+        assertThat(sectionManager.getSections()).containsExactlyElementsOf(expectedSections);
+
+        //__________________________________________________________________________________________
+
+        when(sectionProvider.onPlaceSubheaderBetweenItems(9)).thenReturn(true);
+
+        actualResult = sectionManager.onItemChanged(10);
+
+        //Subheader 0
+        //Item 1 ( index = 0 )
+        //Subheader 2
+        //Item 3 ( index = 1 )
+        //Item 4 ( index = 2 )
+        //Item 5 ( index = 3 )
+        //Item 6 ( index = 4 )
+        //Item 7 ( index = 5 )
+        //Item 8 ( index = 6 )
+        //Subheader 9
+        //Item 10 ( index = 7 )
+        //Item 11 ( index = 8 )
+        //Item 12 ( index = 9 )
+        //Subheader 13
+        //Item 14 ( index = 10 )
+
+        expectedResult = NotifyResultNew.create(Arrays.asList(
+                Notifier.createChanged(13),
+                Notifier.createInserted(14)
+        ));
+
+        assertThat(actualResult).isEqualTo(expectedResult);
+
+        expectedSections = Arrays.asList(
+                Section.create(0, 1),
+                Section.create(2, 6),
+                Section.create(9, 3),
+                Section.create(13, 1)
+        );
+
+        assertThat(sectionManager.getSections()).containsExactlyElementsOf(expectedSections);
+
+        //__________________________________________________________________________________________
+
+        when(sectionProvider.onPlaceSubheaderBetweenItems(2)).thenReturn(true);
+        when(sectionProvider.onPlaceSubheaderBetweenItems(3)).thenReturn(true);
+
+        actualResult = sectionManager.onItemChanged(3);
+
+        //Subheader 0
+        //Item 1 ( index = 0 )
+        //Subheader 2
+        //Item 3 ( index = 1 )
+        //Item 4 ( index = 2 )
+        //Subheader 5
+        //Item 6 ( index = 3 )
+        //Subheader 7
+        //Item 8 ( index = 4 )
+        //Item 9 ( index = 5 )
+        //Item 10 ( index = 6 )
+        //Subheader 11
+        //Item 12 ( index = 7 )
+        //Item 13 ( index = 8 )
+        //Item 14 ( index = 9 )
+        //Subheader 15
+        //Item 16 ( index = 10 )
+
+        expectedResult = NotifyResultNew.create(Arrays.asList(
+                Notifier.createChanged(5),
+                Notifier.createInserted(6, 2)
+        ));
+
+        assertThat(actualResult).isEqualTo(expectedResult);
+
+        expectedSections = Arrays.asList(
+                Section.create(0, 1),
+                Section.create(2, 2),
+                Section.create(5, 1),
+                Section.create(7, 3),
+                Section.create(11, 3),
+                Section.create(15, 1)
+        );
+
+        assertThat(sectionManager.getSections()).containsExactlyElementsOf(expectedSections);
+
+        //__________________________________________________________________________________________
+
+        when(sectionProvider.onPlaceSubheaderBetweenItems(8)).thenReturn(true);
+        when(sectionProvider.onPlaceSubheaderBetweenItems(9)).thenReturn(false);
+
+        actualResult = sectionManager.onItemChanged(9);
+
+        //Subheader 0
+        //Item 1 ( index = 0 )
+        //Subheader 2
+        //Item 3 ( index = 1 )
+        //Item 4 ( index = 2 )
+        //Subheader 5
+        //Item 6 ( index = 3 )
+        //Subheader 7
+        //Item 8 ( index = 4 )
+        //Item 9 ( index = 5 )
+        //Item 10 ( index = 6 )
+        //Subheader 11
+        //Item 12 ( index = 7 )
+        //Item 13 ( index = 8 )
+        //Subheader 14
+        //Item 15 ( index = 9 )
+        //Item 16 ( index = 10 )
+
+        expectedResult = NotifyResultNew.create(Arrays.asList(
+                Notifier.createChanged(14, 2)
+        ));
+
+        assertThat(actualResult).isEqualTo(expectedResult);
+
+        expectedSections = Arrays.asList(
+                Section.create(0, 1),
+                Section.create(2, 2),
+                Section.create(5, 1),
+                Section.create(7, 3),
+                Section.create(11, 2),
+                Section.create(14, 2)
+        );
+
+        assertThat(sectionManager.getSections()).containsExactlyElementsOf(expectedSections);
+
+        //__________________________________________________________________________________________
+
+        when(sectionProvider.onPlaceSubheaderBetweenItems(2)).thenReturn(false);
+        when(sectionProvider.onPlaceSubheaderBetweenItems(3)).thenReturn(false);
+
+        actualResult = sectionManager.onItemChanged(3);
+
+        //Subheader 0
+        //Item 1 ( index = 0 )
+        //Subheader 2
+        //Item 3 ( index = 1 )
+        //Item 4 ( index = 2 )
+        //Item 5 ( index = 3 )
+        //Item 6 ( index = 4 )
+        //Item 7 ( index = 5 )
+        //Item 8 ( index = 6 )
+        //Subheader 9
+        //Item 10 ( index = 7 )
+        //Item 11 ( index = 8 )
+        //Subheader 12
+        //Item 13 ( index = 9 )
+        //Item 14 ( index = 10 )
+
+        expectedResult = NotifyResultNew.create(Arrays.asList(
+                Notifier.createChanged(5),
+                Notifier.createRemoved(6, 2)
+        ));
+
+        assertThat(actualResult).isEqualTo(expectedResult);
+
+        expectedSections = Arrays.asList(
+                Section.create(0, 1),
+                Section.create(2, 6),
+                Section.create(9, 2),
+                Section.create(12, 2)
+        );
+
+        assertThat(sectionManager.getSections()).containsExactlyElementsOf(expectedSections);
+
+        //__________________________________________________________________________________________
+
+        when(sectionProvider.onPlaceSubheaderBetweenItems(7)).thenReturn(true);
+        when(sectionProvider.onPlaceSubheaderBetweenItems(8)).thenReturn(false);
+
+        actualResult = sectionManager.onItemChanged(8);
+
+        //Subheader 0
+        //Item 1 ( index = 0 )
+        //Subheader 2
+        //Item 3 ( index = 1 )
+        //Item 4 ( index = 2 )
+        //Item 5 ( index = 3 )
+        //Item 6 ( index = 4 )
+        //Item 7 ( index = 5 )
+        //Item 8 ( index = 6 )
+        //Subheader 9
+        //Item 10 ( index = 7 )
+        //Subheader 11
+        //Item 12 ( index = 8 )
+        //Item 13 ( index = 9 )
+        //Item 14 ( index = 10 )
+
+        expectedResult = NotifyResultNew.create(Arrays.asList(
+                Notifier.createChanged(11, 2)
+        ));
+
+        assertThat(actualResult).isEqualTo(expectedResult);
+
+        expectedSections = Arrays.asList(
+                Section.create(0, 1),
+                Section.create(2, 6),
+                Section.create(9, 1),
+                Section.create(11, 3)
+        );
+
+        //__________________________________________________________________________________________
+
+        when(sectionProvider.onPlaceSubheaderBetweenItems(0)).thenReturn(false);
+
+        actualResult = sectionManager.onItemChanged(0);
+
+        //Subheader 0
+        //Item 1 ( index = 0 )
+        //Item 2 ( index = 1 )
+        //Item 3 ( index = 2 )
+        //Item 4 ( index = 3 )
+        //Item 5 ( index = 4 )
+        //Item 6 ( index = 5 )
+        //Item 7 ( index = 6 )
+        //Subheader 8
+        //Item 9 ( index = 7 )
+        //Subheader 10
+        //Item 11 ( index = 8 )
+        //Item 12 ( index = 9 )
+        //Item 13 ( index = 10 )
+
+        expectedResult = NotifyResultNew.create(Arrays.asList(
+                Notifier.createChanged(0, 2),
+                Notifier.createRemoved(2)
+        ));
+
+        assertThat(actualResult).isEqualTo(expectedResult);
+
+        expectedSections = Arrays.asList(
+                Section.create(0, 7),
+                Section.create(8, 1),
+                Section.create(10, 3)
+        );
+
+        assertThat(sectionManager.getSections()).containsExactlyElementsOf(expectedSections);
+
+        //__________________________________________________________________________________________
+
+        when(sectionProvider.onPlaceSubheaderBetweenItems(9)).thenReturn(true);
+
+        actualResult = sectionManager.onItemChanged(10);
+
+        //Subheader 0
+        //Item 1 ( index = 0 )
+        //Item 2 ( index = 1 )
+        //Item 3 ( index = 2 )
+        //Item 4 ( index = 3 )
+        //Item 5 ( index = 4 )
+        //Item 6 ( index = 5 )
+        //Item 7 ( index = 6 )
+        //Subheader 8
+        //Item 9 ( index = 7 )
+        //Subheader 10
+        //Item 11 ( index = 8 )
+        //Item 12 ( index = 9 )
+        //Subheader 13
+        //Item 14 ( index = 10 )
+
+        expectedResult = NotifyResultNew.create(Arrays.asList(
+                Notifier.createChanged(13),
+                Notifier.createInserted(14)
+        ));
+
+        assertThat(actualResult).isEqualTo(expectedResult);
+
+        expectedSections = Arrays.asList(
+                Section.create(0, 7),
+                Section.create(8, 1),
+                Section.create(10, 2),
+                Section.create(13, 1)
+        );
+
+        assertThat(sectionManager.getSections()).containsExactlyElementsOf(expectedSections);
+
+        //__________________________________________________________________________________________
+
+        when(sectionProvider.onPlaceSubheaderBetweenItems(9)).thenReturn(false);
+
+        actualResult = sectionManager.onItemChanged(10);
+
+        //Subheader 0
+        //Item 1 ( index = 0 )
+        //Item 2 ( index = 1 )
+        //Item 3 ( index = 2 )
+        //Item 4 ( index = 3 )
+        //Item 5 ( index = 4 )
+        //Item 6 ( index = 5 )
+        //Item 7 ( index = 6 )
+        //Subheader 8
+        //Item 9 ( index = 7 )
+        //Subheader 10
+        //Item 11 ( index = 8 )
+        //Item 12 ( index = 9 )
+        //Item 13 ( index = 10 )
+
+        expectedResult = NotifyResultNew.create(Arrays.asList(
+                Notifier.createChanged(13),
+                Notifier.createRemoved(14)
+        ));
+
+        assertThat(actualResult).isEqualTo(expectedResult);
+
+        expectedSections = Arrays.asList(
+                Section.create(0, 7),
+                Section.create(8, 1),
+                Section.create(10, 3)
+        );
+
+        assertThat(sectionManager.getSections()).containsExactlyElementsOf(expectedSections);
+
+        //__________________________________________________________________________________________
+
+        when(sectionProvider.onPlaceSubheaderBetweenItems(3)).thenReturn(false);
+        when(sectionProvider.onPlaceSubheaderBetweenItems(4)).thenReturn(false);
+
+        actualResult = sectionManager.onItemChanged(4);
+
+        //Subheader 0
+        //Item 1 ( index = 0 )
+        //Item 2 ( index = 1 )
+        //Item 3 ( index = 2 )
+        //Item 4 ( index = 3 )
+        //Item 5 ( index = 4 )
+        //Item 6 ( index = 5 )
+        //Item 7 ( index = 6 )
+        //Subheader 8
+        //Item 9 ( index = 7 )
+        //Subheader 10
+        //Item 11 ( index = 8 )
+        //Item 12 ( index = 9 )
+        //Item 13 ( index = 10 )
+
+        expectedResult = NotifyResultNew.create(Arrays.asList(
+                Notifier.createChanged(5)
+        ));
+
+        assertThat(actualResult).isEqualTo(expectedResult);
+
+        expectedSections = Arrays.asList(
+                Section.create(0, 7),
+                Section.create(8, 1),
+                Section.create(10, 3)
+        );
+
+        assertThat(sectionManager.getSections()).containsExactlyElementsOf(expectedSections);
 
     }
 
@@ -1673,19 +2278,19 @@ public class SectionManagerTest {
         //Item 15 ( index = 10 )
 
         Section section1 = new Section(0);
-        section1.setItemsCount(3);
+        section1.setItemCount(3);
 
         Section section2 = new Section(4);
-        section2.setItemsCount(1);
+        section2.setItemCount(1);
 
         Section section3 = new Section(6);
-        section3.setItemsCount(2);
+        section3.setItemCount(2);
 
         Section section4 = new Section(9);
-        section4.setItemsCount(1);
+        section4.setItemCount(1);
 
         Section section5 = new Section(11);
-        section5.setItemsCount(4);
+        section5.setItemCount(4);
 
         sectionManager.addSection(section1);
         sectionManager.addSection(section2);
@@ -1997,19 +2602,19 @@ public class SectionManagerTest {
     public void removeItem_shouldThrowException() {
 
         Section section1 = new Section(0);
-        section1.setItemsCount(3);
+        section1.setItemCount(3);
 
         Section section2 = new Section(4);
-        section2.setItemsCount(1);
+        section2.setItemCount(1);
 
         Section section3 = new Section(6);
-        section3.setItemsCount(2);
+        section3.setItemCount(2);
 
         Section section4 = new Section(9);
-        section4.setItemsCount(1);
+        section4.setItemCount(1);
 
         Section section5 = new Section(11);
-        section5.setItemsCount(4);
+        section5.setItemCount(4);
 
         sectionManager.addSection(section1);
         sectionManager.addSection(section2);
@@ -2322,13 +2927,13 @@ public class SectionManagerTest {
     public void getDataItemCount() {
 
         Section section1 = new Section(0);
-        section1.setItemsCount(3);
+        section1.setItemCount(3);
 
         Section section2 = new Section(1);
-        section2.setItemsCount(2);
+        section2.setItemCount(2);
 
         Section section3 = new Section(2);
-        section3.setItemsCount(1);
+        section3.setItemCount(1);
 
         sectionManager.addSection(section1);
         sectionManager.addSection(section2);
@@ -2342,13 +2947,13 @@ public class SectionManagerTest {
     public void sectionIndex() {
 
         Section section1 = new Section(0);
-        section1.setItemsCount(3);
+        section1.setItemCount(3);
 
         Section section2 = new Section(4);
-        section2.setItemsCount(2);
+        section2.setItemCount(2);
 
         Section section3 = new Section(7);
-        section3.setItemsCount(1);
+        section3.setItemCount(1);
 
         sectionManager.addSection(section1);
         sectionManager.addSection(section2);
@@ -2370,13 +2975,13 @@ public class SectionManagerTest {
     public void sectionIndex_shouldThrowException() {
 
         Section section1 = new Section(0);
-        section1.setItemsCount(3);
+        section1.setItemCount(3);
 
         Section section2 = new Section(4);
-        section2.setItemsCount(2);
+        section2.setItemCount(2);
 
         Section section3 = new Section(7);
-        section3.setItemsCount(1);
+        section3.setItemCount(1);
 
         sectionManager.addSection(section1);
         sectionManager.addSection(section2);
@@ -2390,13 +2995,13 @@ public class SectionManagerTest {
     public void clear() {
 
         Section section1 = new Section(0);
-        section1.setItemsCount(3);
+        section1.setItemCount(3);
 
         Section section2 = new Section(4);
-        section2.setItemsCount(2);
+        section2.setItemCount(2);
 
         Section section3 = new Section(7);
-        section3.setItemsCount(1);
+        section3.setItemCount(1);
 
         sectionManager.addSection(section1);
         sectionManager.addSection(section2);
@@ -2422,13 +3027,13 @@ public class SectionManagerTest {
         //Item 8
 
         Section section1 = new Section(0);
-        section1.setItemsCount(3);
+        section1.setItemCount(3);
 
         Section section2 = new Section(4);
-        section2.setItemsCount(2);
+        section2.setItemCount(2);
 
         Section section3 = new Section(7);
-        section3.setItemsCount(1);
+        section3.setItemCount(1);
 
         sectionManager.addSection(section1);
         sectionManager.addSection(section2);
@@ -2457,13 +3062,13 @@ public class SectionManagerTest {
         //Item 8
 
         Section section1 = new Section(0);
-        section1.setItemsCount(3);
+        section1.setItemCount(3);
 
         Section section2 = new Section(4);
-        section2.setItemsCount(2);
+        section2.setItemCount(2);
 
         Section section3 = new Section(7);
-        section3.setItemsCount(1);
+        section3.setItemCount(1);
 
         sectionManager.addSection(section1);
         sectionManager.addSection(section2);
@@ -2477,13 +3082,13 @@ public class SectionManagerTest {
     public void sectionSize() {
 
         Section section1 = new Section(0);
-        section1.setItemsCount(3);
+        section1.setItemCount(3);
 
         Section section2 = new Section(4);
-        section2.setItemsCount(2);
+        section2.setItemCount(2);
 
         Section section3 = new Section(7);
-        section3.setItemsCount(1);
+        section3.setItemCount(1);
 
         sectionManager.addSection(section1);
         sectionManager.addSection(section2);
@@ -2510,13 +3115,13 @@ public class SectionManagerTest {
         //Item 9 ( index = 6 )
 
         Section section1 = new Section(0);
-        section1.setItemsCount(3);
+        section1.setItemCount(3);
 
         Section section2 = new Section(4);
-        section2.setItemsCount(2);
+        section2.setItemCount(2);
 
         Section section3 = new Section(7);
-        section3.setItemsCount(2);
+        section3.setItemCount(2);
 
         sectionManager.addSection(section1);
         sectionManager.addSection(section2);
@@ -2549,7 +3154,7 @@ public class SectionManagerTest {
         assertThat(sectionManager.sectionIndexByItemPosition(5)).isEqualTo(2);
         assertThat(sectionManager.sectionIndexByItemPosition(6)).isEqualTo(2);
 
-        sectionManager.collapseAllSections();
+        sectionManager.collapseAllSections(true);
 
         //Subheader 0
         //Subheader 1
@@ -2563,7 +3168,7 @@ public class SectionManagerTest {
         assertThat(sectionManager.sectionIndexByItemPosition(5)).isEqualTo(2);
         assertThat(sectionManager.sectionIndexByItemPosition(6)).isEqualTo(2);
 
-        sectionManager.expandAllSections();
+        sectionManager.expandAllSections(true);
 
         //Subheader 0
         //Item 1 ( index = 0 )
