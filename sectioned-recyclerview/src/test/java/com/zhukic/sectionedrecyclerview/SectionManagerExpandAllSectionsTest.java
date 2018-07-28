@@ -16,6 +16,7 @@ import static org.mockito.Mockito.verifyZeroInteractions;
  * @author Vladislav Zhukov (https://github.com/zhukic)
  */
 
+//TODO review
 public class SectionManagerExpandAllSectionsTest {
 
     private SectionManager sectionManager;
@@ -51,7 +52,7 @@ public class SectionManagerExpandAllSectionsTest {
         //Item ( index = 8 ) //COLLAPSED
         //Item ( index = 9 ) //COLLAPSED
 
-        NotifyResultNew actualResult = sectionManager.expandAllSections(true);
+        NotifyResultNew actualResult = sectionManager.expandAllSections();
 
         //Subheader 0
         //Item 1 ( index = 0 )
@@ -118,7 +119,7 @@ public class SectionManagerExpandAllSectionsTest {
         //Item ( index = 8 ) //COLLAPSED
         //Item ( index = 9 ) //COLLAPSED
 
-        NotifyResultNew actualResult = sectionManager.expandAllSections(false);
+        NotifyResultNew actualResult = sectionManager.expandAllSections();
 
         //Subheader 0
         //Item 1 ( index = 0 )
@@ -136,9 +137,13 @@ public class SectionManagerExpandAllSectionsTest {
         //Item 13 ( index = 9 )
 
         NotifyResultNew expectedResult = NotifyResultNew.create(Arrays.asList(
+                Notifier.createChanged(0),
                 Notifier.createInserted(1, 3),
+                Notifier.createChanged(4),
                 Notifier.createInserted(5, 1),
+                Notifier.createChanged(6),
                 Notifier.createInserted(7, 2),
+                Notifier.createChanged(9),
                 Notifier.createInserted(10, 4)
         ));
 
@@ -180,7 +185,7 @@ public class SectionManagerExpandAllSectionsTest {
         //Item 12 ( index = 8 )
         //Item 13 ( index = 9 )
 
-        NotifyResultNew actualResult = sectionManager.expandAllSections(true);
+        NotifyResultNew actualResult = sectionManager.expandAllSections();
 
         //Subheader 0
         //Item 1 ( index = 0 )
@@ -197,12 +202,7 @@ public class SectionManagerExpandAllSectionsTest {
         //Item 12 ( index = 8 )
         //Item 13 ( index = 9 )
 
-        NotifyResultNew expectedResult = NotifyResultNew.create(Arrays.asList(
-                Notifier.createChanged(0),
-                Notifier.createChanged(4),
-                Notifier.createChanged(6),
-                Notifier.createChanged(9)
-        ));
+        NotifyResultNew expectedResult = NotifyResultNew.empty();
 
         List<Section> expectedSections = Arrays.asList(
                 Section.create(0, 3, true),
@@ -215,6 +215,7 @@ public class SectionManagerExpandAllSectionsTest {
 
         assertThat(sectionManager.getSections()).containsExactlyElementsOf(expectedSections);
 
+        //TODO review
         verifyZeroInteractions(sectionProvider);
 
     }
@@ -242,7 +243,7 @@ public class SectionManagerExpandAllSectionsTest {
         //Item 12 ( index = 8 )
         //Item 13 ( index = 9 )
 
-        NotifyResultNew actualResult = sectionManager.expandAllSections(false);
+        NotifyResultNew actualResult = sectionManager.expandAllSections();
 
         //Subheader 0
         //Item 1 ( index = 0 )

@@ -27,7 +27,14 @@ public abstract class SectionedRecyclerViewAdapter<SH extends RecyclerView.ViewH
 
     @Override
     public void onAttachedToRecyclerView(RecyclerView recyclerView) {
+        super.onDetachedFromRecyclerView(recyclerView);
         sectionManager.init();
+    }
+
+    @Override
+    public void onDetachedFromRecyclerView(RecyclerView recyclerView) {
+        super.onDetachedFromRecyclerView(recyclerView);
+        sectionManager.clear();
     }
 
     public abstract VH onCreateItemViewHolder(ViewGroup parent, int viewType);
@@ -113,13 +120,12 @@ public abstract class SectionedRecyclerViewAdapter<SH extends RecyclerView.ViewH
         }
     }
 
+    //TODO
     public final void notifyDataChanged() {
         sectionManager.init();
         notifyDataSetChanged();
     }
 
-    //TODO А ЧТО ЕСЛИ СЕКЦИЯ COLLAPSED?
-    //TODO notify subheader
     /**
      * Notify that item at {@code itemPosition} has been changed.
      *
@@ -132,28 +138,6 @@ public abstract class SectionedRecyclerViewAdapter<SH extends RecyclerView.ViewH
         return result.getPositionStart();
     }
 
-    //TODO А ЧТО ЕСЛИ СЕКЦИЯ COLLAPSED?
-    public final int notifyItemInsertedAtPosition(int itemPosition, boolean shouldNotifySectionSubheader) {
-        final NotifyResultNew result = sectionManager.onItemInserted(itemPosition);
-        applyResult(result);
-        return result.getPositionStart();
-
-        /*final NotifyItemInsertedResult result = sectionManager.onItemInserted(itemPosition);
-
-        if (result == null) {
-            return -1;
-        }
-
-        notifyItemRangeInserted(result.getPositionStart(), result.getItemCount());
-
-        if (!result.isNewSection() && shouldNotifySectionSubheader) {
-            notifyItemChanged(result.getSubheaderPosition());
-        }
-
-        return result.getPositionStart();*/
-
-    }
-
     /**
      * Notify that item at {@code itemPosition} has been inserted.
      *
@@ -162,29 +146,9 @@ public abstract class SectionedRecyclerViewAdapter<SH extends RecyclerView.ViewH
      *         or -1 if the section new item belongs to is collapsed .
      */
     public final int notifyItemInsertedAtPosition(int itemPosition) {
-        return notifyItemInsertedAtPosition(itemPosition, false);
-    }
-
-    //TODO А ЧТО ЕСЛИ СЕКЦИЯ COLLAPSED?
-    public final int notifyItemRemovedAtPosition(int itemPosition, boolean notifySectionSubheader) {
-        final NotifyResultNew result = sectionManager.onItemRemoved(new Integer(itemPosition));
+        final NotifyResultNew result = sectionManager.onItemInserted(itemPosition);
         applyResult(result);
         return result.getPositionStart();
-
-        /*final NotifyItemRemovedResult result = sectionManager.onItemRemoved(itemPosition);
-
-        if (result == null) {
-            return -1;
-        }
-
-        notifyItemRangeRemoved(result.getPositionStart(), result.getItemCount());
-
-        if (!result.isSectionRemoved() && notifySectionSubheader) {
-            notifyItemChanged(result.getSubheaderPosition());
-        }
-
-        return result.getPositionStart();*/
-
     }
 
     /**
@@ -195,7 +159,9 @@ public abstract class SectionedRecyclerViewAdapter<SH extends RecyclerView.ViewH
      *         or -1 if the section removed item belongs to is collapsed.
      */
     public final int notifyItemRemovedAtPosition(int itemPosition) {
-        return notifyItemRemovedAtPosition(itemPosition, false);
+        final NotifyResultNew result = sectionManager.onItemRemoved(itemPosition);
+        applyResult(result);
+        return result.getPositionStart();
     }
 
     public final void setGridLayoutManager(final GridLayoutManager gridLayoutManager) {
@@ -225,22 +191,13 @@ public abstract class SectionedRecyclerViewAdapter<SH extends RecyclerView.ViewH
         return sectionManager.isSectionSubheaderOnPosition(adapterPosition);
     }
 
-    public final void expandSection(int sectionIndex, boolean shouldNotifySectionSubheader) {
-        final NotifyResultNew result = sectionManager.expandSection(sectionIndex, shouldNotifySectionSubheader);
-        applyResult(result);
-    }
-
     /**
      * Expand the section at the specified index.
      *
      * @param sectionIndex index of the section to be expanded.
      */
     public final void expandSection(int sectionIndex) {
-        expandSection(sectionIndex, true);
-    }
-
-    public final void expandAllSections(boolean notifySectionSubheaders) {
-        final NotifyResultNew result = sectionManager.expandAllSections(notifySectionSubheaders);
+        final NotifyResultNew result = sectionManager.expandSection(sectionIndex);
         applyResult(result);
     }
 
@@ -248,11 +205,7 @@ public abstract class SectionedRecyclerViewAdapter<SH extends RecyclerView.ViewH
      * Expand all sections.
      */
     public final void expandAllSections() {
-        expandAllSections(true);
-    }
-
-    public final void collapseSection(int sectionIndex, boolean shouldNotifySectionSubheader) {
-        final NotifyResultNew result = sectionManager.collapseSection(sectionIndex, shouldNotifySectionSubheader);
+        final NotifyResultNew result = sectionManager.expandAllSections();
         applyResult(result);
     }
 
@@ -262,14 +215,7 @@ public abstract class SectionedRecyclerViewAdapter<SH extends RecyclerView.ViewH
      * @param sectionIndex index of the section to be collapsed.
      */
     public final void collapseSection(int sectionIndex) {
-        collapseSection(sectionIndex, true);
-    }
-
-    /**
-     * Collapse all sections.
-     */
-    public final void collapseAllSections(boolean notifySectionSubheaders) {
-        final NotifyResultNew result = sectionManager.collapseAllSections(notifySectionSubheaders);
+        final NotifyResultNew result = sectionManager.collapseSection(sectionIndex);
         applyResult(result);
     }
 
@@ -277,7 +223,8 @@ public abstract class SectionedRecyclerViewAdapter<SH extends RecyclerView.ViewH
      * Collapse all sections.
      */
     public final void collapseAllSections() {
-        collapseAllSections(true);
+        final NotifyResultNew result = sectionManager.collapseAllSections();
+        applyResult(result);
     }
 
     /**

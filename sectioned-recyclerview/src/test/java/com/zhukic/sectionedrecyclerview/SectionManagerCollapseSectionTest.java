@@ -1,5 +1,6 @@
 package com.zhukic.sectionedrecyclerview;
 
+import com.zhukic.sectionedrecyclerview.result.NotifyResult;
 import com.zhukic.sectionedrecyclerview.result.NotifyResultNew;
 
 import org.junit.Before;
@@ -52,7 +53,7 @@ public class SectionManagerCollapseSectionTest {
         //Item 12 ( index = 9 )
         //Item 13 ( index = 10 )
 
-        NotifyResultNew actualResult = sectionManager.collapseSection(1, true);
+        NotifyResultNew actualResult = sectionManager.collapseSection(1);
 
         //Subheader 0
         //Item 1 ( index = 0 )
@@ -60,8 +61,8 @@ public class SectionManagerCollapseSectionTest {
         //Item 3 ( index = 2 )
         //Item 4 ( index = 3 )
         //Subheader 5
-        //Item ( index = 4 ) COLLAPSED
-        //Item ( index = 5 ) COLLAPSED
+        //Item ( index = 4 ) //COLLAPSED
+        //Item ( index = 5 ) //COLLAPSED
         //Subheader 6
         //Item 7 ( index = 6 )
         //Item 8 ( index = 7 )
@@ -101,8 +102,8 @@ public class SectionManagerCollapseSectionTest {
         //Item 3 ( index = 2 )
         //Item 4 ( index = 3 )
         //Subheader 5
-        //Item ( index = 4 ) COLLAPSED
-        //Item ( index = 5 ) COLLAPSED
+        //Item ( index = 4 ) //COLLAPSED
+        //Item ( index = 5 ) //COLLAPSED
         //Subheader 6
         //Item 7 ( index = 6 )
         //Item 8 ( index = 7 )
@@ -110,16 +111,16 @@ public class SectionManagerCollapseSectionTest {
         //Item 10 ( index = 9 )
         //Item 11 ( index = 10 )
 
-        NotifyResultNew actualResult = sectionManager.collapseSection(0, false);
+        NotifyResultNew actualResult = sectionManager.collapseSection(0);
 
         //Subheader 0
-        //Item ( index = 0 ) COLLAPSED
-        //Item ( index = 1 ) COLLAPSED
-        //Item ( index = 2 ) COLLAPSED
-        //Item ( index = 3 ) COLLAPSED
+        //Item ( index = 0 ) //COLLAPSED
+        //Item ( index = 1 ) //COLLAPSED
+        //Item ( index = 2 ) //COLLAPSED
+        //Item ( index = 3 ) //COLLAPSED
         //Subheader 1
-        //Item ( index = 4 ) COLLAPSED
-        //Item ( index = 5 ) COLLAPSED
+        //Item ( index = 4 ) //COLLAPSED
+        //Item ( index = 5 ) //COLLAPSED
         //Subheader 2
         //Item 3 ( index = 6 )
         //Item 4 ( index = 7 )
@@ -127,7 +128,8 @@ public class SectionManagerCollapseSectionTest {
         //Item 6 ( index = 9 )
         //Item 7 ( index = 10 )
 
-        NotifyResultNew expectedResult = NotifyResultNew.create(Collections.singletonList(
+        NotifyResultNew expectedResult = NotifyResultNew.create(Arrays.asList(
+                Notifier.createChanged(0),
                 Notifier.createRemoved(1, 4)
         ));
 
@@ -153,13 +155,13 @@ public class SectionManagerCollapseSectionTest {
         sectionManager.addSection(Section.create(2, 5, true));
 
         //Subheader 0
-        //Item ( index = 0 ) COLLAPSED
-        //Item ( index = 1 ) COLLAPSED
-        //Item ( index = 2 ) COLLAPSED
-        //Item ( index = 3 ) COLLAPSED
+        //Item ( index = 0 ) //COLLAPSED
+        //Item ( index = 1 ) //COLLAPSED
+        //Item ( index = 2 ) //COLLAPSED
+        //Item ( index = 3 ) //COLLAPSED
         //Subheader 1
-        //Item ( index = 4 ) COLLAPSED
-        //Item ( index = 5 ) COLLAPSED
+        //Item ( index = 4 ) //COLLAPSED
+        //Item ( index = 5 ) //COLLAPSED
         //Subheader 2
         //Item 3 ( index = 6 )
         //Item 4 ( index = 7 )
@@ -167,22 +169,22 @@ public class SectionManagerCollapseSectionTest {
         //Item 6 ( index = 9 )
         //Item 7 ( index = 10 )
 
-        NotifyResultNew actualResult = sectionManager.collapseSection(2, true);
+        NotifyResultNew actualResult = sectionManager.collapseSection(2);
 
         //Subheader 0
-        //Item ( index = 0 ) COLLAPSED
-        //Item ( index = 1 ) COLLAPSED
-        //Item ( index = 2 ) COLLAPSED
-        //Item ( index = 3 ) COLLAPSED
+        //Item ( index = 0 ) //COLLAPSED
+        //Item ( index = 1 ) //COLLAPSED
+        //Item ( index = 2 ) //COLLAPSED
+        //Item ( index = 3 ) //COLLAPSED
         //Subheader 1
-        //Item ( index = 4 ) COLLAPSED
-        //Item ( index = 5 ) COLLAPSED
+        //Item ( index = 4 ) //COLLAPSED
+        //Item ( index = 5 ) //COLLAPSED
         //Subheader 2
-        //Item ( index = 6 ) COLLAPSED
-        //Item ( index = 7 ) COLLAPSED
-        //Item ( index = 8 ) COLLAPSED
-        //Item ( index = 9 ) COLLAPSED
-        //Item ( index = 10 ) COLLAPSED
+        //Item ( index = 6 ) //COLLAPSED
+        //Item ( index = 7 ) //COLLAPSED
+        //Item ( index = 8 ) //COLLAPSED
+        //Item ( index = 9 ) //COLLAPSED
+        //Item ( index = 10 ) //COLLAPSED
 
         NotifyResultNew expectedResult = NotifyResultNew.create(Arrays.asList(
                 Notifier.createChanged(2),
@@ -210,26 +212,24 @@ public class SectionManagerCollapseSectionTest {
         sectionManager.addSection(Section.create(1, 2, false));
         sectionManager.addSection(Section.create(2, 5, false));
 
-        NotifyResultNew actualResult = sectionManager.collapseSection(1, true);
+        NotifyResultNew actualResult = sectionManager.collapseSection(1);
 
         //Subheader 0
-        //Item ( index = 0 ) COLLAPSED
-        //Item ( index = 1 ) COLLAPSED
-        //Item ( index = 2 ) COLLAPSED
-        //Item ( index = 3 ) COLLAPSED
+        //Item ( index = 0 ) //COLLAPSED
+        //Item ( index = 1 ) //COLLAPSED
+        //Item ( index = 2 ) //COLLAPSED
+        //Item ( index = 3 ) //COLLAPSED
         //Subheader 1
-        //Item ( index = 4 ) COLLAPSED
-        //Item ( index = 5 ) COLLAPSED
+        //Item ( index = 4 ) //COLLAPSED
+        //Item ( index = 5 ) //COLLAPSED
         //Subheader 2
-        //Item ( index = 6 ) COLLAPSED
-        //Item ( index = 7 ) COLLAPSED
-        //Item ( index = 8 ) COLLAPSED
-        //Item ( index = 9 ) COLLAPSED
-        //Item ( index = 10 ) COLLAPSED
+        //Item ( index = 6 ) //COLLAPSED
+        //Item ( index = 7 ) //COLLAPSED
+        //Item ( index = 8 ) //COLLAPSED
+        //Item ( index = 9 ) //COLLAPSED
+        //Item ( index = 10 ) //COLLAPSED
 
-        NotifyResultNew expectedResult = NotifyResultNew.create(Collections.singletonList(
-                Notifier.createChanged(1)
-        ));
+        NotifyResultNew expectedResult = NotifyResultNew.empty();
 
         List<Section> expectedSections = Arrays.asList(
                 Section.create(0, 4, false),
@@ -252,22 +252,22 @@ public class SectionManagerCollapseSectionTest {
         sectionManager.addSection(Section.create(1, 2, false));
         sectionManager.addSection(Section.create(2, 5, false));
 
-        NotifyResultNew actualResult = sectionManager.collapseSection(2, false);
+        NotifyResultNew actualResult = sectionManager.collapseSection(2);
 
         //Subheader 0
-        //Item ( index = 0 ) COLLAPSED
-        //Item ( index = 1 ) COLLAPSED
-        //Item ( index = 2 ) COLLAPSED
-        //Item ( index = 3 ) COLLAPSED
+        //Item ( index = 0 ) //COLLAPSED
+        //Item ( index = 1 ) //COLLAPSED
+        //Item ( index = 2 ) //COLLAPSED
+        //Item ( index = 3 ) //COLLAPSED
         //Subheader 1
-        //Item ( index = 4 ) COLLAPSED
-        //Item ( index = 5 ) COLLAPSED
+        //Item ( index = 4 ) //COLLAPSED
+        //Item ( index = 5 ) //COLLAPSED
         //Subheader 2
-        //Item ( index = 6 ) COLLAPSED
-        //Item ( index = 7 ) COLLAPSED
-        //Item ( index = 8 ) COLLAPSED
-        //Item ( index = 9 ) COLLAPSED
-        //Item ( index = 10 ) COLLAPSED
+        //Item ( index = 6 ) //COLLAPSED
+        //Item ( index = 7 ) //COLLAPSED
+        //Item ( index = 8 ) //COLLAPSED
+        //Item ( index = 9 ) //COLLAPSED
+        //Item ( index = 10 ) //COLLAPSED
 
         NotifyResultNew expectedResult = NotifyResultNew.empty();
 

@@ -55,7 +55,7 @@ public class SectionManagerExpandSectionTest {
         //Item ( index = 9 ) COLLAPSED
         //Item ( index = 10 ) COLLAPSED
 
-        NotifyResultNew actualResult = sectionManager.expandSection(1, true);
+        NotifyResultNew actualResult = sectionManager.expandSection(1);
 
         //Subheader 0
         //Item ( index = 0 ) COLLAPSED
@@ -113,7 +113,7 @@ public class SectionManagerExpandSectionTest {
         //Item ( index = 9 ) COLLAPSED
         //Item ( index = 10 ) COLLAPSED
 
-        NotifyResultNew actualResult = sectionManager.expandSection(2, false);
+        NotifyResultNew actualResult = sectionManager.expandSection(2);
 
         //Subheader 0
         //Item ( index = 0 ) COLLAPSED
@@ -130,7 +130,8 @@ public class SectionManagerExpandSectionTest {
         //Item 8 ( index = 9 )
         //Item 9 ( index = 10 )
 
-        NotifyResultNew expectedResult = NotifyResultNew.create(Collections.singletonList(
+        NotifyResultNew expectedResult = NotifyResultNew.create(Arrays.asList(
+                Notifier.createChanged(4),
                 Notifier.createInserted(5, 5)
         ));
 
@@ -170,7 +171,7 @@ public class SectionManagerExpandSectionTest {
         //Item 8 ( index = 9 )
         //Item 9 ( index = 10 )
 
-        NotifyResultNew actualResult = sectionManager.expandSection(0, true);
+        NotifyResultNew actualResult = sectionManager.expandSection(0);
 
         //Subheader 0
         //Item 1 ( index = 0 )
@@ -228,7 +229,7 @@ public class SectionManagerExpandSectionTest {
         //Item 12 ( index = 9 )
         //Item 13 ( index = 10 )
 
-        NotifyResultNew actualResult = sectionManager.expandSection(1, true);
+        NotifyResultNew actualResult = sectionManager.expandSection(1);
 
         //Subheader 0
         //Item 1 ( index = 0 )
@@ -245,9 +246,7 @@ public class SectionManagerExpandSectionTest {
         //Item 12 ( index = 9 )
         //Item 13 ( index = 10 )
 
-        NotifyResultNew expectedResult = NotifyResultNew.create(Collections.singletonList(
-                Notifier.createChanged(5)
-        ));
+        NotifyResultNew expectedResult = NotifyResultNew.empty();
 
         List<Section> expectedSections = Arrays.asList(
                 Section.create(0, 4, true),
@@ -285,7 +284,7 @@ public class SectionManagerExpandSectionTest {
         //Item 12 ( index = 9 )
         //Item 13 ( index = 10 )
 
-        NotifyResultNew actualResult = sectionManager.expandSection(2, false);
+        NotifyResultNew actualResult = sectionManager.expandSection(2);
 
         //Subheader 0
         //Item 1 ( index = 0 )
