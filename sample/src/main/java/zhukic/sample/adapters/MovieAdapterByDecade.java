@@ -4,10 +4,6 @@ import java.util.List;
 
 import zhukic.sample.Movie;
 
-/**
- * @author Vladislav Zhukov (https://github.com/zhukic)
- */
-
 public class MovieAdapterByDecade extends BaseMovieAdapter {
 
     public MovieAdapterByDecade(List<Movie> itemList) {
@@ -38,6 +34,6 @@ public class MovieAdapterByDecade extends BaseMovieAdapter {
         super.onBindSubheaderViewHolder(subheaderHolder, nextItemPosition);
         final Movie nextMovie = movieList.get(nextItemPosition);
         String decade = String.valueOf(nextMovie.getYear() - nextMovie.getYear() % 10) + "s";
-        subheaderHolder.mSubheaderText.setText(decade);
+        subheaderHolder.mSubheaderText.setText(decade + " " + getSectionSize(getSectionIndex(subheaderHolder.getAdapterPosition())) + " items");
     }
 }

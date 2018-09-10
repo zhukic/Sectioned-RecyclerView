@@ -1,10 +1,6 @@
 package com.zhukic.sectionedrecyclerview;
 
-/**
- * @author Vladislav Zhukov (https://github.com/zhukic)
- */
-
-public class Notifier {
+class Notifier {
 
     enum Type {
         ALL_DATA_CHANGED, CHANGED, INSERTED, REMOVED
@@ -16,7 +12,12 @@ public class Notifier {
 
     private final int itemCount;
 
-    //TODO check storIO
+    private Notifier(Type type, int positionStart, int itemCount) {
+        this.type = type;
+        this.positionStart = positionStart;
+        this.itemCount = itemCount;
+    }
+
     private static Notifier create(Type type, int positionStart, int itemCount) {
         return new Notifier(type, positionStart, itemCount);
     }
@@ -34,7 +35,7 @@ public class Notifier {
     }
 
     public static Notifier createInserted(int positionStart) {
-        return create(Type.INSERTED, positionStart, 1);
+        return createInserted(positionStart, 1);
     }
 
     public static Notifier createRemoved(int positionStart, int itemCount) {
@@ -42,18 +43,7 @@ public class Notifier {
     }
 
     public static Notifier createRemoved(int positionStart) {
-        return create(Type.REMOVED, positionStart, 1);
-    }
-
-    //TODO В КОНЦЕ СДЕЛАТЬ PUBLIC
-    private static Notifier create(Type type, int positionStart) {
-        return create(type, positionStart, 1);
-    }
-
-    private Notifier(Type type, int positionStart, int itemCount) {
-        this.type = type;
-        this.positionStart = positionStart;
-        this.itemCount = itemCount;
+        return createRemoved(positionStart, 1);
     }
 
     public Type getType() {

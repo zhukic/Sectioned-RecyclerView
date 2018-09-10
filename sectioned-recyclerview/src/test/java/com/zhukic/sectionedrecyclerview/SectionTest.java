@@ -4,10 +4,6 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
-/**
- * @author Vladislav Zhukov (https://github.com/zhukic)
- */
-
 public class SectionTest {
 
     @Test

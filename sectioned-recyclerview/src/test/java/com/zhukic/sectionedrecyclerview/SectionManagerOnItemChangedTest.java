@@ -1,7 +1,5 @@
 package com.zhukic.sectionedrecyclerview;
 
-import com.zhukic.sectionedrecyclerview.result.NotifyResultNew;
-
 import org.junit.Before;
 import org.junit.Test;
 
@@ -12,10 +10,6 @@ import java.util.List;
 import static org.assertj.core.api.Java6Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-
-/**
- * @author Vladislav Zhukov (https://github.com/zhukic)
- */
 
 public class SectionManagerOnItemChangedTest {
 
@@ -59,7 +53,7 @@ public class SectionManagerOnItemChangedTest {
         when(sectionProvider.onPlaceSubheaderBetweenItems(2)).thenReturn(true);
         when(sectionProvider.onPlaceSubheaderBetweenItems(3)).thenReturn(true);
 
-        NotifyResultNew actualResult = sectionManager.onItemChanged(3);
+        NotifyResult actualResult = sectionManager.onItemChanged(3);
 
         //Subheader 0
         //Item 1 ( index = 0 )
@@ -78,7 +72,7 @@ public class SectionManagerOnItemChangedTest {
         //Item 14 ( index = 9 )
         //Item 15 ( index = 10 )
 
-        NotifyResultNew expectedResult = NotifyResultNew.create(Collections.singletonList(
+        NotifyResult expectedResult = NotifyResult.create(Collections.singletonList(
                 Notifier.createChanged(4, 2)
         ));
 
@@ -125,7 +119,7 @@ public class SectionManagerOnItemChangedTest {
         when(sectionProvider.onPlaceSubheaderBetweenItems(2)).thenReturn(false);
         when(sectionProvider.onPlaceSubheaderBetweenItems(3)).thenReturn(true);
 
-        NotifyResultNew actualResult = sectionManager.onItemChanged(3);
+        NotifyResult actualResult = sectionManager.onItemChanged(3);
 
         //Subheader 0
         //Item 1 ( index = 0 )
@@ -143,7 +137,7 @@ public class SectionManagerOnItemChangedTest {
         //Item 13 ( index = 9 )
         //Item 14 ( index = 10 )
 
-        NotifyResultNew expectedResult = NotifyResultNew.create(Arrays.asList(
+        NotifyResult expectedResult = NotifyResult.create(Arrays.asList(
                 Notifier.createChanged(0),
                 Notifier.createChanged(4, 1),
                 Notifier.createRemoved(5, 1)
@@ -188,7 +182,7 @@ public class SectionManagerOnItemChangedTest {
         when(sectionProvider.onPlaceSubheaderBetweenItems(3)).thenReturn(false);
         when(sectionProvider.onPlaceSubheaderBetweenItems(4)).thenReturn(true);
 
-        NotifyResultNew actualResult = sectionManager.onItemChanged(4);
+        NotifyResult actualResult = sectionManager.onItemChanged(4);
 
         //Subheader 0
         //Item 1 ( index = 0 )
@@ -206,7 +200,7 @@ public class SectionManagerOnItemChangedTest {
         //Item 13 ( index = 9 )
         //Item 14 ( index = 10 )
 
-        NotifyResultNew expectedResult = NotifyResultNew.create(Arrays.asList(
+        NotifyResult expectedResult = NotifyResult.create(Arrays.asList(
                 Notifier.createChanged(0),
                 Notifier.createChanged(5, 2)
         ));
@@ -251,7 +245,7 @@ public class SectionManagerOnItemChangedTest {
         when(sectionProvider.onPlaceSubheaderBetweenItems(4)).thenReturn(false);
         when(sectionProvider.onPlaceSubheaderBetweenItems(5)).thenReturn(true);
 
-        NotifyResultNew actualResult = sectionManager.onItemChanged(5);
+        NotifyResult actualResult = sectionManager.onItemChanged(5);
 
         //Subheader 0
         //Item 1 ( index = 0 )
@@ -268,7 +262,7 @@ public class SectionManagerOnItemChangedTest {
         //Item 12 ( index = 9 )
         //Item 13 ( index = 10 )
 
-        NotifyResultNew expectedResult = NotifyResultNew.create(Arrays.asList(
+        NotifyResult expectedResult = NotifyResult.create(Arrays.asList(
                 Notifier.createChanged(0),
                 Notifier.createChanged(6),
                 Notifier.createRemoved(7)
@@ -312,7 +306,7 @@ public class SectionManagerOnItemChangedTest {
         when(sectionProvider.onPlaceSubheaderBetweenItems(5)).thenReturn(false);
         when(sectionProvider.onPlaceSubheaderBetweenItems(6)).thenReturn(true);
 
-        NotifyResultNew actualResult = sectionManager.onItemChanged(6);
+        NotifyResult actualResult = sectionManager.onItemChanged(6);
 
         //Subheader 0
         //Item 1 ( index = 0 )
@@ -328,7 +322,7 @@ public class SectionManagerOnItemChangedTest {
         //Item 11 ( index = 9 )
         //Item 12 ( index = 10 )
 
-        NotifyResultNew expectedResult = NotifyResultNew.create(Arrays.asList(
+        NotifyResult expectedResult = NotifyResult.create(Arrays.asList(
                 Notifier.createChanged(0),
                 Notifier.createChanged(7),
                 Notifier.createRemoved(8)
@@ -367,7 +361,7 @@ public class SectionManagerOnItemChangedTest {
 
         when(sectionProvider.onPlaceSubheaderBetweenItems(0)).thenReturn(true);
 
-        NotifyResultNew actualResult = sectionManager.onItemChanged(0);
+        NotifyResult actualResult = sectionManager.onItemChanged(0);
 
         //Subheader 0
         //Item 1 ( index = 0 )
@@ -384,7 +378,7 @@ public class SectionManagerOnItemChangedTest {
         //Item 12 ( index = 9 )
         //Item 13 ( index = 10 )
 
-        NotifyResultNew expectedResult = NotifyResultNew.create(Arrays.asList(
+        NotifyResult expectedResult = NotifyResult.create(Arrays.asList(
                 Notifier.createChanged(0, 2),
                 Notifier.createInserted(2)
         ));
@@ -425,7 +419,7 @@ public class SectionManagerOnItemChangedTest {
 
         when(sectionProvider.onPlaceSubheaderBetweenItems(9)).thenReturn(true);
 
-        NotifyResultNew actualResult = sectionManager.onItemChanged(10);
+        NotifyResult actualResult = sectionManager.onItemChanged(10);
 
         //Subheader 0
         //Item 1 ( index = 0 )
@@ -443,7 +437,7 @@ public class SectionManagerOnItemChangedTest {
         //Subheader 13
         //Item 14 ( index = 10 )
 
-        NotifyResultNew expectedResult = NotifyResultNew.create(Arrays.asList(
+        NotifyResult expectedResult = NotifyResult.create(Arrays.asList(
                 Notifier.createChanged(9),
                 Notifier.createChanged(13),
                 Notifier.createInserted(14)
@@ -489,7 +483,7 @@ public class SectionManagerOnItemChangedTest {
         when(sectionProvider.onPlaceSubheaderBetweenItems(2)).thenReturn(true);
         when(sectionProvider.onPlaceSubheaderBetweenItems(3)).thenReturn(true);
 
-        NotifyResultNew actualResult = sectionManager.onItemChanged(3);
+        NotifyResult actualResult = sectionManager.onItemChanged(3);
 
         //Subheader 0
         //Item 1 ( index = 0 )
@@ -509,7 +503,7 @@ public class SectionManagerOnItemChangedTest {
         //Subheader 15
         //Item 16 ( index = 10 )
 
-        NotifyResultNew expectedResult = NotifyResultNew.create(Arrays.asList(
+        NotifyResult expectedResult = NotifyResult.create(Arrays.asList(
                 Notifier.createChanged(2),
                 Notifier.createChanged(5),
                 Notifier.createInserted(6, 2)
@@ -561,7 +555,7 @@ public class SectionManagerOnItemChangedTest {
         when(sectionProvider.onPlaceSubheaderBetweenItems(8)).thenReturn(true);
         when(sectionProvider.onPlaceSubheaderBetweenItems(9)).thenReturn(false);
 
-        NotifyResultNew actualResult = sectionManager.onItemChanged(9);
+        NotifyResult actualResult = sectionManager.onItemChanged(9);
 
         //Subheader 0
         //Item 1 ( index = 0 )
@@ -581,7 +575,7 @@ public class SectionManagerOnItemChangedTest {
         //Item 15 ( index = 9 )
         //Item 16 ( index = 10 )
 
-        NotifyResultNew expectedResult = NotifyResultNew.create(Arrays.asList(
+        NotifyResult expectedResult = NotifyResult.create(Arrays.asList(
                 Notifier.createChanged(11),
                 Notifier.createChanged(14, 2)
         ));
@@ -632,7 +626,7 @@ public class SectionManagerOnItemChangedTest {
         when(sectionProvider.onPlaceSubheaderBetweenItems(2)).thenReturn(false);
         when(sectionProvider.onPlaceSubheaderBetweenItems(3)).thenReturn(false);
 
-        NotifyResultNew actualResult = sectionManager.onItemChanged(3);
+        NotifyResult actualResult = sectionManager.onItemChanged(3);
 
         //Subheader 0
         //Item 1 ( index = 0 )
@@ -650,7 +644,7 @@ public class SectionManagerOnItemChangedTest {
         //Item 13 ( index = 9 )
         //Item 14 ( index = 10 )
 
-        NotifyResultNew expectedResult = NotifyResultNew.create(Arrays.asList(
+        NotifyResult expectedResult = NotifyResult.create(Arrays.asList(
                 Notifier.createChanged(2),
                 Notifier.createChanged(5),
                 Notifier.createRemoved(6, 2)
@@ -696,7 +690,7 @@ public class SectionManagerOnItemChangedTest {
         when(sectionProvider.onPlaceSubheaderBetweenItems(7)).thenReturn(true);
         when(sectionProvider.onPlaceSubheaderBetweenItems(8)).thenReturn(false);
 
-        NotifyResultNew actualResult = sectionManager.onItemChanged(8);
+        NotifyResult actualResult = sectionManager.onItemChanged(8);
 
         //Subheader 0
         //Item 1 ( index = 0 )
@@ -714,7 +708,7 @@ public class SectionManagerOnItemChangedTest {
         //Item 13 ( index = 9 )
         //Item 14 ( index = 10 )
 
-        NotifyResultNew expectedResult = NotifyResultNew.create(Arrays.asList(
+        NotifyResult expectedResult = NotifyResult.create(Arrays.asList(
                 Notifier.createChanged(9),
                 Notifier.createChanged(11, 2)
         ));
@@ -758,7 +752,7 @@ public class SectionManagerOnItemChangedTest {
 
         when(sectionProvider.onPlaceSubheaderBetweenItems(0)).thenReturn(false);
 
-        NotifyResultNew actualResult = sectionManager.onItemChanged(0);
+        NotifyResult actualResult = sectionManager.onItemChanged(0);
 
         //Subheader 0
         //Item 1 ( index = 0 )
@@ -775,7 +769,7 @@ public class SectionManagerOnItemChangedTest {
         //Item 12 ( index = 9 )
         //Item 13 ( index = 10 )
 
-        NotifyResultNew expectedResult = NotifyResultNew.create(Arrays.asList(
+        NotifyResult expectedResult = NotifyResult.create(Arrays.asList(
                 Notifier.createChanged(0, 2),
                 Notifier.createRemoved(2)
         ));
@@ -818,7 +812,7 @@ public class SectionManagerOnItemChangedTest {
 
         when(sectionProvider.onPlaceSubheaderBetweenItems(9)).thenReturn(false);
 
-        NotifyResultNew actualResult = sectionManager.onItemChanged(10);
+        NotifyResult actualResult = sectionManager.onItemChanged(10);
 
         //Subheader 0
         //Item 1 ( index = 0 )
@@ -835,7 +829,7 @@ public class SectionManagerOnItemChangedTest {
         //Item 12 ( index = 9 )
         //Item 13 ( index = 10 )
 
-        NotifyResultNew expectedResult = NotifyResultNew.create(Arrays.asList(
+        NotifyResult expectedResult = NotifyResult.create(Arrays.asList(
                 Notifier.createChanged(10),
                 Notifier.createChanged(13),
                 Notifier.createRemoved(14)
@@ -878,7 +872,7 @@ public class SectionManagerOnItemChangedTest {
         when(sectionProvider.onPlaceSubheaderBetweenItems(3)).thenReturn(false);
         when(sectionProvider.onPlaceSubheaderBetweenItems(4)).thenReturn(false);
 
-        NotifyResultNew actualResult = sectionManager.onItemChanged(4);
+        NotifyResult actualResult = sectionManager.onItemChanged(4);
 
         //Subheader 0
         //Item 1 ( index = 0 )
@@ -895,7 +889,7 @@ public class SectionManagerOnItemChangedTest {
         //Item 12 ( index = 9 )
         //Item 13 ( index = 10 )
 
-        NotifyResultNew expectedResult = NotifyResultNew.create(Arrays.asList(
+        NotifyResult expectedResult = NotifyResult.create(Arrays.asList(
                 Notifier.createChanged(0),
                 Notifier.createChanged(5)
         ));
@@ -943,7 +937,7 @@ public class SectionManagerOnItemChangedTest {
         when(sectionProvider.onPlaceSubheaderBetweenItems(5)).thenReturn(true);
         when(sectionProvider.onPlaceSubheaderBetweenItems(6)).thenReturn(false);
 
-        NotifyResultNew actualResult = sectionManager.onItemChanged(6);
+        NotifyResult actualResult = sectionManager.onItemChanged(6);
 
         //Subheader 0
         //Item 1 ( index = 0 )
@@ -962,7 +956,7 @@ public class SectionManagerOnItemChangedTest {
         //Subheader 14
         //Item 15 ( index = 10 )
 
-        NotifyResultNew expectedResult = NotifyResultNew.create(Arrays.asList(
+        NotifyResult expectedResult = NotifyResult.create(Arrays.asList(
                 Notifier.createChanged(9, 2),
                 Notifier.createRemoved(11)
         ));
@@ -1011,7 +1005,7 @@ public class SectionManagerOnItemChangedTest {
 
         when(sectionProvider.onPlaceSubheaderBetweenItems(0)).thenReturn(false);
 
-        NotifyResultNew actualResult = sectionManager.onItemChanged(0);
+        NotifyResult actualResult = sectionManager.onItemChanged(0);
 
         //Subheader 0
         //Item 1 ( index = 0 )
@@ -1031,7 +1025,7 @@ public class SectionManagerOnItemChangedTest {
         //Subheader 15
         //Item 16 ( index = 10 )
 
-        NotifyResultNew expectedResult = NotifyResultNew.create(
+        NotifyResult expectedResult = NotifyResult.create(
                 Notifier.createChanged(0, 2)
         );
 
@@ -1080,7 +1074,7 @@ public class SectionManagerOnItemChangedTest {
 
         when(sectionProvider.onPlaceSubheaderBetweenItems(9)).thenReturn(true);
 
-        NotifyResultNew actualResult = sectionManager.onItemChanged(10);
+        NotifyResult actualResult = sectionManager.onItemChanged(10);
 
         //Subheader 0
         //Item 1 ( index = 0 )
@@ -1100,7 +1094,7 @@ public class SectionManagerOnItemChangedTest {
         //Subheader 15
         //Item 16 ( index = 10 )
 
-        NotifyResultNew expectedResult = NotifyResultNew.create(
+        NotifyResult expectedResult = NotifyResult.create(
                 Notifier.createChanged(15, 2)
         );
 
@@ -1149,7 +1143,7 @@ public class SectionManagerOnItemChangedTest {
 
         when(sectionProvider.onPlaceSubheaderBetweenItems(9)).thenReturn(false);
 
-        NotifyResultNew actualResult = sectionManager.onItemChanged(10);
+        NotifyResult actualResult = sectionManager.onItemChanged(10);
 
         //Subheader 0
         //Item 1 ( index = 0 )
@@ -1169,7 +1163,7 @@ public class SectionManagerOnItemChangedTest {
         //Item 15 ( index = 9 )
         //Item 16 ( index = 10 )
 
-        NotifyResultNew expectedResult = NotifyResultNew.create(Arrays.asList(
+        NotifyResult expectedResult = NotifyResult.create(Arrays.asList(
                 Notifier.createChanged(14),
                 Notifier.createChanged(16)
         ));
@@ -1218,7 +1212,7 @@ public class SectionManagerOnItemChangedTest {
         when(sectionProvider.onPlaceSubheaderBetweenItems(2)).thenReturn(true);
         when(sectionProvider.onPlaceSubheaderBetweenItems(3)).thenReturn(true);
 
-        NotifyResultNew actualResult = sectionManager.onItemChanged(3);
+        NotifyResult actualResult = sectionManager.onItemChanged(3);
 
         //Subheader 0
         //Item 1 ( index = 0 )
@@ -1237,7 +1231,7 @@ public class SectionManagerOnItemChangedTest {
         //Item 13 ( index = 9 )
         //Item 14 ( index = 10 )
 
-        NotifyResultNew expectedResult = NotifyResultNew.create(Collections.singletonList(
+        NotifyResult expectedResult = NotifyResult.create(Collections.singletonList(
                 Notifier.createChanged(4)
         ));
 
@@ -1283,7 +1277,7 @@ public class SectionManagerOnItemChangedTest {
 
         when(sectionProvider.onPlaceSubheaderBetweenItems(9)).thenReturn(true);
 
-        NotifyResultNew actualResult = sectionManager.onItemChanged(10);
+        NotifyResult actualResult = sectionManager.onItemChanged(10);
 
         //Subheader 0
         //Item 1 ( index = 0 )
@@ -1303,7 +1297,7 @@ public class SectionManagerOnItemChangedTest {
         //Subheader 11
         //Item ( index = 10 ) //COLLAPSED
 
-        NotifyResultNew expectedResult = NotifyResultNew.create(Arrays.asList(
+        NotifyResult expectedResult = NotifyResult.create(Arrays.asList(
                 Notifier.createChanged(10),
                 Notifier.createInserted(11)
         ));
@@ -1354,7 +1348,7 @@ public class SectionManagerOnItemChangedTest {
         when(sectionProvider.onPlaceSubheaderBetweenItems(5)).thenReturn(true);
         when(sectionProvider.onPlaceSubheaderBetweenItems(6)).thenReturn(false);
 
-        NotifyResultNew actualResult = sectionManager.onItemChanged(6);
+        NotifyResult actualResult = sectionManager.onItemChanged(6);
 
         //Subheader 0
         //Item 1 ( index = 0 )
@@ -1373,7 +1367,7 @@ public class SectionManagerOnItemChangedTest {
         //Subheader 9
         //Item ( index = 10 ) //COLLAPSED
 
-        NotifyResultNew expectedResult = NotifyResultNew.create(Arrays.asList(
+        NotifyResult expectedResult = NotifyResult.create(Arrays.asList(
                 Notifier.createChanged(8),
                 Notifier.createRemoved(9, 2)
         ));
@@ -1421,7 +1415,7 @@ public class SectionManagerOnItemChangedTest {
         when(sectionProvider.onPlaceSubheaderBetweenItems(3)).thenReturn(false);
         when(sectionProvider.onPlaceSubheaderBetweenItems(4)).thenReturn(true);
 
-        NotifyResultNew actualResult = sectionManager.onItemChanged(4);
+        NotifyResult actualResult = sectionManager.onItemChanged(4);
 
         //Subheader 0
         //Item 1 ( index = 0 )
@@ -1440,7 +1434,7 @@ public class SectionManagerOnItemChangedTest {
         //Subheader 8
         //Item ( index = 10 ) //COLLAPSED
 
-        NotifyResultNew expectedResult = NotifyResultNew.create(Arrays.asList(
+        NotifyResult expectedResult = NotifyResult.create(Arrays.asList(
                 Notifier.createChanged(4, 2),
                 Notifier.createRemoved(6)
         ));
@@ -1488,7 +1482,7 @@ public class SectionManagerOnItemChangedTest {
         when(sectionProvider.onPlaceSubheaderBetweenItems(7)).thenReturn(true);
         when(sectionProvider.onPlaceSubheaderBetweenItems(8)).thenReturn(true);
 
-        NotifyResultNew actualResult = sectionManager.onItemChanged(8);
+        NotifyResult actualResult = sectionManager.onItemChanged(8);
 
         //Subheader 0
         //Item 1 ( index = 0 )
@@ -1509,7 +1503,7 @@ public class SectionManagerOnItemChangedTest {
         //Subheader 10
         //Item ( index = 10 ) //COLLAPSED
 
-        NotifyResultNew expectedResult = NotifyResultNew.create(Arrays.asList(
+        NotifyResult expectedResult = NotifyResult.create(Arrays.asList(
                 Notifier.createChanged(7),
                 Notifier.createInserted(8, 2)
         ));
@@ -1539,12 +1533,12 @@ public class SectionManagerOnItemChangedTest {
         //Subheader 0
         //Item 1 ( index = 0 )
 
-        NotifyResultNew actualResult = sectionManager.onItemChanged(0);
+        NotifyResult actualResult = sectionManager.onItemChanged(0);
 
         //Subheader 0
         //Item 1 ( index = 0 )
 
-        NotifyResultNew expectedResult = NotifyResultNew.create(Notifier.createChanged(0, 2));
+        NotifyResult expectedResult = NotifyResult.create(Notifier.createChanged(0, 2));
 
         assertThat(actualResult).isEqualTo(expectedResult);
 
@@ -1565,12 +1559,12 @@ public class SectionManagerOnItemChangedTest {
         //Subheader 0
         //Item ( index = 0 ) //COLLAPSED
 
-        NotifyResultNew actualResult = sectionManager.onItemChanged(0);
+        NotifyResult actualResult = sectionManager.onItemChanged(0);
 
         //Subheader 0
         //Item ( index = 0 ) //COLLAPSED
 
-        NotifyResultNew expectedResult = NotifyResultNew.create(
+        NotifyResult expectedResult = NotifyResult.create(
                 Notifier.createChanged(0, 1)
         );
 
@@ -1614,7 +1608,7 @@ public class SectionManagerOnItemChangedTest {
 
         when(sectionProvider.onPlaceSubheaderBetweenItems(0)).thenReturn(false);
 
-        NotifyResultNew actualResult = sectionManager.onItemChanged(0);
+        NotifyResult actualResult = sectionManager.onItemChanged(0);
 
         //Subheader 0
         //Item ( index = 0 ) //COLLAPSED
@@ -1634,7 +1628,7 @@ public class SectionManagerOnItemChangedTest {
         //Subheader 12
         //Item 13 ( index = 10 )
 
-        NotifyResultNew expectedResult = NotifyResultNew.create(
+        NotifyResult expectedResult = NotifyResult.create(
                 Notifier.createChanged(0)
         );
 
@@ -1675,7 +1669,7 @@ public class SectionManagerOnItemChangedTest {
 
         when(sectionProvider.onPlaceSubheaderBetweenItems(0)).thenReturn(true);
 
-        NotifyResultNew actualResult = sectionManager.onItemChanged(0);
+        NotifyResult actualResult = sectionManager.onItemChanged(0);
 
         //Subheader 0
         //Item ( index = 0 ) //COLLAPSED
@@ -1692,7 +1686,7 @@ public class SectionManagerOnItemChangedTest {
         //Item ( index = 9 )
         //Item ( index = 10 )
 
-        NotifyResultNew expectedResult = NotifyResultNew.create(Arrays.asList(
+        NotifyResult expectedResult = NotifyResult.create(Arrays.asList(
                 Notifier.createChanged(0),
                 Notifier.createInserted(1)
         ));
@@ -1735,7 +1729,7 @@ public class SectionManagerOnItemChangedTest {
 
         when(sectionProvider.onPlaceSubheaderBetweenItems(0)).thenReturn(false);
 
-        NotifyResultNew actualResult = sectionManager.onItemChanged(0);
+        NotifyResult actualResult = sectionManager.onItemChanged(0);
 
         //Subheader 0
         //Item ( index = 0 ) //COLLAPSED
@@ -1752,7 +1746,7 @@ public class SectionManagerOnItemChangedTest {
         //Item 5 ( index = 9 )
         //Item 6 ( index = 10 )
 
-        NotifyResultNew expectedResult = NotifyResultNew.create(Arrays.asList(
+        NotifyResult expectedResult = NotifyResult.create(Arrays.asList(
                 Notifier.createChanged(0),
                 Notifier.createRemoved(1, 2)
         ));
@@ -1795,7 +1789,7 @@ public class SectionManagerOnItemChangedTest {
 
         when(sectionProvider.onPlaceSubheaderBetweenItems(0)).thenReturn(false);
 
-        NotifyResultNew actualResult = sectionManager.onItemChanged(0);
+        NotifyResult actualResult = sectionManager.onItemChanged(0);
 
         //Subheader 0
         //Item 1 ( index = 0 )
@@ -1812,7 +1806,7 @@ public class SectionManagerOnItemChangedTest {
         //Item 12 ( index = 9 )
         //Item 13 ( index = 10 )
 
-        NotifyResultNew expectedResult = NotifyResultNew.create(
+        NotifyResult expectedResult = NotifyResult.create(
                 Notifier.createChanged(0, 2)
         );
 
@@ -1854,7 +1848,7 @@ public class SectionManagerOnItemChangedTest {
 
         when(sectionProvider.onPlaceSubheaderBetweenItems(0)).thenReturn(false);
 
-        NotifyResultNew actualResult = sectionManager.onItemChanged(0);
+        NotifyResult actualResult = sectionManager.onItemChanged(0);
 
         //Subheader 0
         //Item ( index = 0 ) //COLLAPSED
@@ -1871,7 +1865,7 @@ public class SectionManagerOnItemChangedTest {
         //Item 5 ( index = 9 )
         //Item 6 ( index = 10 )
 
-        NotifyResultNew expectedResult = NotifyResultNew.create(Arrays.asList(
+        NotifyResult expectedResult = NotifyResult.create(Arrays.asList(
                 Notifier.createChanged(0),
                 Notifier.createRemoved(1)
         ));
@@ -1918,7 +1912,7 @@ public class SectionManagerOnItemChangedTest {
 
         when(sectionProvider.onPlaceSubheaderBetweenItems(9)).thenReturn(true);
 
-        NotifyResultNew actualResult = sectionManager.onItemChanged(10);
+        NotifyResult actualResult = sectionManager.onItemChanged(10);
 
         //Subheader 0
         //Item 1 ( index = 0 )
@@ -1938,7 +1932,7 @@ public class SectionManagerOnItemChangedTest {
         //Subheader 15
         //Item ( index = 10 ) //COLLAPSED
 
-        NotifyResultNew expectedResult = NotifyResultNew.create(
+        NotifyResult expectedResult = NotifyResult.create(
                 Notifier.createChanged(15)
         );
 
@@ -1983,7 +1977,7 @@ public class SectionManagerOnItemChangedTest {
 
         when(sectionProvider.onPlaceSubheaderBetweenItems(9)).thenReturn(false);
 
-        NotifyResultNew actualResult = sectionManager.onItemChanged(10);
+        NotifyResult actualResult = sectionManager.onItemChanged(10);
 
         //Subheader 0
         //Item 1 ( index = 0 )
@@ -2000,7 +1994,7 @@ public class SectionManagerOnItemChangedTest {
         //Item ( index = 9 ) //COLLAPSED
         //Item ( index = 10 ) //COLLAPSED
 
-        NotifyResultNew expectedResult = NotifyResultNew.create(Arrays.asList(
+        NotifyResult expectedResult = NotifyResult.create(Arrays.asList(
                 Notifier.createChanged(10),
                 Notifier.createRemoved(11, 2)
         ));
@@ -2043,7 +2037,7 @@ public class SectionManagerOnItemChangedTest {
 
         when(sectionProvider.onPlaceSubheaderBetweenItems(9)).thenReturn(false);
 
-        NotifyResultNew actualResult = sectionManager.onItemChanged(10);
+        NotifyResult actualResult = sectionManager.onItemChanged(10);
 
         //Subheader 0
         //Item 1 ( index = 0 )
@@ -2060,7 +2054,7 @@ public class SectionManagerOnItemChangedTest {
         //Item 12 ( index = 9 )
         //Item 13 ( index = 10 )
 
-        NotifyResultNew expectedResult = NotifyResultNew.create(Arrays.asList(
+        NotifyResult expectedResult = NotifyResult.create(Arrays.asList(
                 Notifier.createChanged(10),
                 Notifier.createChanged(13)
         ));
@@ -2103,7 +2097,7 @@ public class SectionManagerOnItemChangedTest {
 
         when(sectionProvider.onPlaceSubheaderBetweenItems(9)).thenReturn(false);
 
-        NotifyResultNew actualResult = sectionManager.onItemChanged(10);
+        NotifyResult actualResult = sectionManager.onItemChanged(10);
 
         //Subheader 0
         //Item 1 ( index = 0 )
@@ -2120,7 +2114,7 @@ public class SectionManagerOnItemChangedTest {
         //Item ( index = 9 ) //COLLAPSED
         //Item ( index = 10 ) //COLLAPSED
 
-        NotifyResultNew expectedResult = NotifyResultNew.create(Arrays.asList(
+        NotifyResult expectedResult = NotifyResult.create(Arrays.asList(
                 Notifier.createChanged(10),
                 Notifier.createRemoved(11)
         ));
@@ -2168,7 +2162,7 @@ public class SectionManagerOnItemChangedTest {
         when(sectionProvider.onPlaceSubheaderBetweenItems(8)).thenReturn(true);
         when(sectionProvider.onPlaceSubheaderBetweenItems(9)).thenReturn(false);
 
-        NotifyResultNew actualResult = sectionManager.onItemChanged(9);
+        NotifyResult actualResult = sectionManager.onItemChanged(9);
 
         //Subheader 0
         //Item 1 ( index = 0 )
@@ -2188,7 +2182,7 @@ public class SectionManagerOnItemChangedTest {
         //Item ( index = 9 ) //COLLAPSED
         //Item ( index = 10 ) //COLLAPSED
 
-        NotifyResultNew expectedResult = NotifyResultNew.create(Arrays.asList(
+        NotifyResult expectedResult = NotifyResult.create(Arrays.asList(
                 Notifier.createChanged(11),
                 Notifier.createChanged(14),
                 Notifier.createRemoved(15)
@@ -2240,7 +2234,7 @@ public class SectionManagerOnItemChangedTest {
         when(sectionProvider.onPlaceSubheaderBetweenItems(8)).thenReturn(true);
         when(sectionProvider.onPlaceSubheaderBetweenItems(9)).thenReturn(false);
 
-        NotifyResultNew actualResult = sectionManager.onItemChanged(9);
+        NotifyResult actualResult = sectionManager.onItemChanged(9);
 
         //Subheader 0
         //Item 1 ( index = 0 )
@@ -2260,7 +2254,7 @@ public class SectionManagerOnItemChangedTest {
         //Item 13 ( index = 9 ) //COLLAPSED
         //Item 14 ( index = 10 ) //COLLAPSED
 
-        NotifyResultNew expectedResult = NotifyResultNew.create(Arrays.asList(
+        NotifyResult expectedResult = NotifyResult.create(Arrays.asList(
                 Notifier.createChanged(11),
                 Notifier.createChanged(12),
                 Notifier.createInserted(13)
@@ -2312,7 +2306,7 @@ public class SectionManagerOnItemChangedTest {
         when(sectionProvider.onPlaceSubheaderBetweenItems(8)).thenReturn(true);
         when(sectionProvider.onPlaceSubheaderBetweenItems(9)).thenReturn(false);
 
-        NotifyResultNew actualResult = sectionManager.onItemChanged(9);
+        NotifyResult actualResult = sectionManager.onItemChanged(9);
 
         //Subheader 0
         //Item 1 ( index = 0 )
@@ -2332,7 +2326,7 @@ public class SectionManagerOnItemChangedTest {
         //Item ( index = 9 ) //COLLAPSED
         //Item ( index = 10 ) //COLLAPSED
 
-        NotifyResultNew expectedResult = NotifyResultNew.create(Notifier.createChanged(11, 2));
+        NotifyResult expectedResult = NotifyResult.create(Notifier.createChanged(11, 2));
 
         assertThat(actualResult).isEqualTo(expectedResult);
 
@@ -2380,7 +2374,7 @@ public class SectionManagerOnItemChangedTest {
         when(sectionProvider.onPlaceSubheaderBetweenItems(8)).thenReturn(true);
         when(sectionProvider.onPlaceSubheaderBetweenItems(9)).thenReturn(true);
 
-        NotifyResultNew actualResult = sectionManager.onItemChanged(9);
+        NotifyResult actualResult = sectionManager.onItemChanged(9);
 
         //Subheader 0
         //Item 1 ( index = 0 )
@@ -2401,7 +2395,7 @@ public class SectionManagerOnItemChangedTest {
         //Subheader 16
         //Item 17 ( index = 10 )
 
-        NotifyResultNew expectedResult = NotifyResultNew.create(Arrays.asList(
+        NotifyResult expectedResult = NotifyResult.create(Arrays.asList(
                 Notifier.createChanged(11),
                 Notifier.createChanged(14),
                 Notifier.createInserted(15)
@@ -2454,7 +2448,7 @@ public class SectionManagerOnItemChangedTest {
         when(sectionProvider.onPlaceSubheaderBetweenItems(8)).thenReturn(true);
         when(sectionProvider.onPlaceSubheaderBetweenItems(9)).thenReturn(true);
 
-        NotifyResultNew actualResult = sectionManager.onItemChanged(9);
+        NotifyResult actualResult = sectionManager.onItemChanged(9);
 
         //Subheader 0
         //Item 1 ( index = 0 )
@@ -2475,7 +2469,7 @@ public class SectionManagerOnItemChangedTest {
         //Subheader 13
         //Item 14 ( index = 10 )
 
-        NotifyResultNew expectedResult = NotifyResultNew.create(Arrays.asList(
+        NotifyResult expectedResult = NotifyResult.create(Arrays.asList(
                 Notifier.createChanged(11),
                 Notifier.createInserted(12)
         ));
@@ -2523,7 +2517,7 @@ public class SectionManagerOnItemChangedTest {
         when(sectionProvider.onPlaceSubheaderBetweenItems(3)).thenReturn(false);
         when(sectionProvider.onPlaceSubheaderBetweenItems(4)).thenReturn(true);
 
-        NotifyResultNew actualResult = sectionManager.onItemChanged(4);
+        NotifyResult actualResult = sectionManager.onItemChanged(4);
 
         //Subheader 0
         //Item 1 ( index = 0 )
@@ -2541,7 +2535,7 @@ public class SectionManagerOnItemChangedTest {
         //Item 12 ( index = 9 )
         //Item 13 ( index = 10 )
 
-        NotifyResultNew expectedResult = NotifyResultNew.create(Arrays.asList(
+        NotifyResult expectedResult = NotifyResult.create(Arrays.asList(
                 Notifier.createChanged(0),
                 Notifier.createChanged(5),
                 Notifier.createInserted(6)
@@ -2587,7 +2581,7 @@ public class SectionManagerOnItemChangedTest {
         when(sectionProvider.onPlaceSubheaderBetweenItems(3)).thenReturn(false);
         when(sectionProvider.onPlaceSubheaderBetweenItems(4)).thenReturn(true);
 
-        NotifyResultNew actualResult = sectionManager.onItemChanged(4);
+        NotifyResult actualResult = sectionManager.onItemChanged(4);
 
         //Subheader 0
         //Item ( index = 0 ) //COLLAPSED
@@ -2605,7 +2599,7 @@ public class SectionManagerOnItemChangedTest {
         //Item 7 ( index = 9 )
         //Item 8 ( index = 10 )
 
-        NotifyResultNew expectedResult = NotifyResultNew.create(
+        NotifyResult expectedResult = NotifyResult.create(
                 Notifier.createChanged(0, 2)
         );
 
@@ -2649,7 +2643,7 @@ public class SectionManagerOnItemChangedTest {
         when(sectionProvider.onPlaceSubheaderBetweenItems(3)).thenReturn(true);
         when(sectionProvider.onPlaceSubheaderBetweenItems(4)).thenReturn(true);
 
-        NotifyResultNew actualResult = sectionManager.onItemChanged(4);
+        NotifyResult actualResult = sectionManager.onItemChanged(4);
 
         //Subheader 0
         //Item 1 ( index = 0 )
@@ -2668,7 +2662,7 @@ public class SectionManagerOnItemChangedTest {
         //Item 14 ( index = 9 )
         //Item 15 ( index = 10 )
 
-        NotifyResultNew expectedResult = NotifyResultNew.create(Arrays.asList(
+        NotifyResult expectedResult = NotifyResult.create(Arrays.asList(
                 Notifier.createChanged(5, 2),
                 Notifier.createInserted(7)
         ));
@@ -2714,7 +2708,7 @@ public class SectionManagerOnItemChangedTest {
         when(sectionProvider.onPlaceSubheaderBetweenItems(3)).thenReturn(true);
         when(sectionProvider.onPlaceSubheaderBetweenItems(4)).thenReturn(true);
 
-        NotifyResultNew actualResult = sectionManager.onItemChanged(4);
+        NotifyResult actualResult = sectionManager.onItemChanged(4);
 
         //Subheader 0
         //Item 1 ( index = 0 )
@@ -2733,7 +2727,7 @@ public class SectionManagerOnItemChangedTest {
         //Item 12 ( index = 9 )
         //Item 13 ( index = 10 )
 
-        NotifyResultNew expectedResult = NotifyResultNew.create(Arrays.asList(
+        NotifyResult expectedResult = NotifyResult.create(Arrays.asList(
                 Notifier.createChanged(5),
                 Notifier.createInserted(6)
         ));
@@ -2783,7 +2777,7 @@ public class SectionManagerOnItemChangedTest {
         when(sectionProvider.onPlaceSubheaderBetweenItems(5)).thenReturn(true);
         when(sectionProvider.onPlaceSubheaderBetweenItems(6)).thenReturn(false);
 
-        NotifyResultNew actualResult = sectionManager.onItemChanged(6);
+        NotifyResult actualResult = sectionManager.onItemChanged(6);
 
         //Subheader 0
         //Item 1 ( index = 0 )
@@ -2802,7 +2796,7 @@ public class SectionManagerOnItemChangedTest {
         //Subheader 14
         //Item 15 ( index = 10 )
 
-        NotifyResultNew expectedResult = NotifyResultNew.create(
+        NotifyResult expectedResult = NotifyResult.create(
                 Notifier.createChanged(9, 2)
         );
 
@@ -2851,7 +2845,7 @@ public class SectionManagerOnItemChangedTest {
         when(sectionProvider.onPlaceSubheaderBetweenItems(5)).thenReturn(true);
         when(sectionProvider.onPlaceSubheaderBetweenItems(6)).thenReturn(false);
 
-        NotifyResultNew actualResult = sectionManager.onItemChanged(6);
+        NotifyResult actualResult = sectionManager.onItemChanged(6);
 
         //Subheader 0
         //Item 1 ( index = 0 )
@@ -2870,7 +2864,7 @@ public class SectionManagerOnItemChangedTest {
         //Subheader 10
         //Item 11 ( index = 10 )
 
-        NotifyResultNew expectedResult = NotifyResultNew.create(Arrays.asList(
+        NotifyResult expectedResult = NotifyResult.create(Arrays.asList(
                 Notifier.createChanged(9),
                 Notifier.createRemoved(10)
         ));
@@ -2918,7 +2912,7 @@ public class SectionManagerOnItemChangedTest {
         when(sectionProvider.onPlaceSubheaderBetweenItems(2)).thenReturn(false);
         when(sectionProvider.onPlaceSubheaderBetweenItems(3)).thenReturn(true);
 
-        NotifyResultNew actualResult = sectionManager.onItemChanged(3);
+        NotifyResult actualResult = sectionManager.onItemChanged(3);
 
         //Subheader 0
         //Item ( index = 0 ) //COLLAPSED
@@ -2936,7 +2930,7 @@ public class SectionManagerOnItemChangedTest {
         //Item 8 ( index = 9 )
         //Item 9 ( index = 10 )
 
-        NotifyResultNew expectedResult = NotifyResultNew.create(Arrays.asList(
+        NotifyResult expectedResult = NotifyResult.create(Arrays.asList(
                 Notifier.createChanged(0),
                 Notifier.createRemoved(1, 2)
         ));
@@ -2983,7 +2977,7 @@ public class SectionManagerOnItemChangedTest {
         when(sectionProvider.onPlaceSubheaderBetweenItems(2)).thenReturn(false);
         when(sectionProvider.onPlaceSubheaderBetweenItems(3)).thenReturn(true);
 
-        NotifyResultNew actualResult = sectionManager.onItemChanged(3);
+        NotifyResult actualResult = sectionManager.onItemChanged(3);
 
         //Subheader 0
         //Item 1 ( index = 0 )
@@ -3001,7 +2995,7 @@ public class SectionManagerOnItemChangedTest {
         //Item 13 ( index = 9 )
         //Item 14 ( index = 10 )
 
-        NotifyResultNew expectedResult = NotifyResultNew.create(Arrays.asList(
+        NotifyResult expectedResult = NotifyResult.create(Arrays.asList(
                 Notifier.createChanged(0),
                 Notifier.createChanged(4)
         ));
@@ -3048,7 +3042,7 @@ public class SectionManagerOnItemChangedTest {
         when(sectionProvider.onPlaceSubheaderBetweenItems(2)).thenReturn(false);
         when(sectionProvider.onPlaceSubheaderBetweenItems(3)).thenReturn(true);
 
-        NotifyResultNew actualResult = sectionManager.onItemChanged(3);
+        NotifyResult actualResult = sectionManager.onItemChanged(3);
 
         //Subheader 0
         //Item ( index = 0 ) //COLLAPSED
@@ -3066,7 +3060,7 @@ public class SectionManagerOnItemChangedTest {
         //Item 9 ( index = 9 )
         //Item 10 ( index = 10 )
 
-        NotifyResultNew expectedResult = NotifyResultNew.create(Arrays.asList(
+        NotifyResult expectedResult = NotifyResult.create(Arrays.asList(
                 Notifier.createChanged(0),
                 Notifier.createRemoved(1)
         ));
@@ -3114,7 +3108,7 @@ public class SectionManagerOnItemChangedTest {
         when(sectionProvider.onPlaceSubheaderBetweenItems(2)).thenReturn(false);
         when(sectionProvider.onPlaceSubheaderBetweenItems(3)).thenReturn(false);
 
-        NotifyResultNew actualResult = sectionManager.onItemChanged(3);
+        NotifyResult actualResult = sectionManager.onItemChanged(3);
 
         //Subheader 0
         //Item 1 ( index = 0 )
@@ -3132,7 +3126,7 @@ public class SectionManagerOnItemChangedTest {
         //Item 13 ( index = 9 )
         //Item 14 ( index = 10 )
 
-        NotifyResultNew expectedResult = NotifyResultNew.create(Arrays.asList(
+        NotifyResult expectedResult = NotifyResult.create(Arrays.asList(
                 Notifier.createChanged(2),
                 Notifier.createChanged(5),
                 Notifier.createRemoved(6, 2),
@@ -3183,7 +3177,7 @@ public class SectionManagerOnItemChangedTest {
         when(sectionProvider.onPlaceSubheaderBetweenItems(2)).thenReturn(false);
         when(sectionProvider.onPlaceSubheaderBetweenItems(3)).thenReturn(false);
 
-        NotifyResultNew actualResult = sectionManager.onItemChanged(3);
+        NotifyResult actualResult = sectionManager.onItemChanged(3);
 
         //Subheader 0
         //Item 1 ( index = 0 )
@@ -3201,7 +3195,7 @@ public class SectionManagerOnItemChangedTest {
         //Item 7 ( index = 9 )
         //Item 8 ( index = 10 )
 
-        NotifyResultNew expectedResult = NotifyResultNew.create(Arrays.asList(
+        NotifyResult expectedResult = NotifyResult.create(Arrays.asList(
                 Notifier.createChanged(2),
                 Notifier.createRemoved(3, 6)
         ));
@@ -3250,7 +3244,7 @@ public class SectionManagerOnItemChangedTest {
         when(sectionProvider.onPlaceSubheaderBetweenItems(2)).thenReturn(false);
         when(sectionProvider.onPlaceSubheaderBetweenItems(3)).thenReturn(false);
 
-        NotifyResultNew actualResult = sectionManager.onItemChanged(3);
+        NotifyResult actualResult = sectionManager.onItemChanged(3);
 
         //Subheader 0
         //Item 1 ( index = 0 )
@@ -3268,7 +3262,7 @@ public class SectionManagerOnItemChangedTest {
         //Item 7 ( index = 9 )
         //Item 8 ( index = 10 )
 
-        NotifyResultNew expectedResult = NotifyResultNew.create(Arrays.asList(
+        NotifyResult expectedResult = NotifyResult.create(Arrays.asList(
                 Notifier.createChanged(2),
                 Notifier.createRemoved(3, 3)
         ));
@@ -3317,7 +3311,7 @@ public class SectionManagerOnItemChangedTest {
         when(sectionProvider.onPlaceSubheaderBetweenItems(2)).thenReturn(false);
         when(sectionProvider.onPlaceSubheaderBetweenItems(3)).thenReturn(false);
 
-        NotifyResultNew actualResult = sectionManager.onItemChanged(3);
+        NotifyResult actualResult = sectionManager.onItemChanged(3);
 
         //Subheader 0
         //Item 1 ( index = 0 )
@@ -3335,7 +3329,7 @@ public class SectionManagerOnItemChangedTest {
         //Item 13 ( index = 9 )
         //Item 14 ( index = 10 )
 
-        NotifyResultNew expectedResult = NotifyResultNew.create(Arrays.asList(
+        NotifyResult expectedResult = NotifyResult.create(Arrays.asList(
                 Notifier.createChanged(2),
                 Notifier.createChanged(5),
                 Notifier.createRemoved(6)
@@ -3385,7 +3379,7 @@ public class SectionManagerOnItemChangedTest {
         when(sectionProvider.onPlaceSubheaderBetweenItems(2)).thenReturn(false);
         when(sectionProvider.onPlaceSubheaderBetweenItems(3)).thenReturn(false);
 
-        NotifyResultNew actualResult = sectionManager.onItemChanged(3);
+        NotifyResult actualResult = sectionManager.onItemChanged(3);
 
         //Subheader 0
         //Item 1 ( index = 0 )
@@ -3403,7 +3397,7 @@ public class SectionManagerOnItemChangedTest {
         //Item 13 ( index = 9 )
         //Item 14 ( index = 10 )
 
-        NotifyResultNew expectedResult = NotifyResultNew.create(Arrays.asList(
+        NotifyResult expectedResult = NotifyResult.create(Arrays.asList(
                 Notifier.createChanged(2),
                 Notifier.createRemoved(5, 2),
                 Notifier.createInserted(5, 4)
@@ -3453,7 +3447,7 @@ public class SectionManagerOnItemChangedTest {
         when(sectionProvider.onPlaceSubheaderBetweenItems(2)).thenReturn(false);
         when(sectionProvider.onPlaceSubheaderBetweenItems(3)).thenReturn(false);
 
-        NotifyResultNew actualResult = sectionManager.onItemChanged(3);
+        NotifyResult actualResult = sectionManager.onItemChanged(3);
 
         //Subheader 0
         //Item 1 ( index = 0 )
@@ -3471,7 +3465,7 @@ public class SectionManagerOnItemChangedTest {
         //Item 7 ( index = 9 )
         //Item 8 ( index = 10 )
 
-        NotifyResultNew expectedResult = NotifyResultNew.create(Arrays.asList(
+        NotifyResult expectedResult = NotifyResult.create(Arrays.asList(
                 Notifier.createChanged(2),
                 Notifier.createRemoved(3, 5)
         ));
@@ -3520,7 +3514,7 @@ public class SectionManagerOnItemChangedTest {
         when(sectionProvider.onPlaceSubheaderBetweenItems(2)).thenReturn(false);
         when(sectionProvider.onPlaceSubheaderBetweenItems(3)).thenReturn(false);
 
-        NotifyResultNew actualResult = sectionManager.onItemChanged(3);
+        NotifyResult actualResult = sectionManager.onItemChanged(3);
 
         //Subheader 0
         //Item 1 ( index = 0 )
@@ -3538,7 +3532,7 @@ public class SectionManagerOnItemChangedTest {
         //Item 7 ( index = 9 )
         //Item 8 ( index = 10 )
 
-        NotifyResultNew expectedResult = NotifyResultNew.create(Arrays.asList(
+        NotifyResult expectedResult = NotifyResult.create(Arrays.asList(
                 Notifier.createChanged(2),
                 Notifier.createRemoved(3, 2)
         ));

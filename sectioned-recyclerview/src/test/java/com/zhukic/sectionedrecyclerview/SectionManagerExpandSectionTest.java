@@ -1,25 +1,14 @@
 package com.zhukic.sectionedrecyclerview;
 
-import com.zhukic.sectionedrecyclerview.result.NotifyResultNew;
-
 import org.junit.Before;
-import org.junit.FixMethodOrder;
 import org.junit.Test;
-import org.junit.runners.MethodSorters;
-import org.mockito.Mockito;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 import static org.assertj.core.api.Java6Assertions.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verifyZeroInteractions;
-import static org.mockito.Mockito.when;
-
-/**
- * @author Vladislav Zhukov (https://github.com/zhukic)
- */
 
 public class SectionManagerExpandSectionTest {
 
@@ -55,7 +44,7 @@ public class SectionManagerExpandSectionTest {
         //Item ( index = 9 ) COLLAPSED
         //Item ( index = 10 ) COLLAPSED
 
-        NotifyResultNew actualResult = sectionManager.expandSection(1);
+        NotifyResult actualResult = sectionManager.expandSection(1);
 
         //Subheader 0
         //Item ( index = 0 ) COLLAPSED
@@ -72,7 +61,7 @@ public class SectionManagerExpandSectionTest {
         //Item ( index = 9 ) COLLAPSED
         //Item ( index = 10 ) COLLAPSED
 
-        NotifyResultNew expectedResult = NotifyResultNew.create(Arrays.asList(
+        NotifyResult expectedResult = NotifyResult.create(Arrays.asList(
                 Notifier.createChanged(1),
                 Notifier.createInserted(2, 2)
         ));
@@ -113,7 +102,7 @@ public class SectionManagerExpandSectionTest {
         //Item ( index = 9 ) COLLAPSED
         //Item ( index = 10 ) COLLAPSED
 
-        NotifyResultNew actualResult = sectionManager.expandSection(2);
+        NotifyResult actualResult = sectionManager.expandSection(2);
 
         //Subheader 0
         //Item ( index = 0 ) COLLAPSED
@@ -130,7 +119,7 @@ public class SectionManagerExpandSectionTest {
         //Item 8 ( index = 9 )
         //Item 9 ( index = 10 )
 
-        NotifyResultNew expectedResult = NotifyResultNew.create(Arrays.asList(
+        NotifyResult expectedResult = NotifyResult.create(Arrays.asList(
                 Notifier.createChanged(4),
                 Notifier.createInserted(5, 5)
         ));
@@ -171,7 +160,7 @@ public class SectionManagerExpandSectionTest {
         //Item 8 ( index = 9 )
         //Item 9 ( index = 10 )
 
-        NotifyResultNew actualResult = sectionManager.expandSection(0);
+        NotifyResult actualResult = sectionManager.expandSection(0);
 
         //Subheader 0
         //Item 1 ( index = 0 )
@@ -188,7 +177,7 @@ public class SectionManagerExpandSectionTest {
         //Item 12 ( index = 9 )
         //Item 13 ( index = 10 )
 
-        NotifyResultNew expectedResult = NotifyResultNew.create(Arrays.asList(
+        NotifyResult expectedResult = NotifyResult.create(Arrays.asList(
                 Notifier.createChanged(0),
                 Notifier.createInserted(1, 4)
         ));
@@ -229,7 +218,7 @@ public class SectionManagerExpandSectionTest {
         //Item 12 ( index = 9 )
         //Item 13 ( index = 10 )
 
-        NotifyResultNew actualResult = sectionManager.expandSection(1);
+        NotifyResult actualResult = sectionManager.expandSection(1);
 
         //Subheader 0
         //Item 1 ( index = 0 )
@@ -246,7 +235,7 @@ public class SectionManagerExpandSectionTest {
         //Item 12 ( index = 9 )
         //Item 13 ( index = 10 )
 
-        NotifyResultNew expectedResult = NotifyResultNew.empty();
+        NotifyResult expectedResult = NotifyResult.empty();
 
         List<Section> expectedSections = Arrays.asList(
                 Section.create(0, 4, true),
@@ -284,7 +273,7 @@ public class SectionManagerExpandSectionTest {
         //Item 12 ( index = 9 )
         //Item 13 ( index = 10 )
 
-        NotifyResultNew actualResult = sectionManager.expandSection(2);
+        NotifyResult actualResult = sectionManager.expandSection(2);
 
         //Subheader 0
         //Item 1 ( index = 0 )
@@ -301,7 +290,7 @@ public class SectionManagerExpandSectionTest {
         //Item 12 ( index = 9 )
         //Item 13 ( index = 10 )
 
-        NotifyResultNew expectedResult = NotifyResultNew.empty();
+        NotifyResult expectedResult = NotifyResult.empty();
 
         List<Section> expectedSections = Arrays.asList(
                 Section.create(0, 4, true),

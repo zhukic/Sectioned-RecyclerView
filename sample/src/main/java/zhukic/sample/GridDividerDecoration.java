@@ -12,10 +12,6 @@ import com.zhukic.sectionedrecyclerview.SectionedRecyclerViewAdapter;
 
 import zhukic.sectionedrecyclerview.R;
 
-/**
- * @author Vladislav Zhukov (https://github.com/zhukic)
- */
-
 public class GridDividerDecoration extends RecyclerView.ItemDecoration {
 
     private final Paint dividerPaint;

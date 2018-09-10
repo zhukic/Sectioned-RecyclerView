@@ -17,10 +17,6 @@ import java.util.List;
 import zhukic.sample.Movie;
 import zhukic.sectionedrecyclerview.R;
 
-/**
- * @author Vladislav Zhukov (https://github.com/zhukic)
- */
-
 public abstract class BaseMovieAdapter extends SectionedRecyclerViewAdapter<BaseMovieAdapter.SubheaderHolder, BaseMovieAdapter.MovieViewHolder> {
 
     public interface OnItemClickListener {

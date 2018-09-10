@@ -12,10 +12,6 @@ import android.text.TextUtils;
 
 import zhukic.sectionedrecyclerview.R;
 
-/**
- * Created by RUS on 04.03.2017.
- */
-
 public class NewMovieDialogFragment extends DialogFragment {
 
     interface DialogListener {

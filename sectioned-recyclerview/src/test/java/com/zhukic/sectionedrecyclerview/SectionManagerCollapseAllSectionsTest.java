@@ -1,7 +1,5 @@
 package com.zhukic.sectionedrecyclerview;
 
-import com.zhukic.sectionedrecyclerview.result.NotifyResultNew;
-
 import org.junit.Before;
 import org.junit.Test;
 
@@ -11,10 +9,6 @@ import java.util.List;
 import static org.assertj.core.api.Java6Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verifyZeroInteractions;
-
-/**
- * @author Vladislav Zhukov (https://github.com/zhukic)
- */
 
 public class SectionManagerCollapseAllSectionsTest {
 
@@ -51,7 +45,7 @@ public class SectionManagerCollapseAllSectionsTest {
         //Item 12 ( index = 8 )
         //Item 13 ( index = 9 )
 
-        NotifyResultNew actualResult = sectionManager.collapseAllSections();
+        NotifyResult actualResult = sectionManager.collapseAllSections();
 
         //Subheader 0
         //Item ( index = 0 ) //COLLAPSED
@@ -68,7 +62,7 @@ public class SectionManagerCollapseAllSectionsTest {
         //Item ( index = 8 ) //COLLAPSED
         //Item ( index = 9 ) //COLLAPSED
 
-        NotifyResultNew expectedResult = NotifyResultNew.create(Arrays.asList(
+        NotifyResult expectedResult = NotifyResult.create(Arrays.asList(
                 Notifier.createChanged(0),
                 Notifier.createRemoved(1, 3),
                 Notifier.createChanged(1),
@@ -117,7 +111,7 @@ public class SectionManagerCollapseAllSectionsTest {
         //Item 12 ( index = 8 )
         //Item 13 ( index = 9 )
 
-        NotifyResultNew actualResult = sectionManager.collapseAllSections();
+        NotifyResult actualResult = sectionManager.collapseAllSections();
 
         //Subheader 0
         //Item ( index = 0 ) //COLLAPSED
@@ -134,7 +128,7 @@ public class SectionManagerCollapseAllSectionsTest {
         //Item ( index = 8 ) //COLLAPSED
         //Item ( index = 9 ) //COLLAPSED
 
-        NotifyResultNew expectedResult = NotifyResultNew.create(Arrays.asList(
+        NotifyResult expectedResult = NotifyResult.create(Arrays.asList(
                 Notifier.createChanged(0),
                 Notifier.createRemoved(1, 3),
                 Notifier.createChanged(1),
@@ -183,7 +177,7 @@ public class SectionManagerCollapseAllSectionsTest {
         //Item ( index = 8 ) //COLLAPSED
         //Item ( index = 9 ) //COLLAPSED
 
-        NotifyResultNew actualResult = sectionManager.collapseAllSections();
+        NotifyResult actualResult = sectionManager.collapseAllSections();
 
         //Subheader 0
         //Item ( index = 0 ) //COLLAPSED
@@ -200,7 +194,7 @@ public class SectionManagerCollapseAllSectionsTest {
         //Item ( index = 8 ) //COLLAPSED
         //Item ( index = 9 ) //COLLAPSED
 
-        NotifyResultNew expectedResult = NotifyResultNew.empty();
+        NotifyResult expectedResult = NotifyResult.empty();
 
         List<Section> expectedSections = Arrays.asList(
                 Section.create(0, 3, false),
@@ -240,7 +234,7 @@ public class SectionManagerCollapseAllSectionsTest {
         //Item ( index = 8 ) //COLLAPSED
         //Item ( index = 9 ) //COLLAPSED
 
-        NotifyResultNew actualResult = sectionManager.collapseAllSections();
+        NotifyResult actualResult = sectionManager.collapseAllSections();
 
         //Subheader 0
         //Item ( index = 0 ) //COLLAPSED
@@ -257,7 +251,7 @@ public class SectionManagerCollapseAllSectionsTest {
         //Item ( index = 8 ) //COLLAPSED
         //Item ( index = 9 ) //COLLAPSED
 
-        NotifyResultNew expectedResult = NotifyResultNew.empty();
+        NotifyResult expectedResult = NotifyResult.empty();
 
         List<Section> expectedSections = Arrays.asList(
                 Section.create(0, 3, false),

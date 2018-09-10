@@ -1,9 +1,5 @@
 package com.zhukic.sectionedrecyclerview;
 
-/**
- * @author Vladislav Zhukov (https://github.com/zhukic)
- */
-
 class Section {
 
     private int subheaderPosition;

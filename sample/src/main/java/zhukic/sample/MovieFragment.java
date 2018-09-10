@@ -25,10 +25,6 @@ import zhukic.sample.adapters.MovieAdapterByGenre;
 import zhukic.sample.adapters.MovieAdapterByName;
 import zhukic.sectionedrecyclerview.R;
 
-/**
- * @author Vladislav Zhukov (https://github.com/zhukic)
- */
-
 public class MovieFragment extends Fragment implements BaseMovieAdapter.OnItemClickListener, NewMovieDialogFragment.DialogListener {
 
     private List<Movie> mMovieList;
@@ -166,10 +162,10 @@ public class MovieFragment extends Fragment implements BaseMovieAdapter.OnItemCl
 
         switch (item.getItemId()) {
             case R.id.action_expand_all_sections:
-                mSectionedRecyclerAdapter.expandAllSections(false);
+                mSectionedRecyclerAdapter.expandAllSections();
                 break;
             case R.id.action_collapse_all_sections:
-                mSectionedRecyclerAdapter.collapseAllSections(false);
+                mSectionedRecyclerAdapter.collapseAllSections();
                 break;
         }
 

@@ -2,16 +2,9 @@ package com.zhukic.sectionedrecyclerview;
 
 import android.support.annotation.IntRange;
 
-import com.zhukic.sectionedrecyclerview.result.NotifyItemInsertedResult;
-import com.zhukic.sectionedrecyclerview.result.NotifyResultNew;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
-/**
- * @author Vladislav Zhukov (https://github.com/zhukic)
- */
 
 class SectionManager {
 
@@ -24,7 +17,6 @@ class SectionManager {
     }
 
     void init() {
-
         this.sections.clear();
 
         if (sectionProvider.getItemSize() != 0) {
@@ -48,37 +40,6 @@ class SectionManager {
 
         final Section lastSection = getLastSection();
         lastSection.setItemCount(lastSectionItemCount);
-
-    }
-
-    private void addSection(int index, Section newSection) {
-        for (int i = index; i < sections.size(); i++) {
-            Section section = getSection(i);
-            if (newSection.isExpanded()) {
-                section.setSubheaderPosition(section.getSubheaderPosition() + newSection.getItemCount() + 1);
-            } else {
-                section.setSubheaderPosition(section.getSubheaderPosition() + 1);
-            }
-        }
-        sections.add(index, newSection);
-    }
-
-    //TODO addSections(List<Section> sections)
-    void addSection(Section section) {
-        sections.add(section);
-    }
-
-    private void removeSection(Section section) {
-        final int index = sections.indexOf(section);
-        for (int i = index + 1; i < sections.size(); i++) {
-            final Section s = sections.get(i);
-            if (section.isExpanded()) {
-                s.setSubheaderPosition(s.getSubheaderPosition() - section.getItemCount() - 1);
-            } else {
-                s.setSubheaderPosition(s.getSubheaderPosition() - 1);
-            }
-        }
-        sections.remove(section);
     }
 
     boolean isSectionSubheaderOnPosition(@IntRange(from = 0, to = Integer.MAX_VALUE) int position) {
@@ -97,12 +58,11 @@ class SectionManager {
         return sections.get(sectionIndex).isExpanded();
     }
 
-    NotifyResultNew expandSection(@IntRange(from = 0, to = Integer.MAX_VALUE) int sectionIndex) {
-
+    NotifyResult expandSection(@IntRange(from = 0, to = Integer.MAX_VALUE) int sectionIndex) {
         final Section sectionToExpand = sections.get(sectionIndex);
 
         if (sectionToExpand.isExpanded()) {
-            return NotifyResultNew.empty();
+            return NotifyResult.empty();
         }
 
         sectionToExpand.setExpanded(true);
@@ -113,43 +73,17 @@ class SectionManager {
         }
 
         final List<Notifier> notifiers = new ArrayList<>();
-
         notifiers.add(Notifier.createChanged(sectionToExpand.getSubheaderPosition()));
-
         notifiers.add(Notifier.createInserted(sectionToExpand.getSubheaderPosition() + 1, sectionToExpand.getItemCount()));
 
-        return NotifyResultNew.create(notifiers);
-
+        return NotifyResult.create(notifiers);
     }
 
-    //TODO  REMOVE
-    int expandSection(@IntRange(from = 0, to = Integer.MAX_VALUE) Integer sectionIndex) {
-
-        final Section sectionToExpand = sections.get(sectionIndex);
-
-        if (sectionToExpand.isExpanded()) {
-            return 0;
-        }
-
-        sectionToExpand.setExpanded(true);
-
-        for (int i = sectionIndex + 1; i < sections.size(); i++) {
-            final Section section = sections.get(i);
-            section.setSubheaderPosition(section.getSubheaderPosition() + sectionToExpand.getItemCount());
-        }
-
-        return sectionToExpand.getItemCount();
-
-    }
-
-    NotifyResultNew expandAllSections() {
+    NotifyResult expandAllSections() {
         final List<Notifier> notifiers = new ArrayList<>();
+
         for (int i = 0; i < sections.size(); i++) {
-
-            final List<Notifier> expandSectionNotifiers = new ArrayList<>();
-
             final Section sectionToExpand = sections.get(i);
-
             if (sectionToExpand.isExpanded()) {
                 continue;
             }
@@ -161,22 +95,21 @@ class SectionManager {
                 sectionToExpand.setSubheaderPosition(previousSection.getSubheaderPosition() + previousSection.getItemCount() + 1);
             }
 
+            final List<Notifier> expandSectionNotifiers = new ArrayList<>();
             expandSectionNotifiers.add(Notifier.createChanged(sectionToExpand.getSubheaderPosition()));
-
             expandSectionNotifiers.add(Notifier.createInserted(sectionToExpand.getSubheaderPosition() + 1, sectionToExpand.getItemCount()));
 
             notifiers.addAll(expandSectionNotifiers);
-
         }
-        return NotifyResultNew.create(notifiers);
+
+        return NotifyResult.create(notifiers);
     }
 
-    NotifyResultNew collapseSection(@IntRange(from = 0, to = Integer.MAX_VALUE) int sectionIndex) {
-
+    NotifyResult collapseSection(@IntRange(from = 0, to = Integer.MAX_VALUE) int sectionIndex) {
         final Section sectionToCollapse = sections.get(sectionIndex);
 
         if (!sectionToCollapse.isExpanded()) {
-            return NotifyResultNew.empty();
+            return NotifyResult.empty();
         }
 
         sectionToCollapse.setExpanded(false);
@@ -186,21 +119,17 @@ class SectionManager {
             section.setSubheaderPosition(section.getSubheaderPosition() - sectionToCollapse.getItemCount());
         }
 
-        return NotifyResultNew.create(Arrays.asList(
+        return NotifyResult.create(Arrays.asList(
                 Notifier.createChanged(sectionToCollapse.getSubheaderPosition()),
                 Notifier.createRemoved(sectionToCollapse.getSubheaderPosition() + 1, sectionToCollapse.getItemCount())
         ));
-
     }
 
-    NotifyResultNew collapseAllSections() {
+    NotifyResult collapseAllSections() {
         final List<Notifier> notifiers = new ArrayList<>();
         for (int i = 0; i < sections.size(); i++) {
-
             final Section sectionToCollapse = sections.get(i);
-
             sectionToCollapse.setSubheaderPosition(i);
-
             if (!sectionToCollapse.isExpanded()) {
                 continue;
             }
@@ -208,25 +137,20 @@ class SectionManager {
             sectionToCollapse.setExpanded(false);
 
             final List<Notifier> collapseSectionNotifiers = new ArrayList<>();
-
             collapseSectionNotifiers.add(Notifier.createChanged(i));
-
             collapseSectionNotifiers.add(Notifier.createRemoved(i + 1, sectionToCollapse.getItemCount()));
 
             notifiers.addAll(collapseSectionNotifiers);
-
         }
-        return NotifyResultNew.create(notifiers);
+        return NotifyResult.create(notifiers);
     }
 
     int getItemPositionForSubheaderViewHolder(@IntRange(from = 0, to = Integer.MAX_VALUE) int subheaderPosition) {
-
         if (subheaderPosition < 0 || subheaderPosition >= getItemCount()) {
             throw new IllegalArgumentException("subheaderPosition: " + subheaderPosition + ", itemCount: " + getItemCount());
         }
 
         int itemPosition = 0;
-
         int sectionIndex = sectionIndex(subheaderPosition);
 
         for (int i = 0; i < sectionIndex; i++) {
@@ -234,11 +158,9 @@ class SectionManager {
         }
 
         return itemPosition;
-
     }
 
     int getItemPositionForItemViewHolder(@IntRange(from = 0, to = Integer.MAX_VALUE) int itemHolderPosition) {
-
         if (itemHolderPosition < 0 || itemHolderPosition >= getItemCount()) {
             throw new IllegalArgumentException("itemHolderPosition: " + itemHolderPosition + ", itemCount: " + getItemCount());
         }
@@ -251,22 +173,18 @@ class SectionManager {
         itemHolderPosition -= sectionIndex + 1;
 
         for (int i = 0; i < sectionIndex; i++) {
-
             final Section section = sections.get(i);
 
             if (!section.isExpanded()) {
                 itemHolderPosition += section.getItemCount();
             }
-
         }
 
         return itemHolderPosition;
-
     }
 
     //TODO РАЗОБРАТЬСЯ С ASSERTIONS
     int getAdapterPositionForItem(int itemPosition, boolean ignoreCollapsing) {
-
         if (itemPosition < 0 || itemPosition >= getDataItemCount()) {
             throw new IllegalArgumentException("itemPosition: " + itemPosition + ", itemCount: " + getDataItemCount());
         }
@@ -280,7 +198,6 @@ class SectionManager {
         int itemCount = 0;
 
         for (Section section : sections) {
-
             adapterPosition += 1;
 
             if (!ignoreCollapsing && !section.isExpanded()) {
@@ -292,19 +209,16 @@ class SectionManager {
             } else {
                 break;
             }
-
         }
 
         return adapterPosition + itemPosition;
-
     }
 
     int getAdapterPositionForItem(int itemPosition) {
         return getAdapterPositionForItem(itemPosition, false);
     }
 
-    NotifyResultNew onItemChanged(int itemPosition) {
-
+    NotifyResult onItemChanged(int itemPosition) {
         final int adapterPosition = getAdapterPositionForItem(itemPosition, false);
 
         final int sectionIndex = sectionIndexByItemPosition(itemPosition);
@@ -313,30 +227,27 @@ class SectionManager {
 
         final int positionInSection = positionInSectionByItemPosition(itemPosition);
 
-        if (sectionProvider.getItemSize() == 1) {
+        if (getDataItemCount() == 1) {
             if (section.isExpanded()) {
-                return NotifyResultNew.create(Notifier.createChanged(0, 2));
+                return NotifyResult.create(Notifier.createChanged(0, 2));
             } else {
-                return NotifyResultNew.create(Notifier.createChanged(0));
+                return NotifyResult.create(Notifier.createChanged(0));
             }
         }
 
         if (itemPosition == 0) {
-
             final boolean oldState = section.getItemCount() == 1;
 
             final boolean newState = sectionProvider.onPlaceSubheaderBetweenItems(itemPosition);
 
             if (oldState == newState) {
                 if (section.isExpanded()) {
-                    return NotifyResultNew.create(Notifier.createChanged(0, 2));
+                    return NotifyResult.create(Notifier.createChanged(0, 2));
                 } else {
-                    return NotifyResultNew.create(Notifier.createChanged(0));
+                    return NotifyResult.create(Notifier.createChanged(0));
                 }
             } else {
-
                 if (!oldState && newState) {
-
                     final Section firstSplitSection;
                     final Section secondSplitSection;
 
@@ -354,25 +265,22 @@ class SectionManager {
                     addSection(sectionIndex + 1, secondSplitSection);
 
                     if (section.isExpanded()) {
-                        return NotifyResultNew.create(
+                        return NotifyResult.create(
                                 Arrays.asList(
                                         Notifier.createChanged(0, 2),
                                         Notifier.createInserted(2)
                                 )
                         );
                     } else {
-                        return NotifyResultNew.create(
+                        return NotifyResult.create(
                                 Arrays.asList(
                                         Notifier.createChanged(0),
                                         Notifier.createInserted(1)
                                 )
                         );
                     }
-
                 } else {
-
                     final Section nextSection = sections.get(sectionIndex + 1);
-
                     final Section newSection = Section.create(0, nextSection.getItemCount() + 1, nextSection.isExpanded());
 
                     removeSection(section);
@@ -381,64 +289,56 @@ class SectionManager {
                     addSection(0, newSection);
 
                     if (section.isExpanded() && nextSection.isExpanded()) {
-                        return NotifyResultNew.create(
+                        return NotifyResult.create(
                                 Arrays.asList(
                                         Notifier.createChanged(0, 2),
                                         Notifier.createRemoved(2)
                                 )
                         );
                     } else if (section.isExpanded() && !nextSection.isExpanded()) {
-                        return NotifyResultNew.create(
+                        return NotifyResult.create(
                                 Arrays.asList(
                                         Notifier.createChanged(0),
                                         Notifier.createRemoved(1, 2)
                                 )
                         );
                     } else if (!section.isExpanded() && nextSection.isExpanded()) {
-                        return NotifyResultNew.create(Notifier.createChanged(0, 2));
+                        return NotifyResult.create(Notifier.createChanged(0, 2));
                     } else {
-                        return NotifyResultNew.create(
+                        return NotifyResult.create(
                                 Arrays.asList(
                                         Notifier.createChanged(0),
                                         Notifier.createRemoved(1)
                                 )
                         );
                     }
-
                 }
-
             }
-
-        } else if (itemPosition == sectionProvider.getItemSize() - 1) {
-
+        } else if (itemPosition == getDataItemCount() - 1) {
             final boolean oldState = section.getItemCount() == 1;
 
             final boolean newState = sectionProvider.onPlaceSubheaderBetweenItems(itemPosition - 1);
 
             if (oldState == newState) {
-
                 if (section.isExpanded()) {
                     if (positionInSection == 0) {
-                        return NotifyResultNew.create(
+                        return NotifyResult.create(
                                 Notifier.createChanged(section.getSubheaderPosition(), 2)
                         );
                     } else {
-                        return NotifyResultNew.create(Arrays.asList(
+                        return NotifyResult.create(Arrays.asList(
                                 Notifier.createChanged(section.getSubheaderPosition()),
                                 //TODO потестить такие кейсы, когда все секции collapsed кроме этой на предмет adapterPosition
                                 Notifier.createChanged(adapterPosition)
                         ));
                     }
                 } else {
-                    return NotifyResultNew.create(
+                    return NotifyResult.create(
                             Notifier.createChanged(section.getSubheaderPosition())
                     );
                 }
-
             } else {
-
                 if (!oldState && newState) {
-
                     final Section firstSplitSection;
                     final Section secondSplitSection;
 
@@ -456,7 +356,7 @@ class SectionManager {
                     addSection(sectionIndex + 1, secondSplitSection);
 
                     if (section.isExpanded()) {
-                        return NotifyResultNew.create(
+                        return NotifyResult.create(
                                 Arrays.asList(
                                         Notifier.createChanged(section.getSubheaderPosition(), 1),
                                         Notifier.createChanged(adapterPosition),
@@ -464,16 +364,14 @@ class SectionManager {
                                 )
                         );
                     } else {
-                        return NotifyResultNew.create(
+                        return NotifyResult.create(
                                 Arrays.asList(
                                         Notifier.createChanged(section.getSubheaderPosition()),
                                         Notifier.createInserted(section.getSubheaderPosition() + 1)
                                 )
                         );
                     }
-
                 } else {
-
                     removeSection(section);
 
                     final Section previousSection = sections.get(sectionIndex - 1);
@@ -481,7 +379,7 @@ class SectionManager {
                     previousSection.setItemCount(previousSection.getItemCount() + 1);
 
                     if (section.isExpanded() && previousSection.isExpanded()) {
-                        return NotifyResultNew.create(
+                        return NotifyResult.create(
                                 Arrays.asList(
                                         Notifier.createChanged(previousSection.getSubheaderPosition()),
                                         Notifier.createChanged(section.getSubheaderPosition()),
@@ -489,32 +387,29 @@ class SectionManager {
                                 )
                         );
                     } else if (section.isExpanded() && !previousSection.isExpanded()) {
-                        return NotifyResultNew.create(
+                        return NotifyResult.create(
                                 Arrays.asList(
                                         Notifier.createChanged(previousSection.getSubheaderPosition()),
                                         Notifier.createRemoved(section.getSubheaderPosition(), 2)
                                 )
                         );
                     } else if (!section.isExpanded() && previousSection.isExpanded()) {
-                        return NotifyResultNew.create(
+                        return NotifyResult.create(
                                 Arrays.asList(
                                         Notifier.createChanged(previousSection.getSubheaderPosition()),
                                         Notifier.createChanged(section.getSubheaderPosition())
                                 )
                         );
                     } else {
-                        return NotifyResultNew.create(
+                        return NotifyResult.create(
                                 Arrays.asList(
                                         Notifier.createChanged(previousSection.getSubheaderPosition()),
                                         Notifier.createRemoved(section.getSubheaderPosition())
                                 )
                         );
                     }
-
                 }
-
             }
-
         }
 
         final Section previousItemSection = sections.get(sectionIndexByItemPosition(itemPosition - 1));
@@ -527,14 +422,13 @@ class SectionManager {
         final boolean newState1 = sectionProvider.onPlaceSubheaderBetweenItems(itemPosition);
 
         if (oldState0 == newState0 && oldState1 == newState1) {
-
             if (section.isExpanded()) {
                 if (positionInSection(adapterPosition) == 0) {
-                    return NotifyResultNew.create(
+                    return NotifyResult.create(
                             Notifier.createChanged(section.getSubheaderPosition(), 2)
                     );
                 } else {
-                    return NotifyResultNew.create(
+                    return NotifyResult.create(
                             Arrays.asList(
                                     Notifier.createChanged(section.getSubheaderPosition()),
                                     Notifier.createChanged(adapterPosition)
@@ -542,15 +436,13 @@ class SectionManager {
                     );
                 }
             } else {
-                return NotifyResultNew.create(
+                return NotifyResult.create(
                         Notifier.createChanged(section.getSubheaderPosition())
                 );
             }
-
         }
 
         if (!oldState0 && !oldState1) {
-
             final Section firstSplitSection;
             final Section secondSplitSection;
             final Section thirdSplitSection;
@@ -572,7 +464,7 @@ class SectionManager {
             addSection(sectionIndex + 2, thirdSplitSection);
 
             if (section.isExpanded()) {
-                return NotifyResultNew.create(
+                return NotifyResult.create(
                         Arrays.asList(
                                 Notifier.createChanged(firstSplitSection.getSubheaderPosition()),
                                 Notifier.createChanged(adapterPosition, 1),
@@ -580,20 +472,16 @@ class SectionManager {
                         )
                 );
             } else {
-                return NotifyResultNew.create(
+                return NotifyResult.create(
                         Arrays.asList(
                                 Notifier.createChanged(firstSplitSection.getSubheaderPosition()),
                                 Notifier.createInserted(firstSplitSection.getSubheaderPosition() + 1, 2)
                         )
                 );
             }
-
         }
-
         if (!oldState0 && oldState1) {
-
             if (newState0 && !newState1) {
-
                 nextItemSection.setItemCount(nextItemSection.getItemCount() + 1);
 
                 if (section.isExpanded()) {
@@ -606,28 +494,26 @@ class SectionManager {
                 section.setItemCount(section.getItemCount() - 1);
 
                 if (section.isExpanded() && nextItemSection.isExpanded()) {
-                    return NotifyResultNew.create(Arrays.asList(
+                    return NotifyResult.create(Arrays.asList(
                             Notifier.createChanged(section.getSubheaderPosition()),
                             Notifier.createChanged(adapterPosition, 2)
                     ));
                 } else if (section.isExpanded() && !nextItemSection.isExpanded()) {
-                    return NotifyResultNew.create(Arrays.asList(
+                    return NotifyResult.create(Arrays.asList(
                             Notifier.createChanged(section.getSubheaderPosition()),
                             Notifier.createChanged(adapterPosition),
                             Notifier.createRemoved(adapterPosition + 1)
                     ));
                 } else if (!section.isExpanded() && nextItemSection.isExpanded()) {
-                    return NotifyResultNew.create(Arrays.asList(
+                    return NotifyResult.create(Arrays.asList(
                             Notifier.createChanged(section.getSubheaderPosition()),
                             Notifier.createChanged(section.getSubheaderPosition() + 1),
                             Notifier.createInserted(section.getSubheaderPosition() + 2)
                     ));
                 } else {
-                    return NotifyResultNew.create(Notifier.createChanged(section.getSubheaderPosition(), 2));
+                    return NotifyResult.create(Notifier.createChanged(section.getSubheaderPosition(), 2));
                 }
-
             } else {
-
                 final Section firstSplitSection;
                 final Section secondSplitSection;
 
@@ -645,26 +531,22 @@ class SectionManager {
                 addSection(sectionIndex + 1, secondSplitSection);
 
                 if (section.isExpanded()) {
-                    return NotifyResultNew.create(Arrays.asList(
+                    return NotifyResult.create(Arrays.asList(
                             Notifier.createChanged(section.getSubheaderPosition()),
                             Notifier.createChanged(adapterPosition),
                             Notifier.createInserted(adapterPosition + 1)
                     ));
                 } else {
-                    return NotifyResultNew.create(Arrays.asList(
+                    return NotifyResult.create(Arrays.asList(
                             Notifier.createChanged(section.getSubheaderPosition()),
                             Notifier.createInserted(section.getSubheaderPosition() + 1)
                     ));
                 }
-
             }
-
         }
 
         if (oldState0 && !oldState1) {
-
             if (!newState0 && newState1) {
-
                 previousItemSection.setItemCount(previousItemSection.getItemCount() + 1);
 
                 if (previousItemSection.isExpanded() && section.isExpanded()) {
@@ -684,21 +566,21 @@ class SectionManager {
                 section.setItemCount(section.getItemCount() - 1);
 
                 if (section.isExpanded() && previousItemSection.isExpanded()) {
-                    return NotifyResultNew.create(
+                    return NotifyResult.create(
                             Arrays.asList(
                                     Notifier.createChanged(previousItemSection.getSubheaderPosition()),
                                     Notifier.createChanged(adapterPosition - 1, 2)
                             )
                     );
                 } else if (section.isExpanded() && !previousItemSection.isExpanded()) {
-                    return NotifyResultNew.create(
+                    return NotifyResult.create(
                             Arrays.asList(
                                     Notifier.createChanged(previousItemSection.getSubheaderPosition(), 2),
                                     Notifier.createRemoved(previousItemSection.getSubheaderPosition() + 2)
                             )
                     );
                 } else if (!section.isExpanded() && previousItemSection.isExpanded()) {
-                    return NotifyResultNew.create(
+                    return NotifyResult.create(
                             Arrays.asList(
                                     Notifier.createChanged(previousItemSection.getSubheaderPosition()),
                                     Notifier.createChanged(section.getSubheaderPosition() - 1),
@@ -706,11 +588,9 @@ class SectionManager {
                             )
                     );
                 } else {
-                    return NotifyResultNew.create(Notifier.createChanged(previousItemSection.getSubheaderPosition(), 2));
+                    return NotifyResult.create(Notifier.createChanged(previousItemSection.getSubheaderPosition(), 2));
                 }
-
             } else {
-
                 final Section firstSplitSection;
                 final Section secondSplitSection;
 
@@ -728,25 +608,21 @@ class SectionManager {
                 addSection(sectionIndex + 1, secondSplitSection);
 
                 if (section.isExpanded()) {
-                    return NotifyResultNew.create(Arrays.asList(
+                    return NotifyResult.create(Arrays.asList(
                             Notifier.createChanged(section.getSubheaderPosition(), 2),
                             Notifier.createInserted(section.getSubheaderPosition() + 2)
                     ));
                 } else {
-                    return NotifyResultNew.create(Arrays.asList(
+                    return NotifyResult.create(Arrays.asList(
                             Notifier.createChanged(section.getSubheaderPosition()),
                             Notifier.createInserted(section.getSubheaderPosition() + 1)
                     ));
                 }
-
             }
-
         }
 
         if (oldState0 && oldState1) {
-
             if (newState0 && !newState1) {
-
                 final Section newSection = Section.create(section.getSubheaderPosition(), nextItemSection.getItemCount() + 1, nextItemSection.isExpanded());
 
                 removeSection(section);
@@ -755,34 +631,32 @@ class SectionManager {
                 addSection(sectionIndex, newSection);
 
                 if (section.isExpanded() && nextItemSection.isExpanded()) {
-                    return NotifyResultNew.create(
+                    return NotifyResult.create(
                             Arrays.asList(
                                     Notifier.createChanged(section.getSubheaderPosition(), 2),
                                     Notifier.createRemoved(section.getSubheaderPosition() + 2)
                             )
                     );
                 } else if (section.isExpanded() && !nextItemSection.isExpanded()) {
-                    return NotifyResultNew.create(
+                    return NotifyResult.create(
                             Arrays.asList(
                                     Notifier.createChanged(section.getSubheaderPosition()),
                                     Notifier.createRemoved(section.getSubheaderPosition() + 1, 2)
                             )
                     );
                 } else if (!section.isExpanded() && nextItemSection.isExpanded()) {
-                    return NotifyResultNew.create(Notifier.createChanged(section.getSubheaderPosition(), 2));
+                    return NotifyResult.create(Notifier.createChanged(section.getSubheaderPosition(), 2));
                 } else {
-                    return NotifyResultNew.create(
+                    return NotifyResult.create(
                             Arrays.asList(
                                     Notifier.createChanged(section.getSubheaderPosition()),
                                     Notifier.createRemoved(section.getSubheaderPosition() + 1)
                             )
                     );
                 }
-
             }
 
             if (!newState0 && newState1) {
-
                 final int sectionSubheaderPosition = section.getSubheaderPosition();
 
                 removeSection(previousItemSection);
@@ -792,7 +666,7 @@ class SectionManager {
                 addSection(sectionIndex - 1, newSection);
 
                 if (section.isExpanded() && previousItemSection.isExpanded()) {
-                    return NotifyResultNew.create(
+                    return NotifyResult.create(
                             Arrays.asList(
                                     Notifier.createChanged(previousItemSection.getSubheaderPosition()),
                                     Notifier.createChanged(sectionSubheaderPosition),
@@ -800,32 +674,29 @@ class SectionManager {
                             )
                     );
                 } else if (section.isExpanded() && !previousItemSection.isExpanded()) {
-                    return NotifyResultNew.create(
+                    return NotifyResult.create(
                             Arrays.asList(
                                     Notifier.createChanged(previousItemSection.getSubheaderPosition()),
                                     Notifier.createRemoved(sectionSubheaderPosition, 2)
                             )
                     );
                 } else if (!section.isExpanded() && previousItemSection.isExpanded()) {
-                    return NotifyResultNew.create(
+                    return NotifyResult.create(
                             Arrays.asList(
                                     Notifier.createChanged(previousItemSection.getSubheaderPosition()),
                                     Notifier.createChanged(sectionSubheaderPosition)
                             )
                     );
                 } else {
-                    return NotifyResultNew.create(
+                    return NotifyResult.create(
                             Arrays.asList(
                                     Notifier.createChanged(previousItemSection.getSubheaderPosition()),
                                     Notifier.createRemoved(sectionSubheaderPosition)
                             )
                     );
                 }
-
             }
-
             if (!newState0 && !newState1) {
-
                 final Section newSection = Section.create(previousItemSection.getSubheaderPosition(), previousItemSection.getItemCount() + 1 + nextItemSection.getItemCount(), previousItemSection.isExpanded());
 
                 final int previousSectionSubheaderPosition = previousItemSection.getSubheaderPosition();
@@ -839,7 +710,7 @@ class SectionManager {
                 addSection(sectionIndex - 1, newSection);
 
                 if (section.isExpanded() && previousItemSection.isExpanded() && nextItemSection.isExpanded()) {
-                    return NotifyResultNew.create(
+                    return NotifyResult.create(
                             Arrays.asList(
                                     Notifier.createChanged(previousSectionSubheaderPosition),
                                     Notifier.createChanged(sectionSubheaderPosition),
@@ -848,7 +719,7 @@ class SectionManager {
                     );
                 } else if (section.isExpanded() && previousItemSection.isExpanded() && !nextItemSection.isExpanded()) {
                     //TODO протестить в реале
-                    return NotifyResultNew.create(
+                    return NotifyResult.create(
                             Arrays.asList(
                                     Notifier.createChanged(previousSectionSubheaderPosition),
                                     Notifier.createChanged(sectionSubheaderPosition),
@@ -857,21 +728,21 @@ class SectionManager {
                             )
                     );
                 } else if (section.isExpanded() && !previousItemSection.isExpanded() && nextItemSection.isExpanded()) {
-                    return NotifyResultNew.create(
+                    return NotifyResult.create(
                             Arrays.asList(
                                     Notifier.createChanged(previousSectionSubheaderPosition),
                                     Notifier.createRemoved(sectionSubheaderPosition, nextItemSection.getItemCount() + 3)
                             )
                     );
                 } else if (section.isExpanded() && !previousItemSection.isExpanded() && !nextItemSection.isExpanded()) {
-                    return NotifyResultNew.create(
+                    return NotifyResult.create(
                             Arrays.asList(
                                     Notifier.createChanged(previousSectionSubheaderPosition),
                                     Notifier.createRemoved(sectionSubheaderPosition, 3)
                             )
                     );
                 } else if (!section.isExpanded() && previousItemSection.isExpanded() && nextItemSection.isExpanded()) {
-                    return NotifyResultNew.create(
+                    return NotifyResult.create(
                             Arrays.asList(
                                     Notifier.createChanged(previousSectionSubheaderPosition),
                                     Notifier.createChanged(sectionSubheaderPosition),
@@ -880,7 +751,7 @@ class SectionManager {
                     );
                 } else if (!section.isExpanded() && previousItemSection.isExpanded() && !nextItemSection.isExpanded()) {
                     //TODO протестить в реале
-                    return NotifyResultNew.create(
+                    return NotifyResult.create(
                             Arrays.asList(
                                     Notifier.createChanged(previousSectionSubheaderPosition),
                                     Notifier.createRemoved(sectionSubheaderPosition, 2),
@@ -888,51 +759,44 @@ class SectionManager {
                             )
                     );
                 } else if (!section.isExpanded() && !previousItemSection.isExpanded() && nextItemSection.isExpanded()) {
-                    return NotifyResultNew.create(
+                    return NotifyResult.create(
                             Arrays.asList(
                                     Notifier.createChanged(previousSectionSubheaderPosition),
                                     Notifier.createRemoved(sectionSubheaderPosition, nextItemSection.getItemCount() + 2)
                             )
                     );
                 } else {
-                    return NotifyResultNew.create(
+                    return NotifyResult.create(
                             Arrays.asList(
                                     Notifier.createChanged(previousSectionSubheaderPosition),
                                     Notifier.createRemoved(sectionSubheaderPosition, 2)
                             )
                     );
                 }
-
             }
-
         }
 
-        return NotifyResultNew.empty();
-
+        return NotifyResult.empty();
     }
 
-    NotifyResultNew onItemRemoved(int itemPosition) {
-
+    NotifyResult onItemRemoved(int itemPosition) {
         final int sectionIndex = sectionIndexByItemPosition(itemPosition);
 
         final Section section = sections.get(sectionIndex);
 
         if (section.getItemCount() == 1) {
-
             removeSection(section);
 
             if (section.isExpanded()) {
-                return NotifyResultNew.create(
+                return NotifyResult.create(
                         Notifier.createRemoved(section.getSubheaderPosition(), 2)
                 );
             } else {
-                return NotifyResultNew.create(
+                return NotifyResult.create(
                         Notifier.createRemoved(section.getSubheaderPosition())
                 );
             }
-
         } else {
-
             final int itemAdapterPosition = getAdapterPositionForItem(itemPosition, false);
 
             section.setItemCount(section.getItemCount() - 1);
@@ -945,136 +809,193 @@ class SectionManager {
             }
 
             if (section.isExpanded()) {
-                return NotifyResultNew.create(
+                return NotifyResult.create(
                         Arrays.asList(
                                 Notifier.createChanged(section.getSubheaderPosition()),
                                 Notifier.createRemoved(itemAdapterPosition)
                         )
                 );
             } else {
-                return NotifyResultNew.create(
+                return NotifyResult.create(
                         Notifier.createChanged(section.getSubheaderPosition())
                 );
             }
+        }
+    }
 
+    NotifyResult onItemInserted(int itemPosition) {
+        if (getDataItemCount() == 0) {
+            final Section section = Section.create(0, 1);
+            sections.add(section);
+            return NotifyResult.create(Notifier.createInserted(0, 2));
         }
 
-    }
-
-    //TODO А ЧТО ЕСЛИ СЕКЦИЯ COLLAPSED?
-    NotifyResultNew onItemInserted(int itemPosition) {
-        return null;
-    }
-
-    //TODO А ЧТО ЕСЛИ СЕКЦИЯ COLLAPSED?
-    NotifyItemInsertedResult onItemInserted(Integer itemPosition) {
         if (itemPosition == 0) {
-            if (getItemCount() == 0 || sectionProvider.onPlaceSubheaderBetweenItems(itemPosition)) {
-                insertItem(0, true);
-                return new NotifyItemInsertedResult(0, 2, 0, true);
+            if (sectionProvider.onPlaceSubheaderBetweenItems(itemPosition)) {
+                final Section section = Section.create(0, 1);
+                addSection(0, section);
+                return NotifyResult.create(Notifier.createInserted(0, 2));
             } else {
-                insertItem(1, false);
-                if (getSectionsCount() > 0 && !isSectionExpanded(0)) {
-                    return null;
+                final Section currentSection = getSection(0);
+                currentSection.setItemCount(currentSection.getItemCount() + 1);
+                if (currentSection.isExpanded()) {
+                    for (int i = 1; i < sections.size(); i++) {
+                        final Section section = sections.get(i);
+                        section.setSubheaderPosition(section.getSubheaderPosition() + 1);
+                    }
+                    return NotifyResult.create(
+                            Arrays.asList(
+                                    Notifier.createChanged(0),
+                                    Notifier.createInserted(1)
+                            )
+                    );
                 }
-                return new NotifyItemInsertedResult(1, 1, 0, false);
+                return NotifyResult.create(Notifier.createChanged(0));
             }
-        } else if (itemPosition == sectionProvider.getItemSize() - 1) {
-            int itemCount = getItemCount();
+        }
+
+        final int newItemCount = getDataItemCount() + 1;
+        if (itemPosition == newItemCount - 1) {
             if (sectionProvider.onPlaceSubheaderBetweenItems(itemPosition - 1)) {
-                insertItem(itemCount, true);
-                return new NotifyItemInsertedResult(itemCount, 2, itemCount, true);
+                final Section section = Section.create(getItemCount(), 1);
+                sections.add(section);
+                return NotifyResult.create(Notifier.createInserted(section.getSubheaderPosition(), 2));
             } else {
-                insertItem(itemCount, false);
-                if (!isSectionExpanded(getSectionsCount() - 1)) {
-                    return null;
+                final Section currentSection = sections.get(sections.size() - 1);
+                currentSection.setItemCount(currentSection.getItemCount() + 1);
+                if (currentSection.isExpanded()) {
+                    return NotifyResult.create(
+                            Arrays.asList(
+                                    Notifier.createChanged(currentSection.getSubheaderPosition()),
+                                    Notifier.createInserted(currentSection.getSubheaderPosition() + currentSection.getItemCount())
+                            )
+                    );
                 }
-                return new NotifyItemInsertedResult(itemCount, 1, getLastSection().getSubheaderPosition(), false);
-            }
-        } else {
-            int itemAdapterPosition = getAdapterPositionForItem(itemPosition);
-            if (sectionProvider.onPlaceSubheaderBetweenItems(itemPosition - 1) && sectionProvider.onPlaceSubheaderBetweenItems(itemPosition)) {
-                insertItem(itemAdapterPosition - 1, true);
-                return new NotifyItemInsertedResult(itemAdapterPosition - 1, 2, itemAdapterPosition - 1, true);
-            } else if (sectionProvider.onPlaceSubheaderBetweenItems(itemPosition - 1)) {
-                insertItem(itemAdapterPosition, false);
-                if (!isSectionExpanded(sectionIndex(itemAdapterPosition))) {
-                    return null;
-                }
-                return new NotifyItemInsertedResult(itemAdapterPosition, 1, getSection(sectionIndex(itemAdapterPosition)).getSubheaderPosition(), false);
-            } else if (sectionProvider.onPlaceSubheaderBetweenItems(itemPosition)) {
-                insertItem(itemAdapterPosition - 1, false);
-                if (!isSectionExpanded(sectionIndex(itemAdapterPosition - 1))) {
-                    return null;
-                }
-                return new NotifyItemInsertedResult(itemAdapterPosition - 1, 1, getSection(sectionIndex(itemAdapterPosition - 1)).getSubheaderPosition(), false);
-            } else {
-                insertItem(itemAdapterPosition, false);
-                if (!isSectionExpanded(sectionIndex(itemAdapterPosition))) {
-                    return null;
-                }
-                return new NotifyItemInsertedResult(itemAdapterPosition, 1, getSection(sectionIndex(itemAdapterPosition)).getSubheaderPosition(), false);
+                return NotifyResult.create(
+                        Notifier.createChanged(currentSection.getSubheaderPosition())
+                );
             }
         }
-    }
 
-    void insertItem(int adapterPosition, boolean shouldInsertSection) {
+        final boolean oldState = positionInSectionByItemPosition(itemPosition) == 0;
 
-        if (shouldInsertSection) {
+        if (!oldState) {
+            final boolean newState = sectionProvider.onPlaceSubheaderBetweenItems(itemPosition - 1);
 
-            Section newSection = new Section(adapterPosition);
-            newSection.setItemCount(1);
+            final int positionInSection = positionInSectionByItemPosition(itemPosition);
+            final int sectionIndex = sectionIndexByItemPosition(itemPosition);
+            final Section currentSection = sections.get(sectionIndex);
 
-            if (adapterPosition == getItemCount()) {
-                sections.add(newSection);
-                return;
+            if (newState) {
+                final Section firstSplitSection;
+                final Section secondSplitSection;
+                final Section thirdSplitSection;
+
+                if (currentSection.isExpanded()) {
+                    firstSplitSection = Section.create(currentSection.getSubheaderPosition(), positionInSection, true);
+                    secondSplitSection = Section.create(currentSection.getSubheaderPosition() + positionInSection + 1, 1, true);
+                    thirdSplitSection = Section.create(secondSplitSection.getSubheaderPosition() + 2, currentSection.getItemCount() - positionInSection, true);
+                } else {
+                    firstSplitSection = Section.create(currentSection.getSubheaderPosition(), positionInSection, false);
+                    secondSplitSection = Section.create(currentSection.getSubheaderPosition() + 1, 1, false);
+                    thirdSplitSection = Section.create(currentSection.getSubheaderPosition() + 2, currentSection.getItemCount() - positionInSection, false);
+                }
+
+                removeSection(currentSection);
+
+                addSection(sectionIndex, firstSplitSection);
+                addSection(sectionIndex + 1, secondSplitSection);
+                addSection(sectionIndex + 2, thirdSplitSection);
+
+                if (currentSection.isExpanded()) {
+                    return NotifyResult.create(
+                            Arrays.asList(
+                                    Notifier.createChanged(firstSplitSection.getSubheaderPosition()),
+                                    Notifier.createChanged(secondSplitSection.getSubheaderPosition(), 1),
+                                    Notifier.createInserted(secondSplitSection.getSubheaderPosition() + 1, 2)
+                            )
+                    );
+                } else {
+                    return NotifyResult.create(
+                            Arrays.asList(
+                                    Notifier.createChanged(firstSplitSection.getSubheaderPosition()),
+                                    Notifier.createInserted(firstSplitSection.getSubheaderPosition() + 1, 2)
+                            )
+                    );
+                }
+            } else {
+                currentSection.setItemCount(currentSection.getItemCount() + 1);
+
+                if (currentSection.isExpanded()) {
+                    for (int i = sectionIndex + 1; i < sections.size(); i++) {
+                        final Section section = sections.get(i);
+                        section.setSubheaderPosition(section.getSubheaderPosition() + 1);
+                    }
+
+                    final int adapterPosition = getAdapterPositionForItem(itemPosition);
+                    return NotifyResult.create(
+                            Arrays.asList(
+                                    Notifier.createChanged(currentSection.getSubheaderPosition()),
+                                    Notifier.createInserted(adapterPosition)
+                            )
+                    );
+                } else {
+                    return NotifyResult.create(Notifier.createChanged(currentSection.getSubheaderPosition()));
+                }
             }
+        }
 
-            int sectionIndex = sectionIndex(adapterPosition);
+        final boolean newState1 = sectionProvider.onPlaceSubheaderBetweenItems(itemPosition - 1);
+        final boolean newState2 = sectionProvider.onPlaceSubheaderBetweenItems(itemPosition);
 
-            for (int i = sectionIndex; i < sections.size(); i++) {
-                Section section = getSection(i);
-                section.setSubheaderPosition(section.getSubheaderPosition() + 2);
-            }
-
-            sections.add(sectionIndex, newSection);
-
-        } else {
-
-            if ((isSectionSubheaderOnPosition(adapterPosition) && adapterPosition != 0) || adapterPosition == getItemCount()) {
-                adapterPosition--;
-            }
-
-            int currentSectionIndex = sectionIndex(adapterPosition);
-            Section currentSection = getSection(currentSectionIndex);
+        if (!newState1 && newState2) {
+            final int sectionIndex = sectionIndexByItemPosition(itemPosition - 1);
+            final Section currentSection = sections.get(sectionIndex);
             currentSection.setItemCount(currentSection.getItemCount() + 1);
-
-            if (!currentSection.isExpanded()) {
-                return;
+            if (currentSection.isExpanded()) {
+                for (int i = sectionIndex + 1; i < sections.size(); i++) {
+                    final Section section = sections.get(i);
+                    section.setSubheaderPosition(section.getSubheaderPosition() + 1);
+                }
+                return NotifyResult.create(
+                        Arrays.asList(
+                                Notifier.createChanged(currentSection.getSubheaderPosition()),
+                                Notifier.createInserted(currentSection.getSubheaderPosition() + currentSection.getItemCount())
+                        )
+                );
+            } else {
+                return NotifyResult.create(Notifier.createChanged(currentSection.getSubheaderPosition()));
             }
-
-            for (int i = currentSectionIndex + 1; i < sections.size(); i++) {
-                Section section = getSection(i);
-                section.setSubheaderPosition(section.getSubheaderPosition() + 1);
-            }
-
         }
 
-    }
-
-    Section getSection(@IntRange(from = 0, to = Integer.MAX_VALUE) int sectionIndex) {
-        if (sectionIndex < 0 || sectionIndex >= getSections().size()) {
-            throw new IllegalArgumentException("sectionIndex: " + sectionIndex + ", size: " + getSections().size());
+        if (newState1 && !newState2) {
+            final int sectionIndex = sectionIndexByItemPosition(itemPosition);
+            final Section currentSection = sections.get(sectionIndex);
+            currentSection.setItemCount(currentSection.getItemCount() + 1);
+            if (currentSection.isExpanded()) {
+                for (int i = sectionIndex + 1; i < sections.size(); i++) {
+                    final Section section = sections.get(i);
+                    section.setSubheaderPosition(section.getSubheaderPosition() + 1);
+                }
+                return NotifyResult.create(
+                        Arrays.asList(
+                                Notifier.createChanged(currentSection.getSubheaderPosition()),
+                                Notifier.createInserted(currentSection.getSubheaderPosition() + 1)
+                        )
+                );
+            } else {
+                return NotifyResult.create(Notifier.createChanged(currentSection.getSubheaderPosition()));
+            }
         }
-        return sections.get(sectionIndex);
-    }
 
-    Section getLastSection() {
-        return sections.get(sections.size() - 1);
+        final Section nextSection = sections.get(sectionIndexByItemPosition(itemPosition));
+        final int nextSectionIndex = sections.indexOf(nextSection);
+        final Section newSection = new Section(nextSection.getSubheaderPosition(), 1, true);
+        addSection(nextSectionIndex, newSection);
+        return NotifyResult.create(Notifier.createInserted(newSection.getSubheaderPosition(), 2));
     }
 
     int sectionIndex(@IntRange(from = 0, to = Integer.MAX_VALUE) int adapterPosition) {
-
         if (adapterPosition < 0 || adapterPosition >= getItemCount()) {
             throw new IllegalArgumentException("adapterPosition: " + adapterPosition + ", itemCount: " + getItemCount());
         }
@@ -1090,12 +1011,112 @@ class SectionManager {
         }
 
         return sectionIndex;
-
     }
 
-    int sectionIndexByItemPosition(@IntRange(from = 0, to = Integer.MAX_VALUE) int itemPosition) {
+    int getItemCount() {
+        int itemCount = 0;
 
-        if (itemPosition < 0 || itemPosition > sectionProvider.getItemSize() - 1) {
+        for (Section section : sections) {
+            itemCount += 1;
+            if (section.isExpanded()) {
+                itemCount += section.getItemCount();
+            }
+        }
+
+        return itemCount;
+    }
+
+    int positionInSection(@IntRange(from = 0, to = Integer.MAX_VALUE) int itemAdapterPosition) {
+        if (itemAdapterPosition < 0 || itemAdapterPosition >= getItemCount()) {
+            throw new IllegalArgumentException("itemAdapterPosition: " + itemAdapterPosition + ", itemCount: " + getItemCount());
+        }
+        if (isSectionSubheaderOnPosition(itemAdapterPosition)) {
+            throw new IllegalArgumentException("section subheader is placed at " + itemAdapterPosition + " position");
+        }
+
+        final Section section = getSection(sectionIndex(itemAdapterPosition));
+
+        return itemAdapterPosition - section.getSubheaderPosition() - 1;
+    }
+
+    private int positionInSectionByItemPosition(int itemPosition) {
+        if (itemPosition < 0 || itemPosition > getDataItemCount() - 1) {
+            throw new IllegalArgumentException("itemPosition: " + itemPosition + ", itemCount:" + sectionProvider.getItemSize());
+        }
+
+        final int sectionIndex = sectionIndexByItemPosition(itemPosition);
+
+        int itemCount = 0;
+
+        for (int i = 0; i < sectionIndex; i++) {
+            itemCount += sections.get(i).getItemCount();
+        }
+
+        return itemPosition - itemCount;
+    }
+
+    int sectionSize(int sectionIndex) {
+        return getSection(sectionIndex).getItemCount();
+    }
+
+    int getSectionSubheaderPosition(int sectionIndex) {
+        return getSection(sectionIndex).getSubheaderPosition();
+    }
+
+    int getSectionsCount() {
+        return sections.size();
+    }
+
+    List<Section> getSections() {
+        return sections;
+    }
+
+    void clear() {
+        getSections().clear();
+    }
+
+    void addSection(Section section) {
+        sections.add(section);
+    }
+
+    private void addSection(int index, Section newSection) {
+        for (int i = index; i < sections.size(); i++) {
+            Section section = getSection(i);
+            if (newSection.isExpanded()) {
+                section.setSubheaderPosition(section.getSubheaderPosition() + newSection.getItemCount() + 1);
+            } else {
+                section.setSubheaderPosition(section.getSubheaderPosition() + 1);
+            }
+        }
+        sections.add(index, newSection);
+    }
+
+    private void removeSection(Section section) {
+        final int index = sections.indexOf(section);
+        for (int i = index + 1; i < sections.size(); i++) {
+            final Section s = sections.get(i);
+            if (section.isExpanded()) {
+                s.setSubheaderPosition(s.getSubheaderPosition() - section.getItemCount() - 1);
+            } else {
+                s.setSubheaderPosition(s.getSubheaderPosition() - 1);
+            }
+        }
+        sections.remove(section);
+    }
+
+    private Section getSection(@IntRange(from = 0, to = Integer.MAX_VALUE) int sectionIndex) {
+        if (sectionIndex < 0 || sectionIndex >= getSections().size()) {
+            throw new IllegalArgumentException("sectionIndex: " + sectionIndex + ", size: " + getSections().size());
+        }
+        return sections.get(sectionIndex);
+    }
+
+    private Section getLastSection() {
+        return sections.get(sections.size() - 1);
+    }
+
+    private int sectionIndexByItemPosition(@IntRange(from = 0, to = Integer.MAX_VALUE) int itemPosition) {
+        if (itemPosition < 0 || itemPosition > getDataItemCount() - 1) {
             throw new IllegalArgumentException("itemPosition: " + itemPosition + ", itemCount:" + sectionProvider.getItemSize());
         }
 
@@ -1112,79 +1133,13 @@ class SectionManager {
         }
 
         return sections.size() - 1;
-
     }
 
-    int getItemCount() {
-
-        int itemCount = 0;
-
-        for (Section section : sections) {
-            itemCount += 1;
-            if (section.isExpanded()) {
-                itemCount += section.getItemCount();
-            }
-        }
-
-        return itemCount;
-
-    }
-
-    int getDataItemCount() {
+    private int getDataItemCount() {
         int dataItemCount = 0;
         for (Section section : sections) {
             dataItemCount += section.getItemCount();
         }
         return dataItemCount;
     }
-
-    int positionInSection(@IntRange(from = 0, to = Integer.MAX_VALUE) int itemAdapterPosition) {
-
-        if (itemAdapterPosition < 0 || itemAdapterPosition >= getItemCount()) {
-            throw new IllegalArgumentException("itemAdapterPosition: " + itemAdapterPosition + ", itemCount: " + getItemCount());
-        }
-        if (isSectionSubheaderOnPosition(itemAdapterPosition)) {
-            throw new IllegalArgumentException("section subheader is placed at " + itemAdapterPosition + " position");
-        }
-
-        final Section section = getSection(sectionIndex(itemAdapterPosition));
-
-        return itemAdapterPosition - section.getSubheaderPosition() - 1;
-
-    }
-
-    int positionInSectionByItemPosition(int itemPosition) {
-
-        if (itemPosition < 0 || itemPosition > sectionProvider.getItemSize() - 1) {
-            throw new IllegalArgumentException("itemPosition: " + itemPosition + ", itemCount:" + sectionProvider.getItemSize());
-        }
-
-        final int sectionIndex = sectionIndexByItemPosition(itemPosition);
-
-        int itemCount = 0;
-
-        for (int i = 0; i < sectionIndex; i++) {
-            itemCount += sections.get(i).getItemCount();
-        }
-
-        return itemPosition - itemCount;
-
-    }
-
-    int sectionSize(int sectionIndex) {
-        return getSection(sectionIndex).getItemCount();
-    }
-
-    int getSectionsCount() {
-        return sections.size();
-    }
-
-    List<Section> getSections() {
-        return sections;
-    }
-
-    void clear() {
-        getSections().clear();
-    }
-
 }

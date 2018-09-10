@@ -4,10 +4,6 @@ import java.util.List;
 
 import zhukic.sample.Movie;
 
-/**
- * @author Vladislav Zhukov (https://github.com/zhukic)
- */
-
 public class MovieAdapterByName extends BaseMovieAdapter {
 
     public MovieAdapterByName(List<Movie> itemList) {
@@ -37,6 +33,6 @@ public class MovieAdapterByName extends BaseMovieAdapter {
     public void onBindSubheaderViewHolder(SubheaderHolder subheaderHolder, int nextItemPosition) {
         super.onBindSubheaderViewHolder(subheaderHolder, nextItemPosition);
         final Movie nextMovie = movieList.get(nextItemPosition);
-        subheaderHolder.mSubheaderText.setText(nextMovie.getName().substring(0, 1));
+        subheaderHolder.mSubheaderText.setText(nextMovie.getName().substring(0, 1) + " " + getSectionSize(getSectionIndex(subheaderHolder.getAdapterPosition())) + " items");
     }
 }

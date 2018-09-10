@@ -1,7 +1,5 @@
 package com.zhukic.sectionedrecyclerview;
 
-import com.zhukic.sectionedrecyclerview.result.NotifyResultNew;
-
 import org.junit.Before;
 import org.junit.Test;
 
@@ -13,9 +11,6 @@ import static org.assertj.core.api.Java6Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-/**
- * @author Vladislav Zhukov (https://github.com/zhukic)
- */
 public class SectionManagerOnItemRemovedTest {
 
     private SectionManager sectionManager;
@@ -53,7 +48,7 @@ public class SectionManagerOnItemRemovedTest {
         //Subheader 8
         //Item 9 ( index = 8 )
 
-        NotifyResultNew actualResult = sectionManager.onItemRemoved(1);
+        NotifyResult actualResult = sectionManager.onItemRemoved(1);
 
         //Subheader 0
         //Item ( index = 0 ) //COLLAPSED
@@ -69,7 +64,7 @@ public class SectionManagerOnItemRemovedTest {
         //Subheader 8
         //Item 9 ( index = 7 )
 
-        NotifyResultNew expectedResult = NotifyResultNew.create(
+        NotifyResult expectedResult = NotifyResult.create(
                 Notifier.createChanged(0)
         );
 
@@ -110,7 +105,7 @@ public class SectionManagerOnItemRemovedTest {
         //Subheader 8
         //Item 9 ( index = 7 )
 
-        NotifyResultNew actualResult = sectionManager.onItemRemoved(0);
+        NotifyResult actualResult = sectionManager.onItemRemoved(0);
 
         //Subheader 0
         //Item 1 ( index = 0 )
@@ -124,7 +119,7 @@ public class SectionManagerOnItemRemovedTest {
         //Subheader 7
         //Item 8 ( index = 6 )
 
-        NotifyResultNew expectedResult = NotifyResultNew.create(
+        NotifyResult expectedResult = NotifyResult.create(
                 Notifier.createRemoved(0)
         );
 
@@ -161,7 +156,7 @@ public class SectionManagerOnItemRemovedTest {
         //Subheader 7
         //Item 8 ( index = 6 )
 
-        NotifyResultNew actualResult = sectionManager.onItemRemoved(0);
+        NotifyResult actualResult = sectionManager.onItemRemoved(0);
 
         //Subheader 0
         //Item 1 ( index = 0 )
@@ -173,7 +168,7 @@ public class SectionManagerOnItemRemovedTest {
         //Subheader 5
         //Item 6 ( index = 5 )
 
-        NotifyResultNew expectedResult = NotifyResultNew.create(
+        NotifyResult expectedResult = NotifyResult.create(
                 Notifier.createRemoved(0, 2)
         );
 
@@ -206,7 +201,7 @@ public class SectionManagerOnItemRemovedTest {
         //Subheader 5
         //Item 6 ( index = 5 )
 
-        NotifyResultNew actualResult = sectionManager.onItemRemoved(5);
+        NotifyResult actualResult = sectionManager.onItemRemoved(5);
 
         //Subheader 0
         //Item 1 ( index = 0 )
@@ -216,7 +211,7 @@ public class SectionManagerOnItemRemovedTest {
         //Item ( index = 3 ) //COLLAPSED
         //Item ( index = 4 ) //COLLAPSED
 
-        NotifyResultNew expectedResult = NotifyResultNew.create(
+        NotifyResult expectedResult = NotifyResult.create(
                 Notifier.createRemoved(5, 2)
         );
 
@@ -245,7 +240,7 @@ public class SectionManagerOnItemRemovedTest {
         //Item ( index = 3 ) //COLLAPSED
         //Item ( index = 4 ) //COLLAPSED
 
-        NotifyResultNew actualResult = sectionManager.onItemRemoved(4);
+        NotifyResult actualResult = sectionManager.onItemRemoved(4);
 
         //Subheader 0
         //Item 1 ( index = 0 )
@@ -254,7 +249,7 @@ public class SectionManagerOnItemRemovedTest {
         //Subheader 4
         //Item ( index = 3 ) //COLLAPSED
 
-        NotifyResultNew expectedResult = NotifyResultNew.create(
+        NotifyResult expectedResult = NotifyResult.create(
                 Notifier.createChanged(4)
         );
 
@@ -282,7 +277,7 @@ public class SectionManagerOnItemRemovedTest {
         //Subheader 4
         //Item ( index = 3 ) //COLLAPSED
 
-        NotifyResultNew actualResult = sectionManager.onItemRemoved(2);
+        NotifyResult actualResult = sectionManager.onItemRemoved(2);
 
         //Subheader 0
         //Item 1 ( index = 0 )
@@ -290,7 +285,7 @@ public class SectionManagerOnItemRemovedTest {
         //Subheader 3
         //Item ( index = 2 ) //COLLAPSED
 
-        NotifyResultNew expectedResult = NotifyResultNew.create(Arrays.asList(
+        NotifyResult expectedResult = NotifyResult.create(Arrays.asList(
                 Notifier.createChanged(0),
                 Notifier.createRemoved(3)
         ));
@@ -318,14 +313,14 @@ public class SectionManagerOnItemRemovedTest {
         //Subheader 3
         //Item ( index = 2 ) //COLLAPSED
 
-        NotifyResultNew actualResult = sectionManager.onItemRemoved(1);
+        NotifyResult actualResult = sectionManager.onItemRemoved(1);
 
         //Subheader 0
         //Item 1 ( index = 0 )
         //Subheader 2
         //Item ( index = 1 ) //COLLAPSED
 
-        NotifyResultNew expectedResult = NotifyResultNew.create(Arrays.asList(
+        NotifyResult expectedResult = NotifyResult.create(Arrays.asList(
                 Notifier.createChanged(0),
                 Notifier.createRemoved(2)
         ));
@@ -352,12 +347,12 @@ public class SectionManagerOnItemRemovedTest {
         //Subheader 2
         //Item ( index = 1 ) //COLLAPSED
 
-        NotifyResultNew actualResult = sectionManager.onItemRemoved(0);
+        NotifyResult actualResult = sectionManager.onItemRemoved(0);
 
         //Subheader 0
         //Item ( index = 0 ) //COLLAPSED
 
-        NotifyResultNew expectedResult = NotifyResultNew.create(
+        NotifyResult expectedResult = NotifyResult.create(
                 Notifier.createRemoved(0, 2)
         );
 
@@ -379,11 +374,11 @@ public class SectionManagerOnItemRemovedTest {
         //Subheader 0
         //Item ( index = 0 ) //COLLAPSED
 
-        NotifyResultNew actualResult = sectionManager.onItemRemoved(0);
+        NotifyResult actualResult = sectionManager.onItemRemoved(0);
 
         //
 
-        NotifyResultNew expectedResult = NotifyResultNew.create(
+        NotifyResult expectedResult = NotifyResult.create(
                 Notifier.createRemoved(0)
         );
 
