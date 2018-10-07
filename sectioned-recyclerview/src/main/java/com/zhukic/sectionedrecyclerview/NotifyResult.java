@@ -25,11 +25,6 @@ class NotifyResult {
         this.notifiers = notifiers;
     }
 
-    //TODO выпилить
-    public int getPositionStart() {
-        return 0;
-    }
-
     public Set<Notifier> getNotifiers() {
         return notifiers;
     }

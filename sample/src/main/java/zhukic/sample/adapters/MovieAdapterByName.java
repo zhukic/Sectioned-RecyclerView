@@ -1,8 +1,11 @@
 package zhukic.sample.adapters;
 
+import android.content.Context;
+
 import java.util.List;
 
 import zhukic.sample.Movie;
+import zhukic.sectionedrecyclerview.R;
 
 public class MovieAdapterByName extends BaseMovieAdapter {
 
@@ -32,7 +35,15 @@ public class MovieAdapterByName extends BaseMovieAdapter {
     @Override
     public void onBindSubheaderViewHolder(SubheaderHolder subheaderHolder, int nextItemPosition) {
         super.onBindSubheaderViewHolder(subheaderHolder, nextItemPosition);
+        final Context context = subheaderHolder.itemView.getContext();
         final Movie nextMovie = movieList.get(nextItemPosition);
-        subheaderHolder.mSubheaderText.setText(nextMovie.getName().substring(0, 1) + " " + getSectionSize(getSectionIndex(subheaderHolder.getAdapterPosition())) + " items");
+        final int sectionSize = getSectionSize(getSectionIndex(subheaderHolder.getAdapterPosition()));
+        final String genre = nextMovie.getName().substring(0, 1);
+        final String subheaderText = String.format(
+                context.getString(R.string.subheader),
+                genre,
+                context.getResources().getQuantityString(R.plurals.item, sectionSize, sectionSize)
+        );
+        subheaderHolder.mSubheaderText.setText(subheaderText);
     }
 }

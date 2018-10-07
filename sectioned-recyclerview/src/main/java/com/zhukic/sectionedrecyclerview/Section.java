@@ -16,18 +16,10 @@ class Section {
         return create(subheaderPosition, itemCount, true);
     }
 
-    public static Section create(int subheaderPosition) {
-        return create(subheaderPosition, 0, true);
-    }
-
     Section(int subheaderPosition, int itemCount, boolean isExpanded) {
         this.subheaderPosition = subheaderPosition;
         this.itemCount = itemCount;
         this.isExpanded = isExpanded;
-    }
-
-    Section(int subheaderPosition, int itemCount) {
-        this(subheaderPosition, itemCount, true);
     }
 
     Section(int subheaderPosition) {
