@@ -15,10 +15,10 @@ public class MovieAdapterByName extends BaseMovieAdapter {
 
     @Override
     public boolean onPlaceSubheaderBetweenItems(int position) {
-        final Movie movie = movieList.get(position);
-        final Movie nextMovie = movieList.get(position + 1);
+        final char movieFirstCharacter = movieList.get(position).getName().charAt(0);
+        final char nextMovieFirstCharacter = movieList.get(position + 1).getName().charAt(0);
 
-        return !movie.getName().substring(0, 1).equals(nextMovie.getName().substring(0, 1));
+        return movieFirstCharacter != nextMovieFirstCharacter;
     }
 
     @Override
@@ -38,10 +38,10 @@ public class MovieAdapterByName extends BaseMovieAdapter {
         final Context context = subheaderHolder.itemView.getContext();
         final Movie nextMovie = movieList.get(nextItemPosition);
         final int sectionSize = getSectionSize(getSectionIndex(subheaderHolder.getAdapterPosition()));
-        final String genre = nextMovie.getName().substring(0, 1);
+        final String name = nextMovie.getName().substring(0, 1);
         final String subheaderText = String.format(
                 context.getString(R.string.subheader),
-                genre,
+                name,
                 context.getResources().getQuantityString(R.plurals.item, sectionSize, sectionSize)
         );
         subheaderHolder.mSubheaderText.setText(subheaderText);

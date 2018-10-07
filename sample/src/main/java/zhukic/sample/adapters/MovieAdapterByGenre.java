@@ -14,10 +14,10 @@ public class MovieAdapterByGenre extends BaseMovieAdapter {
 
     @Override
     public boolean onPlaceSubheaderBetweenItems(int position) {
-        final Movie movie = movieList.get(position);
-        final Movie nextMovie = movieList.get(position + 1);
+        final String movieGenre = movieList.get(position).getGenre();
+        final String nextMovieGenre = movieList.get(position + 1).getGenre();
 
-        return !movie.getGenre().equals(nextMovie.getGenre());
+        return !movieGenre.equals(nextMovieGenre);
     }
 
     @Override

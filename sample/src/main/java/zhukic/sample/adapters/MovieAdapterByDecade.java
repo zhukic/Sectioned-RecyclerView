@@ -15,10 +15,10 @@ public class MovieAdapterByDecade extends BaseMovieAdapter {
 
     @Override
     public boolean onPlaceSubheaderBetweenItems(int position) {
-        final Movie movie = movieList.get(position);
-        final Movie nextMovie = movieList.get(position + 1);
+        final int movieDecade = movieList.get(position).getYear() / 10;
+        final int nextMovieDecade = movieList.get(position + 1).getYear() / 10;
 
-        return movie.getYear() / 10 != nextMovie.getYear() / 10;
+        return movieDecade != nextMovieDecade;
     }
 
     @Override
