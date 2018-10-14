@@ -8,4 +8,5 @@
     <color name="primaryTextColor">#212121</color>
     <color name="secondaryTextColor">#727272</color>
     <color name="subheaderColor">#757575</color>
+    <color name="dividerColor">#e0e0e0</color>
 </resources>

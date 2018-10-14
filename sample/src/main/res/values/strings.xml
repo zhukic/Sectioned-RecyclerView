@@ -11,4 +11,9 @@
     <string name="genre">Genre</string>
     <string name="expand_all_sections">Expand all sections</string>
     <string name="collapse_all_sections">Collapse all sections</string>
+    <string name="subheader">%s (%s)</string>
+    <plurals name="item">
+        <item quantity="one">%d item</item>
+        <item quantity="other">%d items</item>
+    </plurals>
 </resources>

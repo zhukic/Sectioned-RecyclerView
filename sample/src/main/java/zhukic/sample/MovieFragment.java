@@ -25,10 +25,6 @@ import zhukic.sample.adapters.MovieAdapterByGenre;
 import zhukic.sample.adapters.MovieAdapterByName;
 import zhukic.sectionedrecyclerview.R;
 
-/**
- * @author Vladislav Zhukov (https://github.com/zhukic)
- */
-
 public class MovieFragment extends Fragment implements BaseMovieAdapter.OnItemClickListener, NewMovieDialogFragment.DialogListener {
 
     private List<Movie> mMovieList;
@@ -38,6 +34,8 @@ public class MovieFragment extends Fragment implements BaseMovieAdapter.OnItemCl
     private RecyclerView recyclerView;
 
     private BaseMovieAdapter mSectionedRecyclerAdapter;
+
+    private GridDividerDecoration gridDividerDecoration;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -56,6 +54,9 @@ public class MovieFragment extends Fragment implements BaseMovieAdapter.OnItemCl
         recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        gridDividerDecoration = new GridDividerDecoration(getContext());
+        recyclerView.addItemDecoration(gridDividerDecoration);
 
         Resources resources = getResources();
         String[] names = resources.getStringArray(R.array.names);

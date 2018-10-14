@@ -1,9 +1,5 @@
 package zhukic.sample;
 
-/**
- * Created by RUS on 31.08.2016.
- */
-
 public class Movie {
 
     private String name;

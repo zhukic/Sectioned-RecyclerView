@@ -1,14 +1,11 @@
 package zhukic.sample.adapters;
 
-import android.view.View;
+import android.content.Context;
 
 import java.util.List;
 
 import zhukic.sample.Movie;
-
-/**
- * @author Vladislav Zhukov (https://github.com/zhukic)
- */
+import zhukic.sectionedrecyclerview.R;
 
 public class MovieAdapterByDecade extends BaseMovieAdapter {
 
@@ -18,10 +15,10 @@ public class MovieAdapterByDecade extends BaseMovieAdapter {
 
     @Override
     public boolean onPlaceSubheaderBetweenItems(int position) {
-        final Movie movie = movieList.get(position);
-        final Movie nextMovie = movieList.get(position + 1);
+        final int movieDecade = movieList.get(position).getYear() / 10;
+        final int nextMovieDecade = movieList.get(position + 1).getYear() / 10;
 
-        return movie.getYear() / 10 != nextMovie.getYear() / 10;
+        return movieDecade != nextMovieDecade;
     }
 
     @Override
@@ -38,8 +35,15 @@ public class MovieAdapterByDecade extends BaseMovieAdapter {
     @Override
     public void onBindSubheaderViewHolder(SubheaderHolder subheaderHolder, int nextItemPosition) {
         super.onBindSubheaderViewHolder(subheaderHolder, nextItemPosition);
+        final Context context = subheaderHolder.itemView.getContext();
         final Movie nextMovie = movieList.get(nextItemPosition);
-        String decade = String.valueOf(nextMovie.getYear() - nextMovie.getYear() % 10) + "s";
-        subheaderHolder.mSubheaderText.setText(decade);
+        final int sectionSize = getSectionSize(getSectionIndex(subheaderHolder.getAdapterPosition()));
+        final String decade = String.valueOf(nextMovie.getYear() - nextMovie.getYear() % 10) + "s";
+        final String subheaderText = String.format(
+                context.getString(R.string.subheader),
+                decade,
+                context.getResources().getQuantityString(R.plurals.item, sectionSize, sectionSize)
+        );
+        subheaderHolder.mSubheaderText.setText(subheaderText);
     }
 }

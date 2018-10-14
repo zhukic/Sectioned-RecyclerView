@@ -1,14 +1,11 @@
 package zhukic.sample.adapters;
 
-import android.view.View;
+import android.content.Context;
 
 import java.util.List;
 
 import zhukic.sample.Movie;
-
-/**
- * @author Vladislav Zhukov (https://github.com/zhukic)
- */
+import zhukic.sectionedrecyclerview.R;
 
 public class MovieAdapterByGenre extends BaseMovieAdapter {
 
@@ -17,10 +14,10 @@ public class MovieAdapterByGenre extends BaseMovieAdapter {
 
     @Override
     public boolean onPlaceSubheaderBetweenItems(int position) {
-        final Movie movie = movieList.get(position);
-        final Movie nextMovie = movieList.get(position + 1);
+        final String movieGenre = movieList.get(position).getGenre();
+        final String nextMovieGenre = movieList.get(position + 1).getGenre();
 
-        return !movie.getGenre().equals(nextMovie.getGenre());
+        return !movieGenre.equals(nextMovieGenre);
     }
 
     @Override
@@ -37,7 +34,15 @@ public class MovieAdapterByGenre extends BaseMovieAdapter {
     @Override
     public void onBindSubheaderViewHolder(SubheaderHolder subheaderHolder, int nextItemPosition) {
         super.onBindSubheaderViewHolder(subheaderHolder, nextItemPosition);
+        final Context context = subheaderHolder.itemView.getContext();
         final Movie nextMovie = movieList.get(nextItemPosition);
-        subheaderHolder.mSubheaderText.setText(nextMovie.getGenre());
+        final int sectionSize = getSectionSize(getSectionIndex(subheaderHolder.getAdapterPosition()));
+        final String genre = nextMovie.getGenre();
+        final String subheaderText = String.format(
+                context.getString(R.string.subheader),
+                genre,
+                context.getResources().getQuantityString(R.plurals.item, sectionSize, sectionSize)
+        );
+        subheaderHolder.mSubheaderText.setText(subheaderText);
     }
 }
