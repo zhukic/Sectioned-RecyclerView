@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void setupViewPager(ViewPager viewPager) {
         this.adapter = new Adapter(getSupportFragmentManager());
-        this.adapter.addFragment(new MovieFragment(), "By name");
+        this.adapter.addFragment(new MovieFragment(), "By title");
         this.adapter.addFragment(new MovieFragment(), "By genre");
         this.adapter.addFragment(new MovieFragment(), "By decade");
         this.adapter.addFragment(new MovieFragment(), "Grid");

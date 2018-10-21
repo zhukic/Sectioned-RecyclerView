@@ -50,13 +50,13 @@ public abstract class BaseMovieAdapter extends SectionedRecyclerViewAdapter<Base
 
     static class MovieViewHolder extends RecyclerView.ViewHolder {
 
-        TextView textMovieName;
+        TextView textMovieTitle;
         TextView textMovieGenre;
         TextView textMovieYear;
 
         MovieViewHolder(View itemView) {
             super(itemView);
-            this.textMovieName = (TextView) itemView.findViewById(R.id.movieName);
+            this.textMovieTitle = (TextView) itemView.findViewById(R.id.movieTitle);
             this.textMovieGenre = (TextView) itemView.findViewById(R.id.movieGenre);
             this.textMovieYear = (TextView) itemView.findViewById(R.id.movieYear);
         }

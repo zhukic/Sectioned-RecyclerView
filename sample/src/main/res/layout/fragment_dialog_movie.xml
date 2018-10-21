@@ -22,10 +22,10 @@
         android:layout_marginEnd="24dp">
 
         <EditText
-            android:id="@+id/et_name"
+            android:id="@+id/et_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/name" />
+            android:hint="@string/title" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout

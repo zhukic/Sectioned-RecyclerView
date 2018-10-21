@@ -24,7 +24,7 @@ public class MovieAdapterByGenre extends BaseMovieAdapter {
     public void onBindItemViewHolder(final MovieViewHolder holder, final int position) {
         final Movie movie = movieList.get(position);
 
-        holder.textMovieName.setText(movie.getName());
+        holder.textMovieTitle.setText(movie.getTitle());
         holder.textMovieGenre.setText(movie.getGenre());
         holder.textMovieYear.setText(String.valueOf(movie.getYear()));
 
