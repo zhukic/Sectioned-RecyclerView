@@ -14,72 +14,21 @@ Add this to your `build.gradle` file.
 compile 'com.github.zhukic:sectioned-recyclerview:1.2.0'
 ```
 
-# Usage
-The main idea is to tell the adapter whether you want to place subheader between two neighboring items.
+# How it works
+The main idea of the library is to determine whether to place a subheader between a pair of neighboring items. To do this, you need to implement the `onPlaceSubheaderBetweenItems` method, which returns `true` when you need to place a subheader between two neighboring items, `false` - otherwise.
 ```java
 @Override
 public boolean onPlaceSubheaderBetweenItems(int position) {
-    final Movie movie = movieList.get(position);
-    final Movie nextMovie = movieList.get(position + 1);
+    final char movieTitleFirstCharacter = movieList.get(position).getTitle().charAt(0);
+    final char nextMovieTitleFirstCharacter = movieList.get(position + 1).getTitle().charAt(0);
     
-    //The subheader will be placed between two neighboring items if the first movie characters are different.
-    return !movie.getName().substring(0, 1).equals(nextMovie.getName().substring(0, 1));
+    //The subheader will be placed between two neighboring items if the first characters in movie titles are different.
+    return movieTitleFirstCharacter != nextMovieTitleFirstCharacter;
 }
 ```
 # Sample adapter
-```java
-public class Adapter extends SectionedRecyclerViewAdapter<SubheaderViewHolder, ItemViewHolder> {
+Please check out [sample app](https://github.com/zhukic/Sectioned-RecyclerView/tree/master/sample) for more details.
 
-    public static class SubheaderViewHolder extends RecyclerView.ViewHolder {
-
-        public SubheaderViewHolder(View itemView) {
-            super(itemView);
-            //Setup holder
-        }
-    }
-
-    public static class ItemViewHolder extends RecyclerView.ViewHolder {
-
-        public ItemViewHolder(View itemView) {
-            super(itemView);
-            //Setup holder
-        }
-    }
-
-    @Override
-    public boolean onPlaceSubheaderBetweenItems(int position) {
-        //return true if you want to place subheader between two neighboring items
-    }
-
-    @Override
-    public SubheaderViewHolder onCreateSubheaderViewHolder(ViewGroup parent, int viewType) {
-        return new SubheaderViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_header, parent, false));
-    }
-
-    @Override
-    public MovieViewHolder onCreateItemViewHolder(ViewGroup parent, int viewType) {
-        return new ItemViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_movie, parent, false));
-    }
-     
-    @Override
-    public void onBindSubheaderViewHolder(SubheaderViewHolder subheaderViewHolder, int nextItemPosition) {
-        //Setup subheader view
-        //nextItemPosition - position of the first item in the section to which this subheader belongs
-        final Movie nextMovie = movieList.get(nextItemPosition);
-        subheaderHolder.subheaderText.setText(nextMovie.getName().substring(0, 1));
-    }
-    
-    @Override
-    public void onBindItemViewHolder(MovieViewHolder holder, int position) {
-        //Setup item view
-    }
-
-    @Override
-    public int getCount() {
-        //return the total number of items
-    }
-}
-```
 # Modify data
 ```java
 
