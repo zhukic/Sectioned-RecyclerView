@@ -27,7 +27,7 @@ public boolean onPlaceSubheaderBetweenItems(int position) {
 }
 ```
 # Sample
-Please check out [sample app](https://github.com/zhukic/Sectioned-RecyclerView/tree/master/sample) for more details.
+Please try out [sample app](https://github.com/zhukic/Sectioned-RecyclerView/tree/master/sample) for more details.
 
 # Modify data
 ```java
