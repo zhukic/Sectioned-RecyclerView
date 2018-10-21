@@ -26,7 +26,7 @@ public boolean onPlaceSubheaderBetweenItems(int position) {
     return movieTitleFirstCharacter != nextMovieTitleFirstCharacter;
 }
 ```
-# Sample adapter
+# Sample
 Please check out [sample app](https://github.com/zhukic/Sectioned-RecyclerView/tree/master/sample) for more details.
 
 # Modify data
