@@ -7,12 +7,12 @@ ext {
 }
 
 android {
-    compileSdkVersion 28
-    buildToolsVersion '28.0.3'
+    compileSdkVersion versions.compileSdk
+    buildToolsVersion versions.buildTools
 
     defaultConfig {
-        minSdkVersion 14
-        targetSdkVersion 28
+        minSdkVersion versions.minSdk
+        targetSdkVersion versions.targetSdk
         versionCode 1
         versionName "1.0"
 
@@ -29,14 +29,13 @@ android {
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation 'androidx.recyclerview:recyclerview:1.0.0'
-    implementation 'androidx.appcompat:appcompat:1.0.0'
+    implementation androidXLibraries.recyclerView
+    implementation androidXLibraries.appCompat
 
-    testImplementation 'junit:junit:4.12'
-    testImplementation 'org.assertj:assertj-core:2.8.0'
-    testImplementation 'org.mockito:mockito-core:2.22.0'
-    testImplementation 'org.robolectric:robolectric:3.8'
+    testImplementation testLibraries.junit
+    testImplementation testLibraries.assertJ
+    testImplementation testLibraries.mockito
+    testImplementation testLibraries.robolectric
 }
 
 apply from: 'https://raw.githubusercontent.com/blundell/release-android-library/master/android-release-aar.gradle'

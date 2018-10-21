@@ -1,0 +1,33 @@
+ext.versions = [
+        androidGradlePlugin : '3.2.1',
+        compileSdk          : 28,
+        targetSdk           : 28,
+        minSdk              : 16,
+        buildTools          : '28.0.3',
+
+        androidX            : '1.0.0',
+        constraintlayout    : '1.1.2',
+
+        junit               : '4.12',
+        assertJ             : '2.8.0',
+        mockito             : '2.22.0',
+        robolectric         : '3.8'
+]
+
+ext.gradlePlugins = [
+        androidGradlePlugin : "com.android.tools.build:gradle:$versions.androidGradlePlugin"
+]
+
+ext.testLibraries = [
+        junit       : "junit:junit:$versions.junit",
+        assertJ     : "org.assertj:assertj-core:$versions.assertJ",
+        mockito     : "org.mockito:mockito-core:$versions.mockito",
+        robolectric : "org.robolectric:robolectric:$versions.robolectric"
+]
+
+ext.androidXLibraries = [
+        recyclerView     : "androidx.recyclerview:recyclerview:$versions.androidX",
+        appCompat        : "androidx.appcompat:appcompat:$versions.androidX",
+        material         : "com.google.android.material:material:$versions.androidX",
+        constraintlayout : "androidx.constraintlayout:constraintlayout:$versions.constraintlayout"
+]
