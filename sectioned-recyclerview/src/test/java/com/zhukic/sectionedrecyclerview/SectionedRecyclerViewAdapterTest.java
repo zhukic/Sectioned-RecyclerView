@@ -1,6 +1,5 @@
 package com.zhukic.sectionedrecyclerview;
 
-import android.support.v7.widget.RecyclerView;
 import android.view.ViewGroup;
 
 import org.junit.Before;
@@ -11,6 +10,8 @@ import org.robolectric.annotation.Config;
 
 import java.util.Arrays;
 import java.util.concurrent.ThreadLocalRandom;
+
+import androidx.recyclerview.widget.RecyclerView;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;

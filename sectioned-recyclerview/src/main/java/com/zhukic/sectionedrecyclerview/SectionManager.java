@@ -1,10 +1,10 @@
 package com.zhukic.sectionedrecyclerview;
 
-import android.support.annotation.IntRange;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import androidx.annotation.IntRange;
 
 class SectionManager {
 
