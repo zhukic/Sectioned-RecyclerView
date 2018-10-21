@@ -22,7 +22,7 @@ import java.util.List;
 import zhukic.sample.adapters.BaseMovieAdapter;
 import zhukic.sample.adapters.MovieAdapterByDecade;
 import zhukic.sample.adapters.MovieAdapterByGenre;
-import zhukic.sample.adapters.MovieAdapterByName;
+import zhukic.sample.adapters.MovieAdapterByTitle;
 import zhukic.sectionedrecyclerview.R;
 
 public class MovieFragment extends Fragment implements BaseMovieAdapter.OnItemClickListener, NewMovieDialogFragment.DialogListener {
@@ -93,9 +93,9 @@ public class MovieFragment extends Fragment implements BaseMovieAdapter.OnItemCl
     }
 
     private void setAdapterByName() {
-        this.movieComparator = (o1, o2) -> o1.getName().compareTo(o2.getName());
+        this.movieComparator = (o1, o2) -> o1.getTitle().compareTo(o2.getTitle());
         Collections.sort(mMovieList, movieComparator);
-        mSectionedRecyclerAdapter = new MovieAdapterByName(mMovieList);
+        mSectionedRecyclerAdapter = new MovieAdapterByTitle(mMovieList);
     }
 
     private void setAdapterByGenre() {

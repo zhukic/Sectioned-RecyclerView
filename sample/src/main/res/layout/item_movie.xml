@@ -16,7 +16,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/movieName"
+        android:id="@+id/movieTitle"
         android:maxLines="1"
         android:ellipsize="end"
         tools:text="Catch Me If You Can"
@@ -29,7 +29,7 @@
         android:textColor="@color/secondaryTextColor"
         android:textSize="@dimen/secondary_text_size"
         tools:text="Biography"
-        android:layout_below="@+id/movieName"
+        android:layout_below="@+id/movieTitle"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
@@ -40,7 +40,7 @@
         android:layout_toRightOf="@+id/movieGenre"
         android:layout_toEndOf="@+id/movieGenre"
         android:id="@+id/textView2"
-        android:layout_below="@+id/movieName"
+        android:layout_below="@+id/movieTitle"
         android:layout_alignBottom="@+id/movieGenre"
         tools:text=", "
         android:textAppearance="@style/TextAppearance.AppCompat.Small" />

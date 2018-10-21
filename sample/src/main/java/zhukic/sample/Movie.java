@@ -2,24 +2,24 @@ package zhukic.sample;
 
 public class Movie {
 
-    private String name;
+    private String title;
 
     private int year;
 
     private String genre;
 
-    public Movie(String name, int year, String genre) {
-        this.name = name;
+    public Movie(String title, int year, String genre) {
+        this.title = title;
         this.year = year;
         this.genre = genre;
     }
 
-    public String getName() {
-        return name;
+    public String getTitle() {
+        return title;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public int getYear() {
@@ -41,7 +41,7 @@ public class Movie {
     @Override
     public String toString() {
         return "Movie{" +
-                "name='" + name + '\'' +
+                "title='" + title + '\'' +
                 ", year=" + year +
                 ", genre='" + genre + '\'' +
                 '}';

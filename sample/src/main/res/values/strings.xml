@@ -1,12 +1,9 @@
 <resources>
     <string name="app_name">Movies</string>
     <string name="action_settings">Settings</string>
-    <string name="action_sort_by_name"> Sort by name</string>
-    <string name="action_sort_by_genre"> Sort by genre</string>
-    <string name="action_sort_by_year"> Sort by year</string>
     <string name="bullet_symbol">\u2022</string>
     <string name="new_movie">New movie</string>
-    <string name="name">Name</string>
+    <string name="title">Title</string>
     <string name="year">Year</string>
     <string name="genre">Genre</string>
     <string name="expand_all_sections">Expand all sections</string>

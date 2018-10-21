@@ -7,25 +7,25 @@ import java.util.List;
 import zhukic.sample.Movie;
 import zhukic.sectionedrecyclerview.R;
 
-public class MovieAdapterByName extends BaseMovieAdapter {
+public class MovieAdapterByTitle extends BaseMovieAdapter {
 
-    public MovieAdapterByName(List<Movie> itemList) {
+    public MovieAdapterByTitle(List<Movie> itemList) {
         super(itemList);
     }
 
     @Override
     public boolean onPlaceSubheaderBetweenItems(int position) {
-        final char movieFirstCharacter = movieList.get(position).getName().charAt(0);
-        final char nextMovieFirstCharacter = movieList.get(position + 1).getName().charAt(0);
+        final char movieTitleFirstCharacter = movieList.get(position).getTitle().charAt(0);
+        final char nextMovieTitleFirstCharacter = movieList.get(position + 1).getTitle().charAt(0);
 
-        return movieFirstCharacter != nextMovieFirstCharacter;
+        return movieTitleFirstCharacter != nextMovieTitleFirstCharacter;
     }
 
     @Override
     public void onBindItemViewHolder(final MovieViewHolder holder, final int position) {
         final Movie movie = movieList.get(position);
 
-        holder.textMovieName.setText(movie.getName());
+        holder.textMovieTitle.setText(movie.getTitle());
         holder.textMovieGenre.setText(movie.getGenre());
         holder.textMovieYear.setText(String.valueOf(movie.getYear()));
 
@@ -38,10 +38,10 @@ public class MovieAdapterByName extends BaseMovieAdapter {
         final Context context = subheaderHolder.itemView.getContext();
         final Movie nextMovie = movieList.get(nextItemPosition);
         final int sectionSize = getSectionSize(getSectionIndex(subheaderHolder.getAdapterPosition()));
-        final String name = nextMovie.getName().substring(0, 1);
+        final String title = nextMovie.getTitle().substring(0, 1);
         final String subheaderText = String.format(
                 context.getString(R.string.subheader),
-                name,
+                title,
                 context.getResources().getQuantityString(R.plurals.item, sectionSize, sectionSize)
         );
         subheaderHolder.mSubheaderText.setText(subheaderText);
