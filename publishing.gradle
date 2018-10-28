@@ -1,26 +1,25 @@
-apply plugin: 'com.jfrog.bintray'
+apply plugin: 'com.novoda.bintray-release'
 
-bintray {
+def getBintrayUserAndKey() {
     Properties properties = new Properties()
     properties.load(project.rootProject.file('local.properties').newDataInputStream())
+    return [
+            hasProperty("BINTRAY_USER") ? properties.getProperty("BINTRAY_USER") : '',
+            hasProperty("BINTRAY_USER") ? properties.getProperty("BINTRAY_KEY") : ''
+    ]
+}
 
-    user = properties.get("BINTRAY_USER")
-    key = properties.get("BINTRAY_KEY")
-    configurations = ['archives']
-
-    pkg {
-        repo = 'maven'
-        name = 'SectionedRecyclerView'
-        licenses = ['Apache-2.0']
-        vcsUrl = 'https://github.com/zhukic/SectionedRecyclerView.git'
-
-        version {
-            name = '1.2.1'
-
-            gpg {
-                sign = true
-                passphrase = properties.get("BINTRAY_GPG_PASSPHRASE")
-            }
-        }
-    }
+def (user, key) = getBintrayUserAndKey()
+publish {
+    bintrayUser = user
+    bintrayKey = key
+    userOrg = 'zhukic'
+    repoName = 'maven'
+    groupId = 'com.github.zhukic'
+    artifactId = 'sectioned-recyclerview'
+    publishVersion = '1.2.1'
+    licences = ['Apache-2.0']
+    website = 'https://github.com/zhukic/SectionedRecyclerView'
+    repository = 'https://github.com/zhukic/SectionedRecyclerView.git'
+    desc = 'A simple library that allows you to split a RecyclerView into sections with subheaders.'
 }
