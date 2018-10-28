@@ -61,7 +61,7 @@ public abstract class SectionedRecyclerViewAdapter<SH extends RecyclerView.ViewH
             return getSubheaderViewType(position);
         } else {
             final int viewType = getViewType(position);
-            if (viewType == DEFAULT_TYPE_HEADER) {
+            if (isSubheaderViewType(viewType)) {
                 throw new IllegalStateException("wrong view type = " + viewType + " at position = " +
                         position + " . It's reserved for subheader view type");
             }
@@ -99,8 +99,8 @@ public abstract class SectionedRecyclerViewAdapter<SH extends RecyclerView.ViewH
     }
 
     public final void notifyDataChanged() {
-        sectionManager.init();
-        notifyDataSetChanged();
+        final NotifyResult result = sectionManager.onDataChanged();
+        applyResult(result);
     }
 
     /**
@@ -329,7 +329,7 @@ public abstract class SectionedRecyclerViewAdapter<SH extends RecyclerView.ViewH
     private void applyNotifier(Notifier notifier) {
         switch (notifier.getType()) {
             case ALL_DATA_CHANGED:
-                notifyDataChanged();
+                notifyDataSetChanged();
                 break;
             case CHANGED:
                 notifyItemRangeChanged(notifier.getPositionStart(), notifier.getItemCount());

@@ -57,9 +57,9 @@ public class SectionedRecyclerViewAdapterTest {
     public void onCreateViewHolder_shouldCallOnCreateSubheaderViewHolder() {
         final ViewGroup viewGroup = mock(ViewGroup.class);
 
-        sectionedRecyclerViewAdapter.onCreateViewHolder(viewGroup, SectionedRecyclerViewAdapter.DEFAULT_TYPE_HEADER);
+        sectionedRecyclerViewAdapter.onCreateViewHolder(viewGroup, 5);
 
-        verify(sectionedRecyclerViewAdapter).onCreateSubheaderViewHolder(viewGroup, SectionedRecyclerViewAdapter.DEFAULT_TYPE_HEADER);
+        verify(sectionedRecyclerViewAdapter).onCreateSubheaderViewHolder(viewGroup, 5);
     }
 
     @Test
@@ -106,12 +106,11 @@ public class SectionedRecyclerViewAdapterTest {
     @Test
     public void notifyDataChanged() {
         final RecyclerView.AdapterDataObserver adapterDataObserver = mock(RecyclerView.AdapterDataObserver.class);
+        final NotifyResult notifyResult = NotifyResult.create(Notifier.createAllDataChanged());
         sectionedRecyclerViewAdapter.registerAdapterDataObserver(adapterDataObserver);
+        when(sectionManager.onDataChanged()).thenReturn(notifyResult);
 
         sectionedRecyclerViewAdapter.notifyDataChanged();
-
-        verify(sectionManager).init();
-        verifyNoMoreInteractions(sectionManager);
 
         verify(adapterDataObserver).onChanged();
         verifyNoMoreInteractions(adapterDataObserver);
@@ -519,7 +518,42 @@ public class SectionedRecyclerViewAdapterTest {
         assertThat(actualResult).isEqualTo(sectionCount);
     }
 
+    @Test
+    public void getItemViewType_shouldWorkCorrectly_whenItemIsData() {
+        final int position = 2;
+        when(sectionManager.isSectionSubheaderAtPosition(position)).thenReturn(false);
+
+        final int actualResult = sectionedRecyclerViewAdapter.getItemViewType(2);
+
+        assertThat(actualResult).isEqualTo(3);
+    }
+
+    @Test
+    public void getItemViewType_shouldWorkCorrectly_whenItemIsSubheader() {
+        final int position = 2;
+        when(sectionManager.isSectionSubheaderAtPosition(position)).thenReturn(true);
+
+        final int actualResult = sectionedRecyclerViewAdapter.getItemViewType(2);
+
+        assertThat(actualResult).isEqualTo(5);
+    }
+
     private static class TestSectionedRecyclerViewAdapter extends SectionedRecyclerViewAdapter<RecyclerView.ViewHolder, RecyclerView.ViewHolder> {
+
+        @Override
+        public int getViewType(int position) {
+            return 3;
+        }
+
+        @Override
+        public int getSubheaderViewType(int position) {
+            return 5;
+        }
+
+        @Override
+        public boolean isSubheaderViewType(int viewType) {
+            return viewType == 5;
+        }
 
         @Override
         public RecyclerView.ViewHolder onCreateItemViewHolder(ViewGroup parent, int viewType) {

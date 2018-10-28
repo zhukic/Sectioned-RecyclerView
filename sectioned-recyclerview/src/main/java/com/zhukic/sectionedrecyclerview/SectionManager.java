@@ -169,6 +169,11 @@ class SectionManager {
         return itemHolderPosition;
     }
 
+    NotifyResult onDataChanged() {
+        init();
+        return NotifyResult.create(Notifier.createAllDataChanged());
+    }
+
     NotifyResult onItemChanged(int itemPosition) {
         final int adapterPosition = getAdapterPositionForItem(itemPosition);
 
