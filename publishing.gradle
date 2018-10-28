@@ -1,0 +1,26 @@
+apply plugin: 'com.jfrog.bintray'
+
+bintray {
+    Properties properties = new Properties()
+    properties.load(project.rootProject.file('local.properties').newDataInputStream())
+
+    user = properties.get("BINTRAY_USER")
+    key = properties.get("BINTRAY_KEY")
+    configurations = ['archives']
+
+    pkg {
+        repo = 'maven'
+        name = 'SectionedRecyclerView'
+        licenses = ['Apache-2.0']
+        vcsUrl = 'https://github.com/zhukic/SectionedRecyclerView.git'
+
+        version {
+            name = '1.2.1'
+
+            gpg {
+                sign = true
+                passphrase = properties.get("BINTRAY_GPG_PASSPHRASE")
+            }
+        }
+    }
+}

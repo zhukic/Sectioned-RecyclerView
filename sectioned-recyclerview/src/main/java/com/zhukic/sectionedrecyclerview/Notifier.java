@@ -22,6 +22,10 @@ class Notifier {
         return new Notifier(type, positionStart, itemCount);
     }
 
+    public static Notifier createAllDataChanged() {
+        return create(Type.ALL_DATA_CHANGED, 0, 0);
+    }
+
     public static Notifier createChanged(int positionStart, int itemCount) {
         return create(Type.CHANGED, positionStart, itemCount);
     }

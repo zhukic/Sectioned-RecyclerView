@@ -3,13 +3,13 @@ package zhukic.sample;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.RecyclerView;
 import android.util.TypedValue;
 import android.view.View;
 
 import com.zhukic.sectionedrecyclerview.SectionedRecyclerViewAdapter;
 
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.RecyclerView;
 import zhukic.sectionedrecyclerview.R;
 
 public class GridDividerDecoration extends RecyclerView.ItemDecoration {
