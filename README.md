@@ -11,7 +11,7 @@ The Gradle dependency is available via [jCenter](https://bintray.com/zhukic/mave
 
 Add this to your `build.gradle` file.
 ```gradle
-compile 'com.github.zhukic:sectioned-recyclerview:1.2.0'
+compile 'com.github.zhukic:sectioned-recyclerview:1.2.1'
 ```
 
 # How it works
