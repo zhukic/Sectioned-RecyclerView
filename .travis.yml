@@ -1,0 +1,14 @@
+language: android
+sudo: false
+android:
+  components:
+    - platform-tools
+    - tools
+    - android-28
+    - build-tools-28.0.3
+
+before_install:
+  - mkdir "$ANDROID_HOME/licenses"
+  
+before_script: chmod a+x gradlew
+script: ./gradlew clean build
