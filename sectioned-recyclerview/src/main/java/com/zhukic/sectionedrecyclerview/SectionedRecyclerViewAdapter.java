@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 public abstract class SectionedRecyclerViewAdapter<SH extends RecyclerView.ViewHolder, VH extends RecyclerView.ViewHolder>
         extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements SectionProvider {
 
-    protected static final int TYPE_HEADER = -1;
+    protected static final int DEFAULT_TYPE_HEADER = -1;
 
     private SectionManager sectionManager;
 
@@ -44,20 +44,24 @@ public abstract class SectionedRecyclerViewAdapter<SH extends RecyclerView.ViewH
     }
 
     /**
-     * Don't return {@link SectionedRecyclerViewAdapter#TYPE_HEADER}.
+     * Don't return {@link SectionedRecyclerViewAdapter#DEFAULT_TYPE_HEADER}.
      * It's reserved for subheader view type.
      */
     public int getViewType(int position) {
         return 0;
     }
 
+    public int getSubheaderViewType(int position) {
+        return DEFAULT_TYPE_HEADER;
+    }
+
     @Override
     public final int getItemViewType(int position) {
         if (sectionManager.isSectionSubheaderAtPosition(position)) {
-            return TYPE_HEADER;
+            return getSubheaderViewType(position);
         } else {
             final int viewType = getViewType(position);
-            if (viewType == TYPE_HEADER) {
+            if (viewType == DEFAULT_TYPE_HEADER) {
                 throw new IllegalStateException("wrong view type = " + viewType + " at position = " +
                         position + " . It's reserved for subheader view type");
             }
@@ -65,10 +69,14 @@ public abstract class SectionedRecyclerViewAdapter<SH extends RecyclerView.ViewH
         }
     }
 
+    public boolean isSubheaderViewType(int viewType) {
+        return viewType == DEFAULT_TYPE_HEADER;
+    }
+
     @NonNull
     @Override
     public final RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        if (viewType == TYPE_HEADER) {
+        if (isSubheaderViewType(viewType)) {
             return onCreateSubheaderViewHolder(parent, viewType);
         } else {
             return onCreateItemViewHolder(parent, viewType);

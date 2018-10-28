@@ -57,9 +57,9 @@ public class SectionedRecyclerViewAdapterTest {
     public void onCreateViewHolder_shouldCallOnCreateSubheaderViewHolder() {
         final ViewGroup viewGroup = mock(ViewGroup.class);
 
-        sectionedRecyclerViewAdapter.onCreateViewHolder(viewGroup, SectionedRecyclerViewAdapter.TYPE_HEADER);
+        sectionedRecyclerViewAdapter.onCreateViewHolder(viewGroup, SectionedRecyclerViewAdapter.DEFAULT_TYPE_HEADER);
 
-        verify(sectionedRecyclerViewAdapter).onCreateSubheaderViewHolder(viewGroup, SectionedRecyclerViewAdapter.TYPE_HEADER);
+        verify(sectionedRecyclerViewAdapter).onCreateSubheaderViewHolder(viewGroup, SectionedRecyclerViewAdapter.DEFAULT_TYPE_HEADER);
     }
 
     @Test
