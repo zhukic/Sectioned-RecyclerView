@@ -1,6 +1,5 @@
 ext.versions = [
         androidGradlePlugin : '3.2.1',
-        bintrayReleasePlugin : '0.8.1',
         compileSdk          : 28,
         targetSdk           : 28,
         minSdk              : 16,
@@ -16,8 +15,7 @@ ext.versions = [
 ]
 
 ext.gradlePlugins = [
-        androidGradlePlugin : "com.android.tools.build:gradle:$versions.androidGradlePlugin",
-        bintrayReleasePlugin : "com.novoda:bintray-release:$versions.bintrayReleasePlugin"
+        androidGradlePlugin : "com.android.tools.build:gradle:$versions.androidGradlePlugin"
 ]
 
 ext.testLibraries = [
