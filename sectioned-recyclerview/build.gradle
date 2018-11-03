@@ -1,5 +1,4 @@
 apply plugin: 'com.android.library'
-apply from: '../publishing.gradle'
 
 ext {
     PUBLISH_GROUP_ID = 'com.github.zhukic'
