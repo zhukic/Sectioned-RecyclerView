@@ -1,5 +1,6 @@
-language: android
 sudo: false
+
+language: android
 android:
   components:
     - platform-tools
@@ -9,6 +10,14 @@ android:
 
 before_install:
   - mkdir "$ANDROID_HOME/licenses"
-  
-before_script: chmod a+x gradlew
-script: ./gradlew clean build
+
+before_cache:
+  - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
+  - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
+cache:
+  directories:
+    - $HOME/.gradle/caches/
+    - $HOME/.gradle/wrapper/
+    - $HOME/.android/build-cache
+    
+notifications: never
