@@ -1,4 +1,5 @@
 # SectionedRecyclerView
+[![Build Status](https://travis-ci.com/zhukic/Sectioned-RecyclerView.svg?branch=master)](https://travis-ci.com/zhukic/Sectioned-RecyclerView)
 [ ![Download](https://api.bintray.com/packages/zhukic/maven/SectionedRecyclerView/images/download.svg) ](https://bintray.com/zhukic/maven/SectionedRecyclerView/_latestVersion)
 
 A simple Android library that allows you to easily split your RecyclerView into expanding/collapsing sections with headers.
