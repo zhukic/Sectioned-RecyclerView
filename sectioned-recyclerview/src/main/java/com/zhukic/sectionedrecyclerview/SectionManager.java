@@ -81,16 +81,17 @@ class SectionManager {
 
         for (int i = 0; i < sections.size(); i++) {
             final Section sectionToExpand = sections.get(i);
-            if (sectionToExpand.isExpanded()) {
-                continue;
-            }
-
-            sectionToExpand.setExpanded(true);
 
             if (i != 0) {
                 final Section previousSection = sections.get(i - 1);
                 sectionToExpand.setSubheaderPosition(previousSection.getSubheaderPosition() + previousSection.getItemCount() + 1);
             }
+
+            if (sectionToExpand.isExpanded()) {
+                continue;
+            }
+
+            sectionToExpand.setExpanded(true);
 
             final List<Notifier> expandSectionNotifiers = new ArrayList<>();
             expandSectionNotifiers.add(Notifier.createChanged(sectionToExpand.getSubheaderPosition()));
