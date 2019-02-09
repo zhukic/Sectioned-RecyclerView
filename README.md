@@ -12,7 +12,7 @@ The Gradle dependency is available via [jCenter](https://bintray.com/zhukic/mave
 
 Add this to your `build.gradle` file.
 ```gradle
-implementation 'com.github.zhukic:sectioned-recyclerview:1.2.1'
+implementation 'com.github.zhukic:sectioned-recyclerview:1.2.2'
 ```
 
 # How it works
@@ -28,10 +28,54 @@ public boolean onPlaceSubheaderBetweenItems(int position) {
 }
 ```
 # Sample
-Please try out [sample app](https://github.com/zhukic/Sectioned-RecyclerView/tree/master/sample) for more details. Or:
+Please try out [sample app](https://github.com/zhukic/Sectioned-RecyclerView/tree/master/sample) for more details.
 
-[<img src="https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png" width="323" height="125">](https://play.google.com/store/apps/details?id=com.github.zhukic.sectionedrecyclerview)
+# Modify data
+```java
 
+notifyDataChanged();
+
+notifyItemInsertedAtPosition(int);
+
+notifyItemChangedAtPosition(int);
+
+notifyItemRemovedAtPosition(int);
+
+```
+# Expanding and Collapsing Sections
+```java
+
+expandSection(int sectionIndex);
+
+expandAllSections();
+
+collapseSection(int sectionIndex);
+
+collapseAllSections();
+
+isSectionExpanded(int sectionIndex);
+
+```
+# Other methods
+```java
+
+boolean isSubheaderAtPosition(int adapterPosition);
+
+int getSectionIndex(int adapterPosition);
+
+int getItemPositionInSection(int adapterPosition);
+
+boolean isFirstItemInSection(int adapterPosition);
+
+boolean isLastItemInSection(int adapterPosition);
+
+int getSectionSize(int sectionIndex);
+
+int getSectionSubheaderPosition(int sectionIndex);
+
+int getSectionsCount();
+
+```
 # Grid
 If you are using a ```GridLayoutManager``` set it to adapter.
 ```java
