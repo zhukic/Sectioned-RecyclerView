@@ -949,11 +949,12 @@ class SectionManager {
     int sectionIndex(@IntRange(from = 0, to = Integer.MAX_VALUE) int adapterPosition) {
         int sectionIndex = 0;
 
-        for (Section section : sections) {
+        for (int i = 0; i < sections.size(); i++) {
+            final Section section = sections.get(i);
             if (adapterPosition == section.getSubheaderPosition()) {
-                return sections.indexOf(section);
+                return i;
             } else if (adapterPosition > section.getSubheaderPosition()) {
-                sectionIndex = sections.indexOf(section);
+                sectionIndex = i;
             }
         }
 
@@ -1081,14 +1082,14 @@ class SectionManager {
     private int sectionIndexByItemPosition(@IntRange(from = 0, to = Integer.MAX_VALUE) int itemPosition) {
         int itemCount = 0;
 
-        for (Section section : sections) {
+        for (int i = 0; i < sections.size(); i++) {
+            final Section section = sections.get(i);
 
             itemCount += section.getItemCount();
 
             if (itemCount > itemPosition) {
-                return sections.indexOf(section);
+                return i;
             }
-
         }
 
         return sections.size() - 1;
